@@ -1,12 +1,22 @@
 # Knowledge Index
 
-> **Last updated**: 2026-02-06
+> **Last updated**: 2026-02-10
 
 Living summary of all accumulated knowledge. **Read this at session start** to know what you know without opening every file.
 
 ## Current Challenge
 
 _Not assigned yet._
+
+## Tasks
+
+_None yet._
+
+<!-- Format when populated:
+| ID | Task | Type | Status | Priority |
+|---|---|---|---|---|
+| T001 | Short description | research/engineering | TODO/IN_PROGRESS/DONE | P0-P3 |
+-->
 
 ## Research
 
@@ -68,10 +78,6 @@ _None yet._
 | # | Type | Decision |
 |---|---|---|
 | D001 | ENG | Dual-flow project structure (research vs engineering) |
-
-## Lessons Learned
-
-_See also MEMORY.md for cross-session operational patterns._
 
 ---
 

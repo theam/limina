@@ -177,6 +177,43 @@ DATABASE_DIRS = {
             "ID": {"rich_text": {}},
         },
     },
+    "tasks": {
+        "emoji": "✅",
+        "title_prop": "Task",
+        "properties": {
+            "ID": {"rich_text": {}},
+            "Status": {
+                "select": {
+                    "options": [
+                        {"name": "BACKLOG", "color": "gray"},
+                        {"name": "TODO", "color": "blue"},
+                        {"name": "IN_PROGRESS", "color": "yellow"},
+                        {"name": "DONE", "color": "green"},
+                        {"name": "BLOCKED", "color": "red"},
+                    ]
+                }
+            },
+            "Priority": {
+                "select": {
+                    "options": [
+                        {"name": "P0", "color": "red"},
+                        {"name": "P1", "color": "orange"},
+                        {"name": "P2", "color": "yellow"},
+                        {"name": "P3", "color": "gray"},
+                    ]
+                }
+            },
+            "Type": {
+                "select": {
+                    "options": [
+                        {"name": "research", "color": "purple"},
+                        {"name": "engineering", "color": "blue"},
+                    ]
+                }
+            },
+            "Linked": {"rich_text": {}},
+        },
+    },
 }
 
 # Directories/files that become regular pages
@@ -186,7 +223,6 @@ PAGE_STRUCTURE = {
     "engineering": {"emoji": "🛠️", "title": "Engineering"},
     "reports": {"emoji": "📊", "title": "Reports"},
     "articles": {"emoji": "📝", "title": "Articles"},
-    "project": {"emoji": "📁", "title": "Project"},
 }
 
 
@@ -671,7 +707,7 @@ class NotionSync:
         # Map our extracted props to Notion property formats
         for key, value in props.items():
             if isinstance(value, str):
-                if key in ("Status", "Impact", "Type", "Relevance"):
+                if key in ("Status", "Impact", "Type", "Relevance", "Priority"):
                     properties[key] = {"select": {"name": value}}
                 elif key == "ID":
                     properties[key] = {"rich_text": [{"text": {"content": value}}]}
@@ -805,9 +841,13 @@ class NotionSync:
     def _sync_database_dir(self, dir_key: str, schema: dict):
         """Sync a directory of files as a Notion database."""
         dir_path = self.kb_path / dir_key
-        section = dir_key.split("/")[0]  # "research" or "engineering"
-        parent_id = self._get_section_id(section)
-        db_name = dir_key.split("/")[1].replace("_", " ").title()
+        # Root-level dirs (like "tasks") go under root page; nested dirs go under section
+        if "/" in dir_key:
+            section = dir_key.split("/")[0]  # "research" or "engineering"
+            parent_id = self._get_section_id(section)
+        else:
+            parent_id = self.root_page_id
+        db_name = (dir_key.split("/")[1] if "/" in dir_key else dir_key).replace("_", " ").title()
 
         print(f"\n{schema['emoji']} Syncing database: {db_name}")
 
@@ -848,6 +888,10 @@ class NotionSync:
                 props["Type"] = metadata["type"]
             if "relevance" in metadata:
                 props["Relevance"] = metadata["relevance"]
+            if "priority" in metadata:
+                props["Priority"] = metadata["priority"]
+            if "linked artifacts" in metadata:
+                props["Linked"] = metadata["linked artifacts"]
 
             try:
                 page_id = self._create_or_update_db_entry(

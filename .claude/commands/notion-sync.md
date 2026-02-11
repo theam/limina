@@ -56,8 +56,8 @@ After the sync completes, report to the CEO:
 
 The sync script (`scripts/notion_sync.py`):
 
-- **Databases** are created for structured collections: hypotheses, experiments, findings, literature, features, investigations, implementations, retrospectives. Each entry becomes a database row with typed properties (Status, Impact, etc.)
-- **Pages** are created for narrative content: mission files (CHALLENGE.md, STATUS.md, DECISIONS.md), reports, articles, and project docs.
+- **Databases** are created for structured collections: hypotheses, experiments, findings, literature, features, investigations, implementations, retrospectives, and tasks. Each entry becomes a database row with typed properties (Status, Priority, Type, Impact, etc.)
+- **Pages** are created for narrative content: mission files (CHALLENGE.md, BACKLOG.md, DECISIONS.md), reports, and articles.
 - **INDEX.md** content is synced directly into the root page.
 - **Change tracking** uses `kb/.notion-sync.json` to store content hashes and Notion page IDs. Only files that changed since the last sync are updated.
 - **Overwrites on re-sync**: existing pages are updated in place (blocks deleted and re-created), never duplicated.

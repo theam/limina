@@ -1,4 +1,4 @@
-# Research Challenge
+# Challenge
 
 > **Status**: NOT SET — Awaiting challenge assignment
 

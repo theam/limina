@@ -12,12 +12,26 @@ Both workflows demand investigation and evidence-based decisions. The difference
 These rules are ABSOLUTE. They survive memory compaction. Re-read them if unsure.
 
 1. **EVERYTHING gets registered in `kb/`.** No exceptions. If it's not in `kb/`, it didn't happen. Every hypothesis, experiment, finding, decision, data file, and lesson learned has a file. This is not bureaucracy — it's your memory. Without it, you will repeat mistakes, contradict yourself, and lose weeks of work.
-2. **NEVER run an experiment without a hypothesis file first.** Create `H{NUM}` before `E{NUM}`. No shortcuts.
-3. **NEVER create a finding without linking it to an experiment.** The chain is: Hypothesis → Experiment → Finding. Always.
-4. **Challenge your own direction every 3 experiments.** Stop. Ask: "Am I optimizing a local maximum? Is there a fundamentally different approach I haven't tried?" Write the assessment to `kb/`.
-5. **Send the CEO a Telegram summary after every milestone.** Not at the end. After every finding, every completed experiment cycle, every strategic decision. Use the `notify_telegram` function or equivalent.
-6. **Update MEMORY.md after every significant lesson.** MEMORY.md is auto-loaded on every turn. If a lesson isn't there, you WILL forget it next session.
-7. **Always follow this file.** Especially when your context is compacted and you're tempted to skip steps.
+2. **Each unit of work is a task in `kb/mission/BACKLOG.md`.** Decompose challenges into tasks. Each task has a type (research or engineering) that determines its workflow.
+3. **For research tasks: NEVER run an experiment without a hypothesis file first.** Create `H{NUM}` before `E{NUM}`. No shortcuts.
+4. **For research tasks: NEVER create a finding without linking it to an experiment.** The chain is: Hypothesis → Experiment → Finding. Always.
+5. **Challenge your own direction every 3 research experiments.** Stop. Ask: "Am I optimizing a local maximum? Is there a fundamentally different approach I haven't tried?" Write the assessment to `kb/`.
+6. **Send the CEO a Telegram summary after every milestone.** Not at the end. After every finding, every completed experiment cycle, every strategic decision. Use the `notify_telegram` function or equivalent.
+7. **After memory compaction, re-read state before continuing.** Read INDEX.md and BACKLOG.md before doing anything else. Your compressed context may be stale or incomplete. See the After Memory Compaction section.
+8. **Update the Lessons Learned section (bottom of this file) after every significant lesson.** This section auto-loads with CLAUDE.md. If a lesson isn't here, you WILL forget it next session.
+9. **Always follow this file.** Especially when your context is compacted and you're tempted to skip steps.
+
+## After Memory Compaction
+
+**If your context was just compacted, STOP.** Do not continue working from the compressed summary alone — it is lossy and may be stale. Before doing anything else:
+
+1. Read `kb/INDEX.md` — what knowledge exists
+2. Read `kb/mission/BACKLOG.md` — what task you were working on, what's next
+3. Read the task file (`kb/tasks/T{NUM}-slug.md`) for whatever task is IN_PROGRESS
+4. Read the **Lessons Learned** section at the bottom of this file
+5. Only then continue working
+
+This takes 30 seconds and prevents contradicting your own prior work.
 
 ## Organizational Structure
 
@@ -57,40 +71,80 @@ Every request to the CEO and its resolution is tracked in `kb/mission/CEO_REQUES
 4. **Persistent knowledge** — All findings, data, and decisions live in `kb/`, never only in conversation memory.
 5. **Proactive communication** — Ask the CEO early when blocked; don't waste cycles guessing.
 
+## Task System
+
+Every challenge or objective is decomposed into **tasks**. Tasks are the unit of work.
+
+### Task properties
+
+| Property | Values |
+|---|---|
+| **ID** | `T{NUM}` — sequential, no gaps |
+| **Type** | `research` or `engineering` |
+| **Status** | `BACKLOG` → `TODO` → `IN_PROGRESS` → `DONE` (or `BLOCKED`) |
+| **Priority** | `P0` (critical) / `P1` (high) / `P2` (normal) / `P3` (low) |
+
+### How tasks work
+
+- Each task lives in `kb/tasks/T{NUM}-slug.md` with full detail (description, acceptance criteria, notes)
+- `kb/mission/BACKLOG.md` is the master view — a single table of all tasks with their status
+- **Source of truth**: The task file is authoritative for detail, description, and linked artifacts. BACKLOG.md is the quick view. When updating a task's status, **always update the task file first, then BACKLOG.md to match**. If they drift, the task file wins — regenerate BACKLOG.md from the task files.
+- A task's **type** determines which workflow and artifacts apply:
+  - `research` tasks follow the Research workflow (H→E→F chain required)
+  - `engineering` tasks follow the Engineering workflow (INV→FT→IMP, no H/E/F needed)
+- Tasks link to their artifacts (H001, E001, FT001, etc.) in the "Linked Artifacts" field
+- **Last IDs**: BACKLOG.md tracks the last used ID for every artifact type. Always check this before creating a new artifact to avoid duplicates or gaps.
+
+### Creating tasks
+
+When the CEO gives a challenge or you identify work to do:
+1. Check Last IDs in BACKLOG.md for the next T number
+2. Create a task file in `kb/tasks/` using the template
+3. Add a row to the Tasks table in `kb/mission/BACKLOG.md`
+4. Update Last IDs in BACKLOG.md
+5. Update `kb/INDEX.md`
+
 ## The Sacred Rule: Everything Gets Registered
 
 This is philosophical, not procedural. **Data is everything.** It's your memory across sessions, the foundation of reproducibility, and the only way to compose knowledge over time. Without complete registration, you are a stateless function that forgets everything it learns.
 
 ### What "everything" means
 
-- Every hypothesis has a file in `kb/research/hypotheses/` BEFORE you test it
-- Every experiment has a file in `kb/research/experiments/` BEFORE you run it
-- Every finding has a file in `kb/research/findings/` AFTER you analyze results
+- Every task has a file in `kb/tasks/` and a row in `kb/mission/BACKLOG.md`
+- Every hypothesis has a file in `kb/research/hypotheses/` BEFORE you test it (research tasks only)
+- Every experiment has a file in `kb/research/experiments/` BEFORE you run it (research tasks only)
+- Every finding has a file in `kb/research/findings/` AFTER you analyze results (research tasks only)
 - Every decision has an entry in `kb/mission/DECISIONS.md` with reasoning and evidence
 - Every data file, metric, intermediate result is saved in `kb/research/data/`
 - Every literature review is in `kb/research/literature/`
 - Every feature spec, investigation, implementation log is in `kb/engineering/`
-- Every lesson learned is in `MEMORY.md`
+- Every lesson learned is in the **Lessons Learned** section at the bottom of this file
 - Every CEO request is in `kb/mission/CEO_REQUESTS.md`
 - `kb/INDEX.md` reflects ALL of the above at all times
 
 ### Traceability chain
 
+For **research** tasks:
 ```
-Hypothesis H{N} → Experiment E{N} → Finding F{N} → Decision D{N}
-                                                  → Implementation IMP{N}
-                                                  → or next Hypothesis H{N+1}
+Task T{N} → Hypothesis H{N} → Experiment E{N} → Finding F{N} → Decision D{N}
+                                                              → or next Hypothesis H{N+1}
 ```
 
-Every artifact links backward to its origin and forward to its consequences. If a finding can't trace back to a hypothesis and experiment, it's undocumented work. Fix it.
+For **engineering** tasks:
+```
+Task T{N} → Investigation INV{N} → Feature FT{N} → Implementation IMP{N} → Retrospective RET{N}
+```
+
+Every artifact links backward to its task and forward to its consequences.
 
 ### Structure for accessibility
 
 The `kb/` structure must remain navigable as it grows:
 - **INDEX.md**: One-line summary per artifact. Read this to know what you know.
+- **BACKLOG.md**: Current state of all tasks + last artifact IDs. Read this to know what to work on.
 - **Individual files**: Full detail. Read these when working on something specific.
-- **Naming convention**: `H001`, `E001`, `F001`, `FT001`, `INV001`, `IMP001` — sequential, no gaps.
-- **Status tracking**: Every file has a status field (PROPOSED/TESTING/CONFIRMED/REJECTED for hypotheses, DESIGNED/RUNNING/COMPLETED for experiments, etc.)
+- **Naming convention**: `T001`, `H001`, `E001`, `F001`, `FT001`, `INV001`, `IMP001` — sequential, no gaps.
+- **Status tracking**: Every file has a status field.
 
 ---
 
@@ -100,23 +154,27 @@ This is your persistent brain. **Always read it at the start of a session** and 
 
 ```
 kb/
-├── mission/                ← Shared: challenge, status, decisions, CEO requests
+├── INDEX.md                   ← Quick overview of ALL accumulated knowledge
+├── mission/                   ← Shared: challenge, backlog, decisions, CEO requests
 │   ├── CHALLENGE.md
-│   ├── STATUS.md
+│   ├── BACKLOG.md             ← Master task view + last artifact IDs
 │   ├── DECISIONS.md
 │   └── CEO_REQUESTS.md
-├── research/               ← Research flow
-│   ├── hypotheses/         ← H001-xxx.md — Falsifiable hypotheses with metrics
-│   ├── experiments/        ← E001-xxx.md — Reproducible experiments with benchmarks
-│   ├── literature/         ← L001-xxx.md — Papers, SOTA, reference material
-│   ├── findings/           ← F001-xxx.md — Validated insights from experiments
-│   └── data/               ← Raw data, metrics, logs from experiments
-├── engineering/            ← Engineering flow
-│   ├── features/           ← FT001-xxx.md — Feature specs (what, why, acceptance criteria)
-│   ├── investigations/     ← INV001-xxx.md — Tool/approach due diligence
-│   ├── implementations/    ← IMP001-xxx.md — Implementation log and technical decisions
-│   └── retrospectives/     ← RET001-xxx.md — Post-delivery learnings
-└── reports/                ← Shared: milestone reports for both flows
+├── tasks/                     ← Task detail files (source of truth)
+│   ├── T001-slug.md
+│   └── ...
+├── research/                  ← Research flow artifacts
+│   ├── hypotheses/            ← H001-xxx.md — Falsifiable hypotheses with metrics
+│   ├── experiments/           ← E001-xxx.md — Reproducible experiments with benchmarks
+│   ├── literature/            ← L001-xxx.md — Papers, SOTA, reference material
+│   ├── findings/              ← F001-xxx.md — Validated insights from experiments
+│   └── data/                  ← Raw data, metrics, logs from experiments
+├── engineering/               ← Engineering flow artifacts
+│   ├── features/              ← FT001-xxx.md — Feature specs (what, why, acceptance criteria)
+│   ├── investigations/        ← INV001-xxx.md — Tool/approach due diligence
+│   ├── implementations/       ← IMP001-xxx.md — Implementation log and technical decisions
+│   └── retrospectives/        ← RET001-xxx.md — Post-delivery learnings
+└── reports/                   ← Shared: milestone reports for both flows
 ```
 
 ---
@@ -126,6 +184,8 @@ kb/
 **Purpose**: Validate technical viability. Answer the question: "Does approach X work, and how well?"
 
 **Output**: Evidence — confirmed/rejected hypotheses, benchmark results, actionable findings.
+
+**Applies to**: Tasks with `type: research`.
 
 ### When to use
 
@@ -144,7 +204,7 @@ kb/
  5. EXECUTE experiments           → Run code, collect data in kb/research/data/
  6. ANALYZE results               → Update experiment files with results + analysis
  7. SYNTHESIZE findings           → Write to kb/research/findings/ (link to H and E)
- 8. UPDATE knowledge              → Update INDEX.md, STATUS.md, MEMORY.md with lessons
+ 8. UPDATE knowledge              → Update INDEX.md, BACKLOG.md, Lessons Learned
  9. COMMUNICATE                   → Send Telegram summary to CEO
 10. STRATEGIC REVIEW (every 3 experiments) → See Strategic Review Protocol
 11. DECIDE next steps             → Update hypothesis status, plan next iteration or change direction
@@ -153,8 +213,8 @@ kb/
 
 ### Research can feed Engineering
 
-When research confirms an approach works, it can trigger an engineering feature:
-> "Finding F003 confirms approach Y gives 20% improvement → Create feature FT002 to productionize it."
+When research confirms an approach works, it can trigger an engineering task:
+> "Finding F003 confirms approach Y gives 20% improvement → Create task T005 (type: engineering) to productionize it."
 
 ---
 
@@ -163,6 +223,8 @@ When research confirms an approach works, it can trigger an engineering feature:
 **Purpose**: Investigate, design, and ship features. Answer the question: "What is the best way to build X?"
 
 **Output**: Working, delivered code. Validation happens in the market.
+
+**Applies to**: Tasks with `type: engineering`.
 
 ### When to use
 
@@ -180,8 +242,9 @@ When research confirms an approach works, it can trigger an engineering feature:
 4. DESIGN the solution         → Write feature spec in kb/engineering/features/
 5. IMPLEMENT                   → Write code, track progress in kb/engineering/implementations/
 6. TEST & DELIVER              → Tests, integration, deployment
-7. COMMUNICATE                 → Send Telegram summary to CEO
-8. RETROSPECTIVE (post-launch) → Capture learnings in kb/engineering/retrospectives/
+7. UPDATE knowledge            → Update INDEX.md, BACKLOG.md, Lessons Learned
+8. COMMUNICATE                 → Send Telegram summary to CEO
+9. RETROSPECTIVE (post-launch) → Capture learnings in kb/engineering/retrospectives/
 ```
 
 ### The investigation phase IS research-lite
@@ -198,14 +261,14 @@ But you do NOT need:
 
 ### Engineering can feed Research
 
-When building reveals an open question, it can trigger research:
-> "While implementing feature X, we discovered approach Z might be faster — create hypothesis H005 to test it."
+When building reveals an open question, it can trigger a research task:
+> "While implementing feature X, we discovered approach Z might be faster — create task T008 (type: research) with hypothesis H005 to test it."
 
 ---
 
 ## Strategic Review Protocol
 
-**Trigger**: After every 3 experiments, or when hitting a performance plateau, or when the CEO requests it.
+**Trigger**: After every 3 research experiments, or when hitting a performance plateau, or when the CEO requests it.
 
 **Purpose**: Prevent local optimization. Force yourself to question whether you're working on the right thing.
 
@@ -251,23 +314,24 @@ Executive summary in English. Context + result + next action. Not raw metrics �
 
 ### At the start of every session:
 1. Read `kb/INDEX.md` — your quick overview of ALL accumulated knowledge
-2. Read `kb/mission/STATUS.md` — where you left off and what's next
-3. Read `kb/mission/CHALLENGE.md` — only if the challenge is new or unclear from INDEX
-4. Open specific files only when you're about to work on them (not everything upfront)
+2. Read `kb/mission/CHALLENGE.md` — only if the challenge is new or unclear from INDEX
+3. Read `kb/mission/BACKLOG.md` — pick the highest-priority task to work on
+4. Read the **Lessons Learned** section at the bottom of this file
+5. Open specific files only when you're about to work on them (not everything upfront)
 
 ### During work:
-- Update `kb/mission/STATUS.md` after every significant step
+- Update `kb/mission/BACKLOG.md` after every significant step (task status changes)
 - Update `kb/INDEX.md` every time you create, close, or significantly update any kb/ artifact
 - Never keep findings only in conversation — write them to `kb/`
 - When you discover something unexpected, document it immediately
-- When you learn a reusable lesson (mistake, anti-pattern, useful technique), add it to `MEMORY.md`
+- When you learn a reusable lesson (mistake, anti-pattern, useful technique), add it to the **Lessons Learned** section below
 
 ### Before ending a session:
-- Update `kb/mission/STATUS.md` with current state and clear next steps
+- Update `kb/mission/BACKLOG.md` with current task states and clear next steps
 - Verify `kb/INDEX.md` reflects all work done in this session
 - Ensure all results are written to their files
 - List any open questions or blocked items
-- Add lessons learned to `MEMORY.md`
+- Add lessons learned to the **Lessons Learned** section
 - Send Telegram summary to CEO
 
 ## Knowledge Retrieval Protocol
@@ -276,36 +340,14 @@ Executive summary in English. Context + result + next action. Not raw metrics �
 
 | Before you... | First do this |
 |---|---|
+| Create a task | `Grep` in `kb/tasks/` for related terms. Check if a similar task already exists. |
 | Formulate a hypothesis | `Grep` in `kb/research/hypotheses/` for related terms. Check if a similar hypothesis was already tested. |
 | Design an experiment | Read the hypothesis file. Check `kb/research/experiments/` for related experiments and their results. |
 | Make a decision | Read `kb/mission/DECISIONS.md` for prior decisions on the same topic. |
 | Start an investigation | `Grep` in `kb/engineering/investigations/` for the tool/approach. It may have been evaluated before. |
-| Choose a tool/library | Check `MEMORY.md` lessons — a prior session may have already learned something about it. |
-| Delegate to a sub-agent | Read `kb/INDEX.md` to identify which files the sub-agent should read as context. |
+| Choose a tool/library | Check the **Lessons Learned** section — a prior session may have already learned something about it. |
 
 If you find related prior work, **reference it** in your new artifact (e.g., "Related: H003 tested a similar approach and was rejected because...").
-
-## Delegation Protocol
-
-You can delegate tasks to sub-agents (junior researchers/engineers). When delegating:
-
-1. **Use the Task tool** with clear, scoped prompts
-2. **Each delegation must include:**
-   - Exact objective (what to produce)
-   - Input context (what files to read, what data to use)
-   - Output specification (what file to write, what format)
-   - Success criteria (how to know if the task is done correctly)
-3. **Sub-agents must write their results to `kb/`** — never rely on their conversation output alone
-4. **Review all sub-agent output** before incorporating it into your work
-
-### Delegation template:
-```
-OBJECTIVE: [What to accomplish]
-CONTEXT: Read [specific files] for background
-OUTPUT: Write results to [specific file path]
-FORMAT: [Expected structure of the output]
-SUCCESS CRITERIA: [How to verify the work is correct]
-```
 
 ## Research Code Standards
 
@@ -338,9 +380,21 @@ Every implementation must have:
 - **Tests**: What is tested and how to run them
 - **Status**: In progress / delivered / needs iteration
 
-## Code & Environment
+## Code & Project Structure
 
-- Experiment code and feature code live in clearly separated directories
+```
+.
+├── CLAUDE.md              ← This file (methodology + lessons learned)
+├── kb/                    ← Knowledge base (documentation, decisions, findings)
+├── templates/             ← Templates for kb/ artifacts
+├── scripts/               ← Utility scripts (sync, automation)
+├── experiments/           ← Experiment code, one directory per experiment (e.g., experiments/E001/)
+└── src/                   ← Engineering feature code
+```
+
+- `kb/` is for documentation — never put executable code here (except data files in `kb/research/data/`)
+- Experiment code goes in `experiments/{E_ID}/` with its own README
+- Engineering code goes in `src/` or project-specific directories
 - Use Python virtual environments for isolation
 - Pin dependencies in `requirements.txt`
 - Use git to track code changes
@@ -363,7 +417,7 @@ This `CLAUDE.md` is the **meta-level** — it defines methodology, not domain kn
 
 - A new research project starts with its own domain, stack, or constraints
 - A feature/module has specific conventions that differ from the global ones
-- A sub-directory has enough context that a sub-agent would need to understand it independently
+- A sub-directory has enough context that needs to be understood independently
 
 ### What to put in it
 
@@ -375,16 +429,36 @@ This `CLAUDE.md` is the **meta-level** — it defines methodology, not domain kn
 ### Example structure
 
 ```
-src/
+.
 ├── CLAUDE.md              ← Root: methodology (this file)
-├── project-alpha/
-│   ├── CLAUDE.md          ← "Project Alpha uses PyTorch 2.x, targets GPU inference,
-│   │                         dataset is in Parquet format at /data/alpha/"
-│   └── ...
-└── feature-beta/
-    ├── CLAUDE.md          ← "Beta integrates with Stripe API. Auth via OAuth2.
-    │                         See INV003 for why we chose Stripe over Paddle."
-    └── ...
+├── experiments/
+│   └── E001/
+│       ├── CLAUDE.md      ← "E001 uses PyTorch 2.x, targets GPU inference,
+│       │                     dataset is in Parquet format at /data/alpha/"
+│       └── ...
+└── src/
+    └── feature-beta/
+        ├── CLAUDE.md      ← "Beta integrates with Stripe API. Auth via OAuth2.
+        │                     See INV003 for why we chose Stripe over Paddle."
+        └── ...
 ```
 
-Claude Code automatically loads nested `CLAUDE.md` files when working in their directory, so the module context is available without consuming root-level tokens.
+Claude Code automatically loads nested `CLAUDE.md` files when working in their directory.
+
+---
+
+## Lessons Learned
+
+> **This section is auto-loaded with CLAUDE.md.** Add lessons here so they survive memory compaction and session boundaries. Keep each entry to one line. When this section exceeds 30 entries, consolidate related lessons and archive old ones to `kb/reports/lessons-archive.md`.
+
+_No lessons yet._
+
+<!-- Format when populated:
+- `{date}` **{Category}**: {Concise lesson}. (Source: {artifact ID or context})
+
+Categories: WORKFLOW | TOOL | ANTIPATTERN | TECHNIQUE | DISCOVERY
+
+Example:
+- `2026-02-15` **ANTIPATTERN**: Don't run embedding benchmarks without warming up the model first — cold start adds 40% latency variance. (Source: E003)
+- `2026-02-16` **TOOL**: `litellm` caching breaks with streaming responses. Use `diskcache` directly instead. (Source: E005)
+-->

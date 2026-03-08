@@ -131,16 +131,6 @@ That pattern works well because it gives the agent:
 - ownership of evaluation
 - permission to escalate when justified
 
-## Open-Source Status
-
-This repo is intended to be publishable as an OSS template:
-
-- it does **not** claim a production deployment
-- it does **not** require Telegram or any other external notification channel
-- it is meant to be adapted into a live project with nested, project-specific runtime docs where needed
-
-If you adopt it in a real project, document local conventions in nested `CLAUDE.md` or `AGENTS.md` files near the code they govern.
-
 ## License
 
 MIT, © The Agile Monkeys. See [LICENSE](./LICENSE).

@@ -30,8 +30,10 @@ These rules are ABSOLUTE. They survive memory compaction. Re-read them if unsure
 1. Read `kb/INDEX.md` — what knowledge exists
 2. Read `kb/mission/BACKLOG.md` — what task you were working on, what's next
 3. Read the task file (`kb/tasks/T{NUM}-slug.md`) for whatever task is IN_PROGRESS — the **Progress** section tells you exactly where you left off
-4. Read the **Lessons Learned** section at the bottom of this file
-5. Only then continue working
+4. Read ONLY the artifacts linked from your current task. Do not explore files outside the task scope. If you need broader context, read INDEX.md for orientation, but do not read unrelated artifact files.
+5. Cross-check: Verify that key numbers, dates, and decisions are consistent across all artifacts you read. Flag any discrepancies before continuing work.
+6. Read the **Lessons Learned** section at the bottom of this file
+7. Only then continue working
 
 This takes 30 seconds and prevents contradicting your own prior work.
 
@@ -571,7 +573,9 @@ Claude Code automatically loads nested `CLAUDE.md` files when working in their d
 
 > **This section is auto-loaded with CLAUDE.md.** Add lessons here so they survive memory compaction and session boundaries. Keep each entry to one line. When this section exceeds 30 entries, consolidate related lessons and archive old ones to `kb/reports/lessons-archive.md`.
 
-_No lessons yet._
+1. **Scope boundaries prevent context contamination after compaction.** Reading unrelated artifacts during recovery introduces noise that's worse than having sparse context. Stick to task-linked artifacts only. (Source: F002, E002)
+2. **Add a consistency-check pass after reading recovery artifacts.** Cross-referencing numbers, dates, and decisions across artifacts catches drift with zero false positives and minimal overhead. (Source: F002, E003)
+3. **Recovery quality improves with accumulated state, not degrades.** More artifacts = richer context for reconstruction. The risk isn't volume — it's contamination and drift. (Source: F001, E001)
 
 <!-- Format when populated:
 - `{date}` **{Category}**: {Concise lesson}. (Source: {artifact ID or context})

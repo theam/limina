@@ -14,6 +14,7 @@ import {
   PanelLeft,
 } from "lucide-react";
 import { useState } from "react";
+import { Logo } from "./logo";
 
 const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -37,6 +38,7 @@ export function Sidebar() {
     >
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-5 border-b border-stone-200">
+        <Logo size={24} className="shrink-0 text-stone-700" />
         {!collapsed && (
           <div className="flex-1 min-w-0">
             <h1 className="text-sm font-semibold text-stone-900 truncate">

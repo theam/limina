@@ -573,9 +573,9 @@ Claude Code automatically loads nested `CLAUDE.md` files when working in their d
 
 > **This section is auto-loaded with CLAUDE.md.** Add lessons here so they survive memory compaction and session boundaries. Keep each entry to one line. When this section exceeds 30 entries, consolidate related lessons and archive old ones to `kb/reports/lessons-archive.md`.
 
-1. **Scope boundaries prevent context contamination after compaction.** Reading unrelated artifacts during recovery introduces noise that's worse than having sparse context. Stick to task-linked artifacts only. (Source: F002, E002)
-2. **Add a consistency-check pass after reading recovery artifacts.** Cross-referencing numbers, dates, and decisions across artifacts catches drift with zero false positives and minimal overhead. (Source: F002, E003)
-3. **Recovery quality improves with accumulated state, not degrades.** More artifacts = richer context for reconstruction. The risk isn't volume — it's contamination and drift. (Source: F001, E001)
+1. **Scope boundaries prevent context contamination after compaction.** Reading unrelated artifacts during recovery introduces noise that's worse than having sparse context. Stick to task-linked artifacts only.
+2. **Add a consistency-check pass after reading recovery artifacts.** Cross-referencing numbers, dates, and decisions across artifacts catches drift with zero false positives and minimal overhead. 
+3. **Recovery quality improves with accumulated state, not degrades.** More artifacts = richer context for reconstruction. The risk isn't volume — it's contamination and drift.
 
 <!-- Format when populated:
 - `{date}` **{Category}**: {Concise lesson}. (Source: {artifact ID or context})

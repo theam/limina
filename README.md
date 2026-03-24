@@ -10,6 +10,8 @@
   Cross the boundary between known and unknown.
 ```
 
+Built by [The Agile Monkeys](https://theagilemonkeys.com)
+
 Give Limina a hard technical problem. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution that meets your success criteria.
 
 ## What is this

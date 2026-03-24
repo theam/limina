@@ -1,7 +1,7 @@
 {
   "name": "@theagilemonkeys/limina",
-  "version": "2.0.0",
-  "description": "Autonomous AI research agent — give it a hard technical problem, get a structured research report",
+  "version": "1.0.0",
+  "description": "Autonomous AI research agent that solves hard technical problems — hypothesizes, experiments, iterates, and delivers solutions with full evidence trails",
   "author": "The Agile Monkeys",
   "license": "Apache-2.0",
   "repository": {
@@ -13,6 +13,9 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "bin/",
@@ -32,7 +35,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.81",

@@ -1,0 +1,9 @@
+{
+  "agent": "claude",
+  "sandbox": "agent",
+  "agentArgs": ["--dangerously-skip-permissions"],
+  "steps": {
+    "work": {},
+    "review": {}
+  }
+}

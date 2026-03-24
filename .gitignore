@@ -1,47 +1,42 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-dist/
-build/
-.eggs/
-venv/
-.venv/
-env/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Jupyter
-.ipynb_checkpoints/
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# Data (large files - track separately or use git-lfs)
-kb/research/data/*.csv
-kb/research/data/*.parquet
-kb/research/data/*.json
-kb/research/data/*.pkl
-kb/research/data/*.h5
-!kb/research/data/.gitkeep
+# testing
+/coverage
 
-# OS
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
 .DS_Store
-Thumbs.db
+*.pem
 
-# IDE
-.vscode/
-.idea/
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# Environment
-.env
-*.log
-.cook/logs/
+# env files (can opt-in for committing if needed)
+.env*
 
-# Notion sync state (contains Notion page IDs, session-specific)
-kb/.notion-sync.json
+# vercel
+.vercel
 
-# Model artifacts (too large for git)
-models/
-checkpoints/
-*.pt
-*.pth
-*.onnx
-*.safetensors
-wandb/
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+/missions/

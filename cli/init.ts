@@ -4,15 +4,23 @@ import chalkAnimation from "chalk-animation";
 import gradientString from "gradient-string";
 import { mkdir, writeFile, copyFile, readdir } from "fs/promises";
 import { join } from "path";
-import { existsSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
 import { setTimeout as sleep } from "timers/promises";
+import {
+  runInitPreflight,
+  installers,
+  checkClaudeCli,
+  checkClaudeAuth,
+  type CheckResult,
+} from "./preflight";
 
 // DESIGN.md colors
 const blue = color.hex("#0f62fe");
 const green = color.hex("#198038");
-const dim = color.hex("#525252");
-const bright = color.hex("#161616");
+const red = color.hex("#da1e28");
+const dim = color.dim;
+const bright = color.bold;
 
 // Universe theme — deep space gradient
 const cosmos = gradientString(["#0f62fe", "#6929c4", "#9f1853", "#0f62fe"]);
@@ -62,6 +70,178 @@ export async function init() {
 
   await sleep(1000);
 
+  // Pre-flight: check and auto-install prerequisites
+  {
+    const preflight = runInitPreflight();
+
+    // Show passing checks
+    for (const check of preflight.checks.filter((c) => c.ok)) {
+      console.log(green("  ✓ ") + dim(check.name + " " + check.message));
+    }
+
+    if (!preflight.ok) {
+      const missing = preflight.checks.filter(
+        (c) => !c.ok && c.severity === "critical",
+      );
+      for (const check of missing) {
+        console.log(red("  ✗ ") + check.name + " — " + dim(check.message));
+      }
+
+      const installable = missing.filter((c) => c.installable);
+      if (installable.length > 0) {
+        console.log();
+        const shouldInstall = await p.confirm({
+          message: `Install ${installable.length} missing prerequisite${installable.length > 1 ? "s" : ""}?`,
+          initialValue: true,
+        });
+
+        if (shouldInstall && !p.isCancel(shouldInstall)) {
+          for (const check of installable) {
+            if (check.name === "Claude auth") {
+              const claudeCheck = checkClaudeCli();
+              if (!claudeCheck.ok) continue;
+              console.log();
+              console.log(blue("  ◇ ") + "Claude Code needs authentication");
+              console.log();
+              console.log(dim("    Run this in another terminal:"));
+              console.log();
+              console.log("      " + bright("claude auth login"));
+              console.log();
+              await p.text({
+                message: "Press Enter when done",
+                defaultValue: "",
+                placeholder: "",
+              });
+              const recheck = checkClaudeAuth();
+              if (recheck.ok) {
+                console.log(green("  ✓ ") + "Authenticated as " + dim(recheck.message));
+              } else {
+                console.log(red("  ✗ ") + "Still not authenticated — you can continue later with " + bright("limina doctor"));
+              }
+              continue;
+            }
+
+            const installer = installers[check.name];
+            if (!installer) continue;
+            const s = p.spinner();
+            s.start(`Installing ${check.name}`);
+            const result = installer();
+            if (result.ok) {
+              s.stop(green("✓") + ` ${check.name} installed`);
+            } else {
+              s.stop(red("✗") + ` ${check.name} install failed`);
+              if (check.fix) console.log(dim("    → ") + check.fix);
+            }
+          }
+        }
+      }
+
+      // Re-check after install attempts
+      const recheck = runInitPreflight();
+      if (!recheck.ok) {
+        const still = recheck.checks.filter(
+          (c) => !c.ok && c.severity === "critical",
+        );
+        console.log();
+        for (const check of still) {
+          console.log(red("  ✗ ") + check.name + " — " + dim(check.message));
+          if (check.fix) console.log(dim("    → ") + check.fix);
+        }
+        p.cancel(
+          "Fix the issues above, or run " +
+            color.bold("limina doctor") +
+            " for a full health check.",
+        );
+        process.exit(1);
+      }
+    }
+
+    console.log();
+  }
+
+  // Prompt for Anthropic API key if not already set
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.log();
+    console.log(blue("  ◇ ") + "Limina needs an Anthropic API key to run the research agent.");
+    console.log(dim("    Get one at: ") + bright("https://console.anthropic.com/settings/keys"));
+    console.log();
+
+    const apiKey = await p.text({
+      message: "Paste your Anthropic API key",
+      placeholder: "sk-ant-...",
+      validate: (val) => {
+        if (!val.trim()) return "API key is required";
+        if (!val.startsWith("sk-ant-")) return "Key should start with sk-ant-";
+      },
+    });
+
+    if (p.isCancel(apiKey)) {
+      p.cancel("Setup cancelled.");
+      process.exit(0);
+    }
+
+    if (apiKey) {
+      const cwd = process.cwd();
+      const envPath = join(cwd, ".env.local");
+      let envContent = "";
+      try {
+        envContent = existsSync(envPath) ? readFileSync(envPath, "utf-8") : "";
+      } catch {}
+
+      if (envContent.includes("ANTHROPIC_API_KEY=")) {
+        envContent = envContent.replace(
+          /ANTHROPIC_API_KEY=.*/,
+          `ANTHROPIC_API_KEY=${apiKey}`
+        );
+      } else {
+        envContent += `${envContent && !envContent.endsWith("\n") ? "\n" : ""}ANTHROPIC_API_KEY=${apiKey}\n`;
+      }
+      writeFileSync(envPath, envContent);
+      process.env.ANTHROPIC_API_KEY = apiKey;
+      console.log(green("  ✓ ") + "API key saved to " + dim(".env.local"));
+    }
+  } else {
+    console.log(green("  ✓ ") + dim("Anthropic API key found"));
+  }
+
+  // Model selection
+  if (!process.env.LIMINA_MODEL) {
+    console.log();
+    const model = await p.select({
+      message: "Which model should the research agent use?",
+      options: [
+        {
+          value: "claude-opus-4-6",
+          label: "Opus — best for research (recommended)",
+          hint: "deepest reasoning, highest quality results",
+        },
+        {
+          value: "claude-sonnet-4-6",
+          label: "Sonnet — cost-effective",
+          hint: "faster and cheaper, good for exploratory work",
+        },
+      ],
+    });
+
+    if (p.isCancel(model)) {
+      p.cancel("Setup cancelled.");
+      process.exit(0);
+    }
+
+    const cwd = process.cwd();
+    const envPath = join(cwd, ".env.local");
+    let envContent = "";
+    try {
+      envContent = existsSync(envPath) ? readFileSync(envPath, "utf-8") : "";
+    } catch {}
+    envContent += `${envContent && !envContent.endsWith("\n") ? "\n" : ""}LIMINA_MODEL=${model}\n`;
+    writeFileSync(envPath, envContent);
+    process.env.LIMINA_MODEL = model as string;
+    console.log(green("  ✓ ") + "Model set to " + dim(model as string));
+  } else {
+    console.log(green("  ✓ ") + dim(`Model: ${process.env.LIMINA_MODEL}`));
+  }
+
   p.intro(blue("Set up your research mission"));
 
   // Check if already initialized
@@ -77,10 +257,20 @@ export async function init() {
 
   await sleep(300);
 
-  // Step 1: Objective
+  // Step 1: Objective — the most important question, show examples
+  console.log();
+  console.log(dim("  Examples:"));
+  console.log(dim("  • \"Find the best embedding model for Spanish legal documents\""));
+  console.log(dim("  • \"Compare RAG vs fine-tuning for our customer support bot\""));
+  console.log(dim("  • \"Why is our search relevance dropping on long queries?\""));
+  console.log();
+
   const objective = await p.text({
-    message: "What problem are you investigating?",
-    placeholder: "Describe your research objective",
+    message: "What should the agent research?",
+    placeholder: "e.g., Find the fastest way to serve our ML model under 100ms",
+    validate: (val) => {
+      if (!val.trim()) return "Tell the agent what to research";
+    },
   });
 
   if (p.isCancel(objective)) {
@@ -88,10 +278,16 @@ export async function init() {
     process.exit(0);
   }
 
-  // Step 2: Context
+  // Step 2: Context — optional, explain what it's for
+  console.log();
+  console.log(dim("  Give the agent a head start — what has been tried, what exists today."));
+  console.log(dim("  Example: \"We use pgvector with OpenAI embeddings. Retrieval is slow on 1M+ rows.\""));
+  console.log();
+
   const context = await p.text({
-    message: "What does your current system look like?",
-    placeholder: "Describe your baseline and what you've tried",
+    message: "Any context the agent should know? " + dim("(Enter to skip)"),
+    placeholder: "e.g., We currently use X, we tried Y but it didn't work because Z",
+    defaultValue: "",
   });
 
   if (p.isCancel(context)) {
@@ -99,10 +295,16 @@ export async function init() {
     process.exit(0);
   }
 
-  // Step 3: Success metric
+  // Step 3: Success metric — optional with smart default
+  console.log();
+  console.log(dim("  How will you know the research succeeded? A number, a comparison, a clear answer."));
+  console.log(dim("  Example: \"Latency under 200ms at p95\" or \"A ranked comparison of 3+ approaches\""));
+  console.log();
+
   const successMetric = await p.text({
-    message: "How will you measure success?",
-    placeholder: "e.g., Recall@10 improvement ≥ 5%",
+    message: "What does success look like? " + dim("(Enter for default)"),
+    placeholder: "e.g., A clear recommendation backed by experimental evidence",
+    defaultValue: "A clear recommendation with evidence from at least 2 experiments",
   });
 
   if (p.isCancel(successMetric)) {
@@ -112,8 +314,8 @@ export async function init() {
 
   // Step 4: Repository (optional)
   const repository = await p.text({
-    message: "Repository to target " + dim("(optional, press Enter to skip)"),
-    placeholder: "github.com/org/repo",
+    message: "Repository to target " + dim("(Enter to skip)"),
+    placeholder: "e.g., github.com/your-org/your-repo",
     defaultValue: "",
   });
 
@@ -124,7 +326,7 @@ export async function init() {
 
   // Step 5: Budget
   const maxBudget = await p.text({
-    message: "Max budget for this mission",
+    message: "Max budget " + dim("(API costs — Enter for $150)"),
     placeholder: "$150",
     defaultValue: "$150",
   });
@@ -136,7 +338,7 @@ export async function init() {
 
   // Step 6: Slack notifications (optional)
   const wantSlack = await p.confirm({
-    message: "Enable Slack notifications for agent requests?",
+    message: "Notify you on Slack when the agent needs input?",
     initialValue: false,
   });
 
@@ -144,7 +346,7 @@ export async function init() {
   if (wantSlack && !p.isCancel(wantSlack)) {
     const webhook = await p.text({
       message: "Slack webhook URL",
-      placeholder: "https://hooks.slack.com/services/...",
+      placeholder: "https://hooks.slack.com/services/T00.../B00.../xxx",
     });
     if (!p.isCancel(webhook)) {
       slackWebhook = webhook as string;
@@ -248,18 +450,12 @@ When blocked on resources, access, or decisions, create an entry in \`kb/mission
   // Copy framework files
   const frameworkDir = join(__dirname, "..", "framework");
   if (existsSync(frameworkDir)) {
-    const filesToCopy = ["CLAUDE.md", "AGENTS.md", "COOK.md"];
+    const filesToCopy = ["CLAUDE.md", "AGENTS.md", "LIMINA.md"];
     for (const file of filesToCopy) {
       const src = join(frameworkDir, file);
       if (existsSync(src)) {
         await copyFile(src, join(cwd, file));
       }
-    }
-
-    await mkdir(join(cwd, ".cook"), { recursive: true });
-    const cookConfig = join(frameworkDir, ".cook/config.json");
-    if (existsSync(cookConfig)) {
-      await copyFile(cookConfig, join(cwd, ".cook/config.json"));
     }
 
     const templateDir = join(frameworkDir, "templates");
@@ -318,25 +514,5 @@ When blocked on resources, access, or decisions, create an entry in \`kb/mission
 
   await sleep(300);
 
-  // Next steps — clear, guided
-  console.log();
-  console.log(
-    blue("  Next step: ") +
-      bright("limina start")
-  );
-  console.log();
-  console.log(
-    dim("  This will start the research agent and open the observatory")
-  );
-  console.log(
-    dim("  at ") +
-      color.underline(dim("http://localhost:3000")) +
-      dim(" where you can monitor progress,")
-  );
-  console.log(
-    dim("  review findings, and steer direction.")
-  );
-  console.log();
-
-  p.outro(green("Your research mission is ready") + dim(" — run limina start to begin"));
+  p.outro(green("Your research mission is ready") + dim(" — starting agent..."));
 }

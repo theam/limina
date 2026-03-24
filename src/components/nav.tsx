@@ -25,6 +25,26 @@ const tabs = [
     ),
   },
   {
+    label: "Talk",
+    href: "/talk",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M4 4h12a1 1 0 011 1v8a1 1 0 01-1 1H8l-4 3v-3a1 1 0 01-1-1V5a1 1 0 011-1z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Directive",
+    href: "/directive",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <circle cx="10" cy="10" r="7" />
+        <path d="M10 3v2M10 15v2M3 10h2M15 10h2" />
+        <circle cx="10" cy="10" r="2" />
+      </svg>
+    ),
+  },
+  {
     label: "Research",
     href: "/research",
     icon: (
@@ -46,17 +66,6 @@ const tabs = [
     ),
   },
   {
-    label: "Steering",
-    href: "/steering",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="10" cy="10" r="7" />
-        <path d="M10 3v2M10 15v2M3 10h2M15 10h2" />
-        <circle cx="10" cy="10" r="2" />
-      </svg>
-    ),
-  },
-  {
     label: "Cost",
     href: "/cost",
     icon: (
@@ -72,6 +81,16 @@ const tabs = [
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
         <rect x="3" y="2" width="14" height="16" rx="1" />
         <path d="M6 6h8M6 9h8M6 12h5" />
+      </svg>
+    ),
+  },
+  {
+    label: "Log",
+    href: "/log",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M4 6h12M4 10h12M4 14h8" />
+        <path d="M16 13l1 1-1 1" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { spawn } from "child_process";
 
 function getMissionDir(): string {
   return process.env.MISSION_DIR || process.cwd();
@@ -9,23 +8,38 @@ export async function POST() {
   const cwd = getMissionDir();
 
   try {
-    const proc = spawn(
-      "cook",
-      [
-        "Run /challenge with target 'Research direction'",
-        "review",
-        "Read the CR report and assess whether critical issues were addressed",
-        "DONE if no critical issues remain, else ITERATE",
-        "--max-iterations", "1",
-        "--agent", "claude",
-      ],
-      {
-        cwd,
-        detached: true,
-        stdio: "ignore",
+    const { query } = await import("@anthropic-ai/claude-agent-sdk");
+
+    // Fire-and-forget: run challenge review in background
+    const challengePrompt =
+      "Run a challenge review of the current research direction. " +
+      "Spawn the devil-advocate agent via /challenge with target 'Research direction'. " +
+      "Write the review to kb/reports/CR{next}-challenge-review.md.";
+
+    // Don't await — this runs detached
+    (async () => {
+      try {
+        for await (const _msg of query({
+          prompt: challengePrompt,
+          options: {
+            cwd,
+            permissionMode: "bypassPermissions" as const,
+            allowDangerouslySkipPermissions: true,
+            allowedTools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent"],
+            settingSources: ["project" as const],
+            maxTurns: 10,
+            env: {
+              ...process.env,
+              CLAUDE_AGENT_SDK_CLIENT_APP: "limina/1.0",
+            },
+          } as any,
+        })) {
+          // Consume stream
+        }
+      } catch {
+        // Non-fatal: challenge review failure doesn't affect the main mission
       }
-    );
-    proc.unref();
+    })();
 
     return NextResponse.json({ success: true, message: "Challenge review triggered" });
   } catch (err) {

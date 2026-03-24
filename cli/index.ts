@@ -6,6 +6,21 @@ import { start } from "./start";
 import { stop } from "./stop";
 import { status } from "./status";
 import { budget } from "./budget";
+import { directive } from "./directive";
+import { doctor } from "./doctor";
+
+// Load .env.local from the user's project directory (cwd) at startup.
+// This ensures ANTHROPIC_API_KEY persists across runs without re-prompting.
+const envLocalPath = join(process.cwd(), ".env.local");
+if (existsSync(envLocalPath)) {
+  const lines = readFileSync(envLocalPath, "utf-8").split("\n");
+  for (const line of lines) {
+    const match = line.match(/^([A-Z_]+)=(.+)$/);
+    if (match && !process.env[match[1]]) {
+      process.env[match[1]] = match[2].trim();
+    }
+  }
+}
 
 /**
  * Auto-detect mission state and run the appropriate command.
@@ -19,9 +34,10 @@ async function auto() {
   const missionPath = join(cwd, "mission.json");
   const pidFile = join(cwd, ".limina.pid");
 
-  // No mission — start from scratch
+  // No mission — set up, then start
   if (!existsSync(missionPath)) {
-    return init();
+    await init();
+    return start({ open: true });
   }
 
   // Mission exists — check if daemon is running
@@ -37,7 +53,7 @@ async function auto() {
   }
 
   // Mission exists but daemon not running — start it
-  return start({ port: "3000", open: true });
+  return start({ open: true });
 }
 
 const program = new Command();
@@ -74,5 +90,15 @@ program
   .command("budget [amount]")
   .description("View or set mission budget")
   .action(budget);
+
+program
+  .command("directive [instruction]")
+  .description("Send a directive to the research agent")
+  .action(directive);
+
+program
+  .command("doctor")
+  .description("Check and install prerequisites")
+  .action(doctor);
 
 program.parse();

@@ -5,7 +5,7 @@ import { join } from "path";
 
 const blue = color.hex("#0f62fe");
 const green = color.hex("#198038");
-const dim = color.hex("#525252");
+const dim = color.dim;
 
 export async function stop() {
   console.log();

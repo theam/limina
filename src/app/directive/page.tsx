@@ -11,6 +11,15 @@ interface CeoRequest {
   date?: string;
 }
 
+interface Directive {
+  id: string;
+  title: string;
+  instruction: string;
+  priority: string;
+  status: string;
+  submittedAt: string;
+}
+
 interface Artifact {
   type: string;
   id: string;
@@ -29,6 +38,7 @@ interface StatusResponse {
   kb: {
     artifacts: Artifact[];
     ceoRequests: CeoRequest[];
+    directives: Directive[];
     artifactCounts: {
       hypotheses: number;
       experiments: number;
@@ -38,6 +48,7 @@ interface StatusResponse {
     };
   } | null;
   pendingEscalations: CeoRequest[];
+  pendingDirectives: Directive[];
 }
 
 interface ChallengeReviewSummary {
@@ -76,6 +87,10 @@ export default function SteeringPage() {
   const [feedbackComment, setFeedbackComment] = useState("");
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
+  const [directiveText, setDirectiveText] = useState("");
+  const [directivePriority, setDirectivePriority] = useState("NORMAL");
+  const [directiveSubmitting, setDirectiveSubmitting] = useState(false);
+  const [directiveSuccess, setDirectiveSuccess] = useState(false);
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -145,6 +160,31 @@ export default function SteeringPage() {
     setFeedbackSubmitting(false);
   }
 
+  async function handleDirectiveSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!directiveText.trim()) return;
+    setDirectiveSubmitting(true);
+    try {
+      const res = await fetch("/api/directive", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          instruction: directiveText,
+          priority: directivePriority,
+        }),
+      });
+      if (res.ok) {
+        setDirectiveText("");
+        setDirectivePriority("NORMAL");
+        setDirectiveSuccess(true);
+        setTimeout(() => setDirectiveSuccess(false), 3000);
+      }
+    } catch {
+      // Silently handle
+    }
+    setDirectiveSubmitting(false);
+  }
+
   if (loading) {
     return (
       <div
@@ -154,7 +194,7 @@ export default function SteeringPage() {
           fontFamily: "'IBM Plex Sans', sans-serif",
         }}
       >
-        <Nav activePath="/steering" />
+        <Nav activePath="/directive" />
         <div style={{ maxWidth: 960, margin: "0 auto", padding: 24 }}>
           <div
             style={{
@@ -182,7 +222,7 @@ export default function SteeringPage() {
           fontFamily: "'IBM Plex Sans', sans-serif",
         }}
       >
-        <Nav activePath="/steering" />
+        <Nav activePath="/directive" />
         <div style={{ maxWidth: 960, margin: "0 auto", padding: 24 }}>
           <div
             style={{
@@ -246,7 +286,7 @@ export default function SteeringPage() {
         fontFamily: "'IBM Plex Sans', sans-serif",
       }}
     >
-      <Nav activePath="/steering" />
+      <Nav activePath="/directive" />
 
       <main
         style={{
@@ -258,16 +298,202 @@ export default function SteeringPage() {
           gap: 24,
         }}
       >
-        <h1
-          style={{
-            fontSize: 20,
-            fontWeight: 600,
-            color: "#161616",
-            marginBottom: 0,
-          }}
-        >
-          Steering Controls
-        </h1>
+        <div>
+          <h1
+            style={{
+              fontSize: 20,
+              fontWeight: 600,
+              color: "#161616",
+              marginBottom: 4,
+            }}
+          >
+            Directive
+          </h1>
+          <p
+            style={{
+              fontSize: 13,
+              color: "#525252",
+              lineHeight: 1.5,
+              margin: 0,
+            }}
+          >
+            Send strategic instructions to the research agent while it works.
+            Directives are delivered at the next phase boundary — the agent finishes
+            its current step, reads your instruction, and adjusts course.
+          </p>
+        </div>
+
+        {/* Send Directive Section */}
+        <div>
+          <div style={sectionTitle("#0f62fe")}>Send Directive</div>
+          <div style={card}>
+            <form
+              onSubmit={handleDirectiveSubmit}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
+              <div>
+                <label
+                  htmlFor="directive-text"
+                  style={{
+                    display: "block",
+                    fontSize: 12,
+                    color: "#525252",
+                    marginBottom: 4,
+                  }}
+                >
+                  Instruction for the agent
+                </label>
+                <textarea
+                  id="directive-text"
+                  value={directiveText}
+                  onChange={(e) => setDirectiveText(e.target.value)}
+                  placeholder="e.g., Focus more on latency optimization, stop investigating hypothesis H003..."
+                  rows={3}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    border: "1px solid #e0e0e0",
+                    fontSize: 14,
+                    fontFamily: "'IBM Plex Sans', sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#161616",
+                    resize: "vertical",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                }}
+              >
+                <select
+                  value={directivePriority}
+                  onChange={(e) => setDirectivePriority(e.target.value)}
+                  style={{
+                    padding: "8px 12px",
+                    border: "1px solid #e0e0e0",
+                    fontSize: 14,
+                    fontFamily: "'IBM Plex Sans', sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#161616",
+                    appearance: "auto",
+                  }}
+                >
+                  <option value="HIGH">High priority</option>
+                  <option value="NORMAL">Normal priority</option>
+                  <option value="LOW">Low priority</option>
+                </select>
+                <button
+                  type="submit"
+                  disabled={directiveSubmitting || !directiveText.trim()}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor:
+                      directiveSubmitting || !directiveText.trim()
+                        ? "#c6c6c6"
+                        : "#0f62fe",
+                    color: "#ffffff",
+                    border: "none",
+                    fontSize: 14,
+                    fontWeight: 500,
+                    fontFamily: "'IBM Plex Sans', sans-serif",
+                    cursor:
+                      directiveSubmitting || !directiveText.trim()
+                        ? "not-allowed"
+                        : "pointer",
+                  }}
+                >
+                  {directiveSubmitting ? "Sending..." : "Send Directive"}
+                </button>
+                {directiveSuccess && (
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 500,
+                      color: "#198038",
+                    }}
+                  >
+                    Directive sent
+                  </span>
+                )}
+              </div>
+            </form>
+          </div>
+          {/* Directive History */}
+          {(kb?.directives?.length ?? 0) > 0 && (
+            <div
+              style={{
+                marginTop: 12,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              {kb!.directives.map((dir) => (
+                <div
+                  key={dir.id}
+                  style={{
+                    ...card,
+                    padding: 16,
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'IBM Plex Mono', monospace",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "#525252",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {dir.id}
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 500,
+                        color: "#161616",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {dir.title}
+                    </div>
+                    {dir.submittedAt && (
+                      <div style={{ fontSize: 11, color: "#8d8d8d" }}>
+                        {new Date(dir.submittedAt).toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 500,
+                      color: dir.status === "ACKNOWLEDGED" ? "#198038" : "#f1c21b",
+                      backgroundColor:
+                        dir.status === "ACKNOWLEDGED" ? "#defbe6" : "#fff8e1",
+                      padding: "1px 8px",
+                      borderRadius: 2,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {dir.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* CEO Requests Section */}
         <div>

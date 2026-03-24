@@ -9,7 +9,7 @@ Autonomous research agent web app. Next.js single-process architecture.
 Single Next.js app. No database — filesystem-based state (`missions/{id}/kb/` + `mission.json`). Polls KB for changes every 5s. Spawns `cook` CLI via `child_process` for research execution. Claude Code only (v1).
 
 Key modules:
-- `src/lib/cook-manager.ts` — mission state machine + cook subprocess lifecycle
+- `src/lib/mission-runner.ts` — MissionRunner class + agent session lifecycle via Claude Agent SDK
 - `src/lib/kb-parser.ts` — shared parser for all KB artifact types (H, E, F, CR, SR, T, L)
 - `src/lib/mission.ts` — CHALLENGE.md templates, mission CRUD, atomic writes
 - `src/lib/notify.ts` — Slack webhook notifications

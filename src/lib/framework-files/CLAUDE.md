@@ -65,6 +65,15 @@ Every request to the CEO and its resolution is tracked in `kb/mission/CEO_REQUES
 
 **Do not stay blocked silently.** If you need something, ask.
 
+### CEO Directives
+
+The CEO may proactively send strategic instructions via `kb/mission/DIRECTIVES.md` — these can also arrive as conversation messages mid-session. When you receive a directive:
+
+1. Read and understand the instruction
+2. Incorporate it into your current plan — it may change priorities, approaches, or focus areas
+3. Update the directive's status from `PENDING` to `ACKNOWLEDGED` in `kb/mission/DIRECTIVES.md`
+4. If the directive conflicts with prior decisions, document the resolution in `kb/mission/DECISIONS.md`
+
 ## Core Principles
 
 1. **Evidence over intuition** — Every decision must be backed by data, analysis, or literature.
@@ -158,11 +167,12 @@ This is your persistent brain. **Always read it at the start of a session** and 
 ```
 kb/
 ├── INDEX.md                   ← Quick overview of ALL accumulated knowledge
-├── mission/                   ← Shared: challenge, backlog, decisions, CEO requests
+├── mission/                   ← Shared: challenge, backlog, decisions, CEO requests, directives
 │   ├── CHALLENGE.md
 │   ├── BACKLOG.md             ← Master task view + last artifact IDs
 │   ├── DECISIONS.md
-│   └── CEO_REQUESTS.md
+│   ├── CEO_REQUESTS.md
+│   └── DIRECTIVES.md          ← CEO-initiated strategic instructions (check for PENDING)
 ├── tasks/                     ← Task detail files (source of truth)
 │   ├── T001-slug.md
 │   └── ...
@@ -417,8 +427,9 @@ If the validator fails, fix the KB before closing the task or session.
 1. Read `kb/INDEX.md` — your quick overview of ALL accumulated knowledge
 2. Read `kb/mission/CHALLENGE.md` — only if the challenge is new or unclear from INDEX
 3. Read `kb/mission/BACKLOG.md` — pick the highest-priority task to work on
-4. Read the **Lessons Learned** section at the bottom of this file
-5. Open specific files only when you're about to work on them (not everything upfront)
+4. Read `kb/mission/DIRECTIVES.md` — check for PENDING CEO directives and incorporate them
+5. Read the **Lessons Learned** section at the bottom of this file
+6. Open specific files only when you're about to work on them (not everything upfront)
 
 ### During work:
 - Update `kb/mission/BACKLOG.md` after every significant step (task status changes)
@@ -497,13 +508,11 @@ Every implementation must have:
 ├── README.md              ← Canonical human-readable spec for the template
 ├── CLAUDE.md              ← Claude Code runtime adapter
 ├── AGENTS.md              ← Codex runtime adapter
-├── COOK.md                ← Agent-agnostic instructions injected by cook on every iteration
+├── LIMINA.md              ← Continuity protocol — injected at every iteration start
 ├── .claude/
 │   ├── agents/            ← Agent role definitions (devil-advocate, researcher, surveyor, builder, reviewer)
 │   ├── commands/          ← Slash commands (/challenge, /research-sprint, /engineering-sprint, etc.)
 │   └── settings.json      ← Enables agent teams
-├── .cook/
-│   └── config.json        ← cook orchestration config (agent, sandbox, step overrides)
 ├── kb/                    ← Knowledge base (documentation, decisions, findings)
 ├── templates/             ← Templates for kb/ artifacts
 ├── scripts/               ← Utility scripts (validation, sync, automation)

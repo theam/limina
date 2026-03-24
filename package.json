@@ -1,10 +1,31 @@
 {
-  "name": "limina",
+  "name": "@theagilemonkeys/limina",
   "version": "2.0.0",
-  "description": "Cross the threshold between known and unknown",
+  "description": "Autonomous AI research agent — give it a hard technical problem, get a structured research report",
+  "author": "The Agile Monkeys",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theam/autonomous-researcher.git"
+  },
   "bin": {
     "limina": "./bin/limina"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "cli/",
+    "src/",
+    "public/",
+    "framework/",
+    ".env.example",
+    "next.config.ts",
+    "tsconfig.json",
+    "postcss.config.mjs",
+    "tailwind.config.ts"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,6 +35,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.81",
     "@clack/prompts": "^1.1.0",
     "chalk": "^5.6.2",
     "chalk-animation": "^2.0.3",
@@ -23,7 +45,8 @@
     "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
@@ -37,7 +60,6 @@
     "eslint-config-next": "16.2.1",
     "jsdom": "^29.0.1",
     "tailwindcss": "^4",
-    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.0"
   }

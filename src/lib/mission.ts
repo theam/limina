@@ -42,6 +42,7 @@ export interface MissionState {
   phase: MissionPhase;
   pid?: number;
   pgid?: number;
+  sessionId?: string;
   createdAt: string;
   planApprovedAt?: string;
   lastArtifactAt?: string;
@@ -190,13 +191,17 @@ async function scaffoldKB(missionPath: string): Promise<void> {
     "# CEO Requests\n\n_Requests for human input will appear here._\n"
   );
 
-  // Copy framework files (CLAUDE.md, COOK.md, .cook/config.json, templates)
+  // Create DIRECTIVES.md
+  await writeFile(
+    join(kbPath, "mission/DIRECTIVES.md"),
+    "# CEO Directives\n\n_Strategic instructions from the CEO to incorporate into ongoing work._\n"
+  );
+
+  // Copy framework files (CLAUDE.md, LIMINA.md, templates)
   const frameworkDir = join(process.cwd(), "src/lib/framework-files");
   if (existsSync(frameworkDir)) {
     await copyFile(join(frameworkDir, "CLAUDE.md"), join(missionPath, "CLAUDE.md"));
-    await copyFile(join(frameworkDir, "COOK.md"), join(missionPath, "COOK.md"));
-    await mkdir(join(missionPath, ".cook"), { recursive: true });
-    await copyFile(join(frameworkDir, "cook-config.json"), join(missionPath, ".cook/config.json"));
+    await copyFile(join(frameworkDir, "LIMINA.md"), join(missionPath, "LIMINA.md"));
     // Copy templates
     const templateDir = join(missionPath, "templates");
     await mkdir(templateDir, { recursive: true });
@@ -208,7 +213,7 @@ async function scaffoldKB(missionPath: string): Promise<void> {
     }
   }
 
-  // Init git repo (cook requires a git repository)
+  // Init git repo
   try {
     execSync("git init && git add -A && git commit -m 'Mission initialized'", {
       cwd: missionPath,
@@ -312,6 +317,24 @@ export async function writeMissionState(
   const tmpPath = `${statePath}.tmp.${Date.now()}`;
   await writeFile(tmpPath, JSON.stringify(state, null, 2));
   await rename(tmpPath, statePath);
+}
+
+/**
+ * Update mission state fields without a phase transition.
+ * Used for saving sessionId, timestamps, etc.
+ */
+export async function updateMissionState(
+  missionId: string,
+  updates: Partial<MissionState>
+): Promise<MissionState> {
+  const state = await readMissionState(missionId);
+  if (!state) {
+    throw new Error(`Mission ${missionId} not found`);
+  }
+
+  const updated: MissionState = { ...state, ...updates };
+  await writeMissionState(missionId, updated);
+  return updated;
 }
 
 /**

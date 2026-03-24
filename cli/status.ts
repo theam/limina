@@ -8,8 +8,8 @@ const blue = color.hex("#0f62fe");
 const green = color.hex("#198038");
 const yellow = color.hex("#f1c21b");
 const red = color.hex("#da1e28");
-const dim = color.hex("#525252");
-const bright = color.hex("#161616");
+const dim = color.dim;
+const bright = color.bold;
 
 export async function status() {
   const cwd = process.cwd();

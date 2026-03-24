@@ -5,8 +5,8 @@ import { join } from "path";
 
 const blue = color.hex("#0f62fe");
 const green = color.hex("#198038");
-const dim = color.hex("#525252");
-const bright = color.hex("#161616");
+const dim = color.dim;
+const bright = color.bold;
 
 export async function budget(amount?: string) {
   const missionPath = join(process.cwd(), "mission.json");

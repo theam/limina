@@ -7,6 +7,7 @@ import {
   parseArtifact,
   parseBacklog,
   parseCeoRequests,
+  parseDirectives,
   inferPhase,
   type Artifact,
 } from "../../src/lib/kb-parser";
@@ -241,5 +242,83 @@ describe("inferPhase", () => {
       },
     ];
     expect(inferPhase(artifacts)).toBe("reviewing");
+  });
+});
+
+describe("parseDirectives", () => {
+  it("returns empty array for header-only file", () => {
+    const content =
+      "# CEO Directives\n\n_Strategic instructions from the CEO._\n";
+    expect(parseDirectives(content)).toEqual([]);
+  });
+
+  it("parses a single directive", () => {
+    const content = `# CEO Directives
+
+## DIR-001: Focus on latency
+> **Priority**: HIGH
+> **Submitted**: 2026-03-24T10:30:00Z
+> **Status**: PENDING
+
+Focus more on latency optimization.
+`;
+
+    const directives = parseDirectives(content);
+    expect(directives).toHaveLength(1);
+    expect(directives[0].id).toBe("DIR-001");
+    expect(directives[0].title).toBe("Focus on latency");
+    expect(directives[0].priority).toBe("HIGH");
+    expect(directives[0].status).toBe("PENDING");
+    expect(directives[0].submittedAt).toBe("2026-03-24T10:30:00Z");
+    expect(directives[0].instruction).toBe(
+      "Focus more on latency optimization."
+    );
+  });
+
+  it("parses multiple directives with mixed statuses", () => {
+    const content = `# CEO Directives
+
+## DIR-001: Focus on latency
+> **Priority**: HIGH
+> **Submitted**: 2026-03-24T10:30:00Z
+> **Status**: ACKNOWLEDGED
+
+Focus more on latency optimization.
+
+## DIR-002: Incorporate paper
+> **Priority**: NORMAL
+> **Submitted**: 2026-03-24T11:45:00Z
+> **Status**: PENDING
+
+Check out arxiv 2026.12345.
+
+## DIR-003: Stop H003
+> **Priority**: HIGH
+> **Submitted**: 2026-03-24T12:00:00Z
+> **Status**: PENDING
+
+Stop investigating hypothesis H003, it's a dead end.
+`;
+
+    const directives = parseDirectives(content);
+    expect(directives).toHaveLength(3);
+    expect(directives[0].status).toBe("ACKNOWLEDGED");
+    expect(directives[1].status).toBe("PENDING");
+    expect(directives[2].id).toBe("DIR-003");
+    expect(directives[2].title).toBe("Stop H003");
+  });
+
+  it("defaults priority to NORMAL when missing", () => {
+    const content = `# CEO Directives
+
+## DIR-001: Do something
+> **Submitted**: 2026-03-24T10:00:00Z
+> **Status**: PENDING
+
+Instructions here.
+`;
+
+    const directives = parseDirectives(content);
+    expect(directives[0].priority).toBe("NORMAL");
   });
 });

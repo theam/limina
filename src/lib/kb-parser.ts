@@ -42,10 +42,20 @@ export interface CeoRequest {
   date?: string;
 }
 
+export interface Directive {
+  id: string;
+  title: string;
+  instruction: string;
+  priority: "HIGH" | "NORMAL" | "LOW";
+  status: "PENDING" | "ACKNOWLEDGED";
+  submittedAt: string;
+}
+
 export interface KBState {
   artifacts: Artifact[];
   tasks: TaskEntry[];
   ceoRequests: CeoRequest[];
+  directives: Directive[];
   phase: ResearchPhase;
   artifactCounts: {
     hypotheses: number;
@@ -241,6 +251,47 @@ export function parseCeoRequests(content: string): CeoRequest[] {
 }
 
 /**
+ * Parse DIRECTIVES.md to extract CEO directives.
+ * Format:
+ * ## DIR-001: Title
+ * > **Priority**: HIGH
+ * > **Submitted**: 2026-03-24T10:30:00Z
+ * > **Status**: PENDING
+ * Instruction text...
+ */
+export function parseDirectives(content: string): Directive[] {
+  const directives: Directive[] = [];
+  const sections = content.split(/^## /m).filter(Boolean);
+
+  for (const section of sections) {
+    const headerMatch = section.match(/^(DIR-\d+)\s*[:\u2014\u2013-]\s*(.+)$/m);
+    if (!headerMatch) continue;
+
+    const metadata = parseMetadata(section);
+
+    const lines = section.split("\n");
+    const instrLines = lines.filter(
+      (l) =>
+        !l.startsWith(">") &&
+        !l.match(/^DIR-\d+/) &&
+        !l.match(/^###/) &&
+        l.trim()
+    );
+
+    directives.push({
+      id: headerMatch[1],
+      title: headerMatch[2].trim(),
+      instruction: instrLines.join("\n").trim(),
+      priority: (metadata.priority as Directive["priority"]) || "NORMAL",
+      status: (metadata.status as Directive["status"]) || "PENDING",
+      submittedAt: metadata.submitted || "",
+    });
+  }
+
+  return directives;
+}
+
+/**
  * Infer the current research phase from the most recently created artifact.
  *
  * The research cycle is: H → E → F → CR/SR. Within a cycle, if both
@@ -345,12 +396,25 @@ export async function readKBState(kbPath: string): Promise<KBState> {
     // CEO_REQUESTS.md doesn't exist yet
   }
 
+  // Parse directives
+  let directives: Directive[] = [];
+  try {
+    const dirFile = await readFile(
+      join(kbPath, "mission/DIRECTIVES.md"),
+      "utf-8"
+    );
+    directives = parseDirectives(dirFile);
+  } catch {
+    // DIRECTIVES.md doesn't exist yet
+  }
+
   const phase = inferPhase(artifacts);
 
   return {
     artifacts,
     tasks,
     ceoRequests,
+    directives,
     phase,
     artifactCounts: {
       hypotheses: artifacts.filter((a) => a.type === "hypothesis").length,

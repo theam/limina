@@ -131,10 +131,18 @@ function formatElapsed(createdAt: string): string {
 // Phase progress: maps research phase to a 0-4 step index
 const phaseSteps = ["idle", "hypothesizing", "experimenting", "documenting", "reviewing"];
 
+interface DashboardLogEntry {
+  timestamp: string;
+  type: string;
+  summary: string;
+}
+
 export default function Dashboard() {
   const [data, setData] = useState<StatusResponse | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [logEntries, setLogEntries] = useState<DashboardLogEntry[]>([]);
+  const [costData, setCostData] = useState<{ budget: number | null; spent: number } | null>(null);
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -150,11 +158,36 @@ export default function Dashboard() {
     }
   }, []);
 
+  const fetchCost = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cost");
+      if (!res.ok) return;
+      setCostData(await res.json());
+    } catch {}
+  }, []);
+
+  const fetchLog = useCallback(async () => {
+    try {
+      const res = await fetch("/api/log?tail=10");
+      if (!res.ok) return;
+      const json = await res.json();
+      setLogEntries(json.entries || []);
+    } catch {
+      // Non-critical
+    }
+  }, []);
+
   useEffect(() => {
     fetchStatus();
-    const interval = setInterval(fetchStatus, 5000);
+    fetchLog();
+    fetchCost();
+    const interval = setInterval(() => {
+      fetchStatus();
+      fetchLog();
+      fetchCost();
+    }, 5000);
     return () => clearInterval(interval);
-  }, [fetchStatus]);
+  }, [fetchStatus, fetchLog, fetchCost]);
 
   const mission = data?.mission ?? null;
   const kb = data?.kb ?? null;
@@ -371,8 +404,15 @@ export default function Dashboard() {
                   <div>
                     <div style={label}>Budget</div>
                     <div style={value}>
-                      {mission.budget ?? mission.estimatedCost ?? "N/A"}
+                      {costData && costData.spent > 0
+                        ? `$${costData.spent.toFixed(2)} spent`
+                        : mission.budget ?? mission.estimatedCost ?? "N/A"}
                     </div>
+                    {costData && costData.budget && costData.budget > 0 && (
+                      <div style={{ fontSize: 11, color: costData.spent > costData.budget * 0.8 ? "#da1e28" : "#525252", marginTop: 2 }}>
+                        ${Math.max(0, costData.budget - costData.spent).toFixed(2)} remaining
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -594,6 +634,157 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
+
+            {/* Agent Log card */}
+            <Link
+              href="/log"
+              style={{
+                ...card,
+                display: "block",
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: logEntries.length > 0 ? 12 : 0,
+                }}
+              >
+                <div style={sectionTitle}>Agent Log</div>
+                <span
+                  style={{
+                    fontSize: 12,
+                    color: "#0f62fe",
+                    fontWeight: 500,
+                  }}
+                >
+                  View all
+                </span>
+              </div>
+              {logEntries.length === 0 ? (
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "var(--text-secondary, #525252)",
+                    margin: 0,
+                    paddingTop: 8,
+                  }}
+                >
+                  No agent activity yet. Logs will appear when the agent starts
+                  working.
+                </p>
+              ) : (
+                <div>
+                  {logEntries.map((entry, i) => {
+                    const badgeColors: Record<
+                      string,
+                      { color: string; bg: string; label: string }
+                    > = {
+                      assistant: {
+                        color: "#0f62fe",
+                        bg: "#edf5ff",
+                        label: "Agent",
+                      },
+                      tool: {
+                        color: "#198038",
+                        bg: "#defbe6",
+                        label: "Tool",
+                      },
+                      system: {
+                        color: "#525252",
+                        bg: "#f4f4f4",
+                        label: "System",
+                      },
+                      prompt: {
+                        color: "#6929c4",
+                        bg: "#f6f2ff",
+                        label: "Prompt",
+                      },
+                      directive: {
+                        color: "#da1e28",
+                        bg: "#fff1f1",
+                        label: "Directive",
+                      },
+                      result: {
+                        color: "#525252",
+                        bg: "#f4f4f4",
+                        label: "Done",
+                      },
+                    };
+                    const badge =
+                      badgeColors[entry.type] || badgeColors.system;
+                    return (
+                      <div
+                        key={`${entry.timestamp}-${i}`}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 8,
+                          padding: "6px 0",
+                          borderBottom:
+                            i < logEntries.length - 1
+                              ? "1px solid #f4f4f4"
+                              : "none",
+                          fontSize: 12,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: "'IBM Plex Mono', monospace",
+                            fontSize: 11,
+                            color: "#8d8d8d",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {(() => {
+                            try {
+                              return new Date(
+                                entry.timestamp
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                              });
+                            } catch {
+                              return entry.timestamp;
+                            }
+                          })()}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 500,
+                            color: badge.color,
+                            backgroundColor: badge.bg,
+                            padding: "0px 5px",
+                            borderRadius: 2,
+                            flexShrink: 0,
+                            minWidth: 44,
+                            textAlign: "center",
+                          }}
+                        >
+                          {badge.label}
+                        </span>
+                        <span
+                          style={{
+                            color: "#161616",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            flex: 1,
+                          }}
+                        >
+                          {entry.summary}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </Link>
           </>
         )}
       </main>

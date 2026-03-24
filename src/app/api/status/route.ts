@@ -31,9 +31,14 @@ export async function GET() {
   const pendingEscalations =
     kb?.ceoRequests.filter((r) => r.status === "PENDING") ?? [];
 
+  // Extract pending directives
+  const pendingDirectives =
+    kb?.directives.filter((d) => d.status === "PENDING") ?? [];
+
   return NextResponse.json({
     mission,
     kb,
     pendingEscalations,
+    pendingDirectives,
   });
 }

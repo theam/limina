@@ -1,4 +1,4 @@
-# Limina — cook instructions
+# Limina — Continuity Protocol
 
 This repository has a persistent research and engineering operating model.
 
@@ -11,6 +11,7 @@ Each iteration starts with analysis, not action. Before doing anything: Read you
 Now analyze:
 - **Where are we?** What has been accomplished toward the mission?
 - **What are the gaps?** What remains unknown, unvalidated, or unbuilt?
+- **Are there new CEO directives?** Check `kb/mission/DIRECTIVES.md` for PENDING directives. Incorporate them into your plan and mark as ACKNOWLEDGED.
 - **What is the highest-impact next step?** Not necessarily the highest-priority task — the best move given current state.
 
 Only then act. Your job is not to follow a list — it is to advance the mission as effectively as possible given what you now know.

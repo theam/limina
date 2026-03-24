@@ -1,161 +1,141 @@
-# Limina
+```
+  ██╗     ██╗███╗   ███╗██╗███╗   ██╗ █████╗
+  ██║     ██║████╗ ████║██║████╗  ██║██╔══██╗
+  ██║     ██║██╔████╔██║██║██╔██╗ ██║███████║
+  ██║     ██║██║╚██╔╝██║██║██║╚██╗██║██╔══██║
+  ███████╗██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║
+  ╚══════╝╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
 
-Submit a complex technical problem, get an autonomous AI research report back — with hypotheses tested, experiments run, and actionable recommendations.
+  from Latin līmen — "threshold"
+  Cross the boundary between known and unknown.
+```
 
-## Who is this for?
-
-Technical leads and engineering managers who need AI research outcomes but lack access to deep AI research talent. Limina runs autonomously for hours/days, and the web interface makes it accessible without touching the CLI.
+An autonomous AI research agent. Give it a hard technical problem, walk away, come back to a structured research report — hypotheses tested, experiments run, findings ranked by impact.
 
 ## How it works
 
 ```
-Intake Form → Research Plan → Approve → Live Progress → Report
-     │              │              │           │            │
-     ▼              ▼              ▼           ▼            ▼
- CHALLENGE.md    BACKLOG.md     cook CLI    KB artifacts   Findings
- generated       auto-plan      spawns      appear via     ranked by
- from form       from agent     research    polling        impact
+limina init      →  You describe the problem
+limina start     →  Agent researches autonomously for hours/days
+                    Observatory opens at localhost:3000
+                    ┌─────────────────────────────────┐
+                    │  Dashboard · Research · Findings │
+                    │  Steering · Cost · Report        │
+                    └─────────────────────────────────┘
+limina status    →  Check progress from the terminal
+limina stop      →  Pause anytime, state is preserved
 ```
 
-1. **Submit a mission** — describe your problem, success metric, and context
-2. **Review the plan** — the AI generates a research plan with tasks, approve or reject
-3. **Watch progress** — hypotheses, experiments, and findings appear as the agent works
-4. **Respond to escalations** — the agent asks for input when it needs human judgment
-5. **Get the report** — key findings ranked by impact, with a recommendation
+The agent uses the [cook](https://rjcorwin.github.io/cook/) CLI to orchestrate Claude Code through a structured research loop: hypothesize, experiment, document findings, review, iterate. All state lives on the filesystem in a `kb/` knowledge base — if it's not in `kb/`, it didn't happen.
 
 ## Quick start
 
 ```bash
-# Clone and install
+# Install
 git clone https://github.com/theam/autonomous-researcher.git
 cd autonomous-researcher
 npm install
 
-# Configure
-cp .env.example .env.local
-# Edit .env.local — set MISSION_API_KEY to any secret string
-
 # Prerequisites
 npm install -g @let-it-cook/cli   # cook CLI for agent orchestration
 
-# Run
-npm run dev
-# Open http://localhost:3000
+# Create a research mission
+mkdir my-research && cd my-research
+limina init
+
+# Launch
+limina start
 ```
 
-Set your API key in the browser: open DevTools console and run:
-```js
-localStorage.setItem('ar-api-key', 'your-secret-key-here')
-```
+## Observatory
 
-## Architecture
+The web UI at `localhost:3000` gives you a live view of the agent's work:
 
-Single Next.js process. No database. Filesystem-based state.
+- **Dashboard** — mission status, phase, artifact counts, elapsed time
+- **Research** — hypotheses, experiments, and literature as they're created
+- **Findings** — results ranked by impact
+- **Steering** — respond to agent escalations (CEO Requests) when it needs human judgment
+- **Cost** — budget tracking
+- **Report** — final research report with recommendations
 
-```
-┌──────────────────────────────────────────────┐
-│            Next.js App (single process)        │
-│                                                │
-│  Pages:  / (list) → /new (intake) → /missions/[id] (workspace)
-│  API:    /api/missions (CRUD, status, escalation, kill, share)
-│  Lib:    cook-manager, kb-parser, mission, notify
-│                                                │
-└────────────────┬───────────────────────────────┘
-                 │ spawns via child_process
-┌────────────────┴───────────────────────────────┐
-│  cook CLI → Claude Code → writes to missions/{id}/kb/
-└────────────────────────────────────────────────┘
-```
+## CLI reference
 
-### Key decisions
+| Command | Description |
+|---|---|
+| `limina init` | Interactive setup — describe your problem, set budget, configure Slack |
+| `limina start` | Launch the research agent + observatory |
+| `limina stop` | Stop the daemon (state is preserved) |
+| `limina status` | Show mission phase, artifact counts, daemon status |
+| `limina budget [amount]` | View or update the mission budget |
 
-| Decision | Choice | Why |
-|---|---|---|
-| Backend | Next.js only | cook is Node.js; one server, one language |
-| Auth | API key in `.env` | v1 is single-tenant with 3 design partners |
-| Storage | Filesystem | `kb/` IS the persistent state; `mission.json` for metadata |
-| Real-time | Polling every 5s | Simpler than SSE, same UX for multi-hour workflows |
-| Notifications | Slack webhooks | Nobody watches a page for days |
-| Runtime | Claude Code only | One reliable runtime for v1 |
-
-## Configuration
-
-| Variable | Required | Description |
-|---|---|---|
-| `MISSION_API_KEY` | Yes | Shared secret for API authentication |
-| `SLACK_WEBHOOK_URL` | No | Slack incoming webhook for notifications |
-| `APP_URL` | No | Base URL for links in Slack messages (default: `http://localhost:3000`) |
-
-## Mission state machine
+## How the agent works
 
 ```
-CREATED → PLANNING → PLAN_READY → RUNNING → COMPLETED
-                                    ├→ CHECKPOINT_WAITING → RUNNING
-                                    ├→ ESCALATION_WAITING → RUNNING
-                                    ├→ STALLED
-                                    ├→ FAILED_RECOVERABLE → RUNNING
-                                    └→ KILLED
+limina start
+    │
+    ├── Starts Next.js observatory (web UI)
+    │
+    └── Spawns cook CLI
+         │
+         └── Claude Code researches autonomously
+              │
+              ├── Reads CHALLENGE.md (your problem)
+              ├── Creates research plan in BACKLOG.md
+              ├── Generates hypotheses (H001, H002, ...)
+              ├── Runs experiments (E001, E002, ...)
+              ├── Documents findings (F001, F002, ...)
+              ├── Escalates via CEO_REQUESTS.md when blocked
+              └── Writes final report
 ```
 
-## API routes
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/missions` | List all missions |
-| `POST` | `/api/missions` | Create a new mission |
-| `GET` | `/api/missions/:id/status` | Poll mission state + KB artifacts |
-| `POST` | `/api/missions/:id/approve` | Approve plan / resume from checkpoint |
-| `POST` | `/api/missions/:id/escalation` | Respond to CEO request |
-| `POST` | `/api/missions/:id/kill` | Stop mission (preserves state) |
-| `POST` | `/api/missions/:id/share` | Generate shareable report link |
-| `GET` | `/api/reports/:token` | Public read-only report (no auth) |
-
-All endpoints except `/api/reports/:token` require `Authorization: Bearer <API_KEY>`.
-
-## Testing
-
-```bash
-# Unit tests (Vitest)
-npx vitest run
-
-# E2E tests (Playwright)
-npx playwright test
-
-# Build check
-npx next build
-```
-
-50 unit tests + 19 E2E tests. Every module ships with tests.
-
-## Deployment
-
-**Must use `next start` or Docker.** Vercel serverless is NOT compatible (subprocess state and persistent watchers require a long-lived Node.js process).
-
-```bash
-npm run build
-npm start
-```
+All artifacts are markdown files in `kb/`. The observatory polls this directory and renders progress in real-time.
 
 ## Project structure
 
 ```
+cli/                                CLI commands (init, start, stop, status, budget)
+bin/limina                          Entry point
+framework/                          Research framework files scaffolded into new missions
 src/
-├── app/
-│   ├── page.tsx                    Missions list (homepage)
-│   ├── new/page.tsx                Intake form
-│   ├── missions/[id]/page.tsx      Mission workspace (plan/progress/report tabs)
-│   └── api/missions/               API routes
+├── app/                            Next.js observatory pages
+│   ├── page.tsx                    Dashboard
+│   ├── research/                   Research artifacts view
+│   ├── findings/                   Findings ranked by impact
+│   ├── steering/                   CEO request / escalation UI
+│   ├── cost/                       Budget tracking
+│   ├── report/                     Final report view
+│   └── api/                        API routes (status, feedback, escalation, etc.)
 ├── lib/
-│   ├── cook-manager.ts             State machine + subprocess lifecycle
-│   ├── kb-parser.ts                Shared artifact parser (all types)
-│   ├── mission.ts                  Templates, state CRUD, atomic writes
+│   ├── cook-manager.ts             Cook subprocess lifecycle + state machine
+│   ├── kb-parser.ts                Shared parser for all KB artifact types
+│   ├── mission.ts                  Mission CRUD, templates, atomic writes
 │   └── notify.ts                   Slack webhook notifications
-missions/                           Runtime data (gitignored)
 tests/
 ├── lib/                            Unit tests (Vitest)
 └── e2e/                            E2E tests (Playwright)
 ```
 
-## Related
+## Configuration
 
-- [cook](https://rjcorwin.github.io/cook/) — agent orchestration CLI used for the research loop
+Set in `.env.local` (see `.env.example`):
+
+| Variable | Required | Description |
+|---|---|---|
+| `MISSION_API_KEY` | Yes | Shared secret for API authentication |
+| `SLACK_WEBHOOK_URL` | No | Slack incoming webhook for escalation notifications |
+| `APP_URL` | No | Base URL for links in Slack messages (default: `http://localhost:3000`) |
+
+## Testing
+
+```bash
+npx vitest run        # Unit tests
+npx playwright test   # E2E tests
+```
+
+## Deployment
+
+**Must use `next start` or Docker.** Vercel serverless won't work — the agent subprocess and filesystem state require a long-lived Node.js process.
+
+```bash
+npm run build && npm start
+```

@@ -14,16 +14,24 @@ An autonomous AI research agent. Give it a hard technical problem, walk away, co
 
 ## How it works
 
+Just type `limina`. It figures out what to do:
+
 ```
-limina init      →  You describe the problem
-limina start     →  Agent researches autonomously for hours/days
-                    Observatory opens at localhost:3000
-                    ┌─────────────────────────────────┐
-                    │  Dashboard · Research · Findings │
-                    │  Steering · Cost · Report        │
-                    └─────────────────────────────────┘
-limina status    →  Check progress from the terminal
+limina           →  Auto-detects state:
+                    No mission?  → Sets one up (interactive)
+                    Mission idle? → Starts the agent + observatory
+                    Already running? → Shows status
+
 limina stop      →  Pause anytime, state is preserved
+```
+
+The observatory opens at `localhost:3000`:
+
+```
+┌─────────────────────────────────┐
+│  Dashboard · Research · Findings │
+│  Steering · Cost · Report        │
+└─────────────────────────────────┘
 ```
 
 The agent uses the [cook](https://rjcorwin.github.io/cook/) CLI to orchestrate Claude Code through a structured research loop: hypothesize, experiment, document findings, review, iterate. All state lives on the filesystem in a `kb/` knowledge base — if it's not in `kb/`, it didn't happen.
@@ -39,12 +47,9 @@ npm install
 # Prerequisites
 npm install -g @let-it-cook/cli   # cook CLI for agent orchestration
 
-# Create a research mission
+# Create and run a research mission
 mkdir my-research && cd my-research
-limina init
-
-# Launch
-limina start
+limina
 ```
 
 ## Observatory
@@ -62,6 +67,7 @@ The web UI at `localhost:3000` gives you a live view of the agent's work:
 
 | Command | Description |
 |---|---|
+| `limina` | Auto-detect: init → start → status |
 | `limina init` | Interactive setup — describe your problem, set budget, configure Slack |
 | `limina start` | Launch the research agent + observatory |
 | `limina stop` | Stop the daemon (state is preserved) |

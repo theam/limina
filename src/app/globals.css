@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+:root {
+  /* DESIGN.md compliant tokens — IBM Carbon-inspired */
+  --surface-primary: #ffffff;
+  --surface-secondary: #f4f4f4;
+  --text-primary: #161616;
+  --text-secondary: #525252;
+  --text-placeholder: #a8a8a8;
+  --interactive: #0f62fe;
+  --interactive-hover: #0353e9;
+  --support-success: #198038;
+  --support-warning: #f1c21b;
+  --support-error: #da1e28;
+  --support-info: #0f62fe;
+  --border-subtle: #e0e0e0;
+  --border-strong: #8d8d8d;
+  --background: #f4f4f4;
+  --foreground: #161616;
+
+  /* Typography */
+  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+
+  /* Spacing — 8px base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-none: 0px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+/* Artifact type left borders — AI trust states */
+.border-hypothesis { border-left: 3px solid var(--interactive); }
+.border-experiment { border-left: 3px solid #f1c21b; }
+.border-finding { border-left: 3px solid var(--support-success); }
+.border-review { border-left: 3px solid #8a3ffc; }
+.border-task { border-left: 3px solid var(--text-secondary); }
+
+/* Status badges */
+.badge-confirmed { background: #defbe6; color: var(--support-success); }
+.badge-rejected { background: #fff1f1; color: var(--support-error); }
+.badge-testing { background: #edf5ff; color: var(--interactive); }
+.badge-proposed { background: #f4f4f4; color: var(--text-secondary); }
+.badge-running { background: #edf5ff; color: var(--interactive); }
+.badge-completed { background: #defbe6; color: var(--support-success); }
+.badge-failed { background: #fff1f1; color: var(--support-error); }
+
+/* Impact badges */
+.impact-high { background: #defbe6; color: var(--support-success); }
+.impact-medium { background: #fef3cd; color: #8e6a00; }
+.impact-low { background: #f4f4f4; color: var(--text-secondary); }
+
+/* Pulse animation for active research */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Fade-in for new content appearing — DESIGN.md: "motion preserves context" */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 300ms ease-out forwards;
+}
+
+/* Subtle breathing glow on cards when agent is running — shows liveness */
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(15, 98, 254, 0); }
+  50% { box-shadow: 0 0 0 2px rgba(15, 98, 254, 0.08); }
+}
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Progress bar shimmer — shows active polling */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--interactive) 0%,
+    rgba(15, 98, 254, 0.4) 50%,
+    var(--interactive) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Last-updated flash — brief highlight when data refreshes */
+@keyframes flash-update {
+  0% { background-color: rgba(15, 98, 254, 0.06); }
+  100% { background-color: transparent; }
+}
+.animate-flash {
+  animation: flash-update 1s ease-out;
+}
+
+/* Reduced motion — DESIGN.md: "respect reduced-motion preferences" */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-dot,
+  .animate-breathe,
+  .animate-shimmer {
+    animation: none;
+  }
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

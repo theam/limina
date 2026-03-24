@@ -1,207 +1,219 @@
-# Autonomous Researcher
+```
+  ██╗     ██╗███╗   ███╗██╗███╗   ██╗ █████╗
+  ██║     ██║████╗ ████║██║████╗  ██║██╔══██╗
+  ██║     ██║██╔████╔██║██║██╔██╗ ██║███████║
+  ██║     ██║██║╚██╔╝██║██║██║╚██╗██║██╔══██║
+  ███████╗██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║
+  ╚══════╝╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
 
-Autonomous Researcher is a framework for building **long-running autonomous research agents**.
-
-It is built for agents that can stay focused on a research objective over time, accumulate knowledge, design and run experiments, evaluate progress, challenge their own direction, and keep improving with minimal human involvement.
-
-The human defines the mission, constraints, resources, and intervention thresholds. The agent handles the research loop: breaking work into tasks, forming hypotheses, running experiments, recording findings, and continuing from persistent state across sessions.
-
-Progress means better experiments, better findings, stronger baselines, better decisions, and a durable research history that survives interruptions.
-
-This repository packages that operating model with persistent memory, explicit artifact trails, and validation rules so the research process remains reproducible instead of collapsing into chat history.
-
-It is compatible with **Claude Code, Codex, and OpenCode**:
-
-- `CLAUDE.md` is the runtime adapter for **Claude Code**
-- `AGENTS.md` is the runtime adapter for **Codex** and **OpenCode**
-
-This repository is a **template/starter system**, not a battle-tested deployment. The repository history reflects the evolution of the system over multiple iterations.
-
-## How the Loop Works
-
-1. The human defines the research objective, constraints, and available resources.
-2. The agent decomposes the work into tasks, questions, and hypotheses.
-3. The agent runs experiments, gathers evidence, and records findings.
-4. The agent reviews the direction, challenges assumptions, and updates the plan.
-5. The agent continues from persistent state across sessions instead of starting over.
-
-## Why This Exists
-
-Most agent repos stop at one of these layers:
-
-- prompt engineering
-- agent orchestration
-- experiment scripts
-
-Autonomous Researcher is different because it is a **persistent research operating model**:
-
-- not just a prompt
-- not just a loop
-- not just a benchmark harness
-- a framework for sustained research progress with memory, validation, and review
-
-The point is not only to run tasks autonomously, but to make **measurable research progress** over long periods with a system that can preserve context, justify decisions, and recover after interruptions.
-
-## Compatibility
-
-Autonomous Researcher keeps the same functional contract across all supported runtimes while adapting to their native mechanics.
-
-| Capability | Claude Code | Codex | OpenCode |
-|---|---|---|---|
-| Ask the user for missing information | `AskUserQuestion` | `request_user_input` or a direct question | Direct question |
-| Delegate work | Slash commands and Claude agents | `spawn_agent` / `send_input` | — |
-| Communicate status | Active session/chat | Active session/chat | Active session/chat |
-| Validate KB state | `python3 scripts/kb_validate.py` | `python3 scripts/kb_validate.py` | `python3 scripts/kb_validate.py` |
-
-`README.md` is the canonical human-readable spec. Runtime files are adapters, not the primary place for conceptual explanation.
-
-## What You Get
-
-- A persistent knowledge base in `kb/`
-- A research-first workflow:
-  - research: `H -> E -> F`
-  - engineering support: `INV -> FT -> IMP -> RET`
-- First-class review artifacts: `CR` and `SR`
-- Runtime-specific adapters for Claude Code, Codex, and OpenCode
-- Core artifact templates
-- A read-only KB validator: `python3 scripts/kb_validate.py`
-- Optional Notion export tooling
-
-## Quick Start
-
-1. Start with `README.md`, then read the runtime adapter you will use:
-   - Codex: `AGENTS.md`
-   - Claude Code: `CLAUDE.md`
-2. Define your challenge in `kb/mission/CHALLENGE.md`.
-3. Break the work into tasks in `kb/mission/BACKLOG.md`.
-4. Use the templates in `templates/` to create the first task and its downstream artifacts.
-5. Keep durable progress in `kb/`, not only in chat.
-6. Run the validator before closing KB-heavy work:
-
-```bash
-python3 scripts/kb_validate.py
+  from Latin līmen — "threshold"
+  Cross the boundary between known and unknown.
 ```
 
-## Autonomous Execution with cook
+Built by [The Agile Monkeys](https://theagilemonkeys.com)
 
-[cook](https://rjcorwin.github.io/cook/) is a universal orchestration CLI that handles work-review-gate cycles across any agent runtime. Install it and use the recipes below to run the researcher autonomously.
+Give Limina a hard technical problem. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution that meets your success criteria.
+
+## What is this
+
+Limina is an autonomous AI research agent. You give it a hard technical problem with clear success criteria, and it works through it using a structured multi-agent approach: break the problem down, survey existing work, form hypotheses, design and run experiments, challenge its own direction, and iterate — until it reaches a solution that meets the target, or exhausts the approaches and tells you what it learned.
+
+Everything the agent does is written to a persistent knowledge base (`kb/`). Hypotheses link to experiments. Experiments link to findings. Decisions are logged with reasoning. If the agent gets stuck, it escalates to you instead of guessing. You don't just get a result — you get the full trail of how it got there and why.
+
+## Who is this for
+
+- **Technical leads** — You need to make a decision between approaches and don't have weeks to run the comparison yourself. Limina does the legwork and gives you the evidence to decide.
+- **Research engineers** — You're tired of manually setting up experiment after experiment, tracking what you tried, and remembering why you discarded something three days ago. The agent keeps the full trail for you.
+- **Scientists** — Your research involves systematic evaluation across many variables. Limina runs the loop — hypothesize, test, record, review, iterate — so you can focus on the questions, not the bookkeeping.
+- **Business intelligence** — You have a question that requires more than pulling a dashboard. Something that needs real investigation: gathering data from multiple sources, testing assumptions, building evidence for a recommendation.
+- **Anyone with a very hard technical question** — The kind that takes multiple experiments to answer, where you need to track what worked, what didn't, and why. If you've ever lost track of what you already tried, this is for that.
+
+## What you can do with it
+
+**Define a mission.** Describe your research objective — what you're trying to figure out, what "better" means, what resources the agent can use, and when it should come to you for a decision.
+
+**Let it run.** The agent breaks the problem into tasks, forms hypotheses, runs experiments, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
+
+**Watch it work.** The Observatory app shows progress as it happens — hypotheses being tested, experiments completing, findings emerging.
+
+**Steer when needed.** When the agent hits something it can't decide on its own — needs more budget, wants to try a risky approach, reached a fork — it stops and asks you. You can also send directives at any time to change the agent's focus, priorities, or approach — and it will incorporate them at the next phase boundary.
+
+**Get the result.** When the agent meets your success criteria — or determines it can't — you have the solution, the full research trail, and the reasoning behind every decision it made along the way.
+
+---
+
+## Quick start
+
+Requires [Node.js 20+](https://nodejs.org/).
 
 ```bash
-npm install -g @let-it-cook/cli
+npm install -g @theagilemonkeys/limina
 ```
 
-**Continue research (open-ended):**
+Then go to the directory where you want your research project to live:
+
 ```bash
-cook "Continue research" review \
-     "Review current status and verify if we achieved the target mission" \
-     "DONE if we achieved the target mission, else ITERATE"
+cd ~/my-research
+limina
 ```
 
-**Research with iteration cap:**
-```bash
-cook "Continue research" review \
-     "Review current status and verify if we achieved the target mission" \
-     "DONE if we achieved the target mission, else ITERATE" \
-     --max-iterations 10
+That's it. `limina` will check for required tools ([Claude Code](https://docs.anthropic.com/en/docs/claude-code), git) and offer to install anything that's missing — including walking you through Claude Code authentication and setting up your Anthropic API key. Then it sets up your mission interactively, launches the agent, and opens the Observatory.
+
+
+After setup, it stays simple:
+
+```
+limina           →  Auto-detects state:
+                    No mission?  → Sets one up (interactive)
+                    Mission idle? → Starts the agent + Observatory
+                    Already running? → Shows status
+
+limina stop      →  Pause anytime, state is preserved
+limina doctor    →  Check system health and install missing tools
 ```
 
-**Mixed agents (Codex work, Claude review):**
-```bash
-cook "Continue research" review \
-     "Review current status and verify if we achieved the target mission" \
-     "DONE if we achieved the target mission, else ITERATE" \
-     --work-agent codex --review-agent claude
-```
+## Writing a good mission
 
-**Challenge review:**
-```bash
-cook "Run /challenge with target 'Research direction'" review \
-     "Read the CR report and assess whether critical issues were addressed" \
-     "DONE if no critical issues remain, else ITERATE"
-```
+`limina` will ask you to describe your problem. Think of it as a **research brief**, not a coding request. The agent should understand:
 
-The validator is read-only in v1. It checks:
+1. **Research objective** — what problem it is trying to solve or improve
+2. **Evaluation target** — what "better" means and what failure is unacceptable
+3. **Baseline** — the current system, method, or repo it should beat or replace
+4. **Resource envelope** — what compute, budget, datasets, APIs, and services it can use
+5. **Autonomy boundaries** — what it is allowed to generate on its own (evaluation sets, synthetic data, benchmarks)
+6. **Escalation rules** — when it should ask the human for more budget, tools, or approvals
 
-- last-ID declarations in `BACKLOG.md`
-- task file and backlog row consistency
-- `INDEX.md` coverage for core artifact files
-- research traceability: `E -> H`, `F -> E/H/T`
-- engineering traceability across `INV`, `FT`, `IMP`, `RET`
-- `CR` and `SR` metadata and naming
-- malformed filenames, duplicate IDs, and ID gaps
-
-## Writing the First Prompt
-
-Your first prompt should read like a **research brief**, not like a generic coding request.
-
-The agent should understand:
-
-1. **Research objective**: what problem it is trying to solve or improve.
-2. **Evaluation target**: what “better” means and what failure is unacceptable.
-3. **Baseline**: the current system, method, or repo it should beat or replace.
-4. **Resource envelope**: what compute, budget, datasets, APIs, and services it can use.
-5. **Autonomy boundaries**: what it is allowed to generate on its own, such as evaluation sets, synthetic queries, or benchmarks.
-6. **Escalation rules**: when it should ask the human for more budget, tools, or approvals.
-
-### Good First-Prompt Pattern
-
-Write the first prompt as a compact mission brief. For example:
+### Example
 
 ```text
 Your objective is to improve a multilingual retrieval system for a product catalog.
 
 The system should support both natural-language intent queries and traditional keyword search.
-Success requires high precision, high recall, and strong latency. Missing relevant items or returning irrelevant ones is not acceptable.
+Success requires high precision, high recall, and strong latency. Missing relevant items or
+returning irrelevant ones is not acceptable.
 
 You have an existing baseline system to improve.
 You may use the datasets, services, and API keys available in the project environment.
-You also have a bounded compute budget and should optimize for effective iteration, not long expensive runs by default.
+You also have a bounded compute budget and should optimize for effective iteration, not long
+expensive runs by default.
 
 If evaluation data does not exist, generate it yourself and document how it was created.
 If additional tools, budget, or access are needed, ask with a clear justification.
 ```
 
-That pattern works well because it gives the agent:
+This works because it gives the agent a concrete objective, a measurable bar, a baseline to beat, a resource envelope, ownership of evaluation setup, and a clear rule for when to escalate.
 
-- a concrete research objective
-- a measurable quality bar
-- a baseline to improve
-- a resource envelope
-- ownership of evaluation setup
-- a clear rule for when to escalate to the human
+## The Observatory
 
-## Core Model
+When the agent is running, the Observatory at `localhost:3000` lets you follow along:
 
-The system is built around a persistent knowledge base in `kb/`.
+- **Dashboard** — mission status, current phase, how many artifacts have been created, elapsed time
+- **Directive** — send strategic instructions to the agent mid-loop, respond when it needs your judgment
+- **Research** — hypotheses, experiments, and literature as they appear
+- **Findings** — results ranked by impact
+- **Cost** — budget tracking
+- **Report** — final research report with recommendations
 
-- Durable state lives in `kb/`, not only in conversation context
-- Every unit of work is a task
-- Research tasks follow `H -> E -> F`
-- Engineering tasks follow `INV -> FT -> IMP -> RET`
-- Reviews are first-class artifacts: `CR` and `SR`
-- Communication is transport-neutral: use the active session by default
-- `DECISIONS.md` and `CEO_REQUESTS.md` are mission ledgers, not file-backed artifact types
+## How the agent works
 
-### Core Tracked Artifacts
+```
+limina
+    │
+    ├── Opens the Observatory
+    │
+    └── Launches the research agent
+         │
+         ├── Reads your problem description
+         ├── Creates a research plan
+         ├── Generates hypotheses (H001, H002, ...)
+         ├── Runs experiments (E001, E002, ...)
+         ├── Documents findings (F001, F002, ...)
+         ├── Asks you when it gets stuck
+         └── Writes the final report
+```
 
-These are the file-backed artifact types enforced by the validator:
+All artifacts are markdown files in a `kb/` directory. The Observatory watches this directory and shows progress in real-time. Under the hood, the agent uses the [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code) (`@anthropic-ai/claude-agent-sdk`) — Claude Code's capabilities as a library — running work-review-iterate cycles with session continuity across iterations.
 
-| Prefix | Meaning | Location |
+## Full-manual mode
+
+If you prefer to run the research framework directly — without the Observatory — you can use the `framework/` directory as a standalone template. This is how the [original version](https://github.com/theam/autonomous-researcher/tree/main) of this project works.
+
+### Setup
+
+`limina` handles prerequisites and scaffolding automatically. If you prefer full control, set up manually:
+
+```bash
+# Copy the framework into your research directory
+cp -r framework/ my-research/
+cd my-research
+
+# Write your research objective
+# Edit kb/mission/CHALLENGE.md with your problem description
+
+# Install prerequisites
+npm install -g @anthropic-ai/claude-code   # Claude Code
+```
+
+### Running with Claude Code directly
+
+You can run Claude Code directly without the Observatory:
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+Then give it your research brief as the first prompt. The `CLAUDE.md` in the framework directory will be loaded automatically and guide the agent through the full methodology.
+
+### What you get
+
+- `CLAUDE.md` — full research methodology (hypothesis-experiment-finding chains, strategic reviews, task system)
+- `AGENTS.md` — Codex/OpenCode runtime adapter for the same methodology
+- `templates/` — artifact templates for all KB file types
+- `scripts/kb_validate.py` — read-only KB validator
+
+## CLI reference
+
+| Command | Description |
+|---|---|
+| `limina` | Does the right thing — sets up, starts, or shows status |
+| `limina init` | Just the setup step (if you want to configure before starting) |
+| `limina start` | Just the launch step (agent + Observatory) |
+| `limina stop` | Stop the daemon (state is preserved) |
+| `limina status` | Show mission phase, artifact counts, daemon status |
+| `limina budget [amount]` | View or update the mission budget |
+| `limina doctor` | Check prerequisites and install missing tools |
+
+## Configuration
+
+Set in `.env.local` (see `.env.example`):
+
+| Variable | Required | Description |
 |---|---|---|
-| `T` | Task | `kb/tasks/` |
-| `H` | Hypothesis | `kb/research/hypotheses/` |
-| `E` | Experiment | `kb/research/experiments/` |
-| `F` | Finding | `kb/research/findings/` |
-| `L` | Literature review | `kb/research/literature/` |
-| `FT` | Feature spec | `kb/engineering/features/` |
-| `INV` | Investigation | `kb/engineering/investigations/` |
-| `IMP` | Implementation log | `kb/engineering/implementations/` |
-| `RET` | Retrospective | `kb/engineering/retrospectives/` |
-| `CR` | Challenge review | `kb/reports/` |
-| `SR` | Strategic review | `kb/reports/` |
+| `MISSION_API_KEY` | Yes | Shared secret for API authentication |
+| `ANTHROPIC_API_KEY` | Yes | Anthropic API key for the Claude Agent SDK ([get one here](https://console.anthropic.com/settings/keys)) |
+| `SLACK_WEBHOOK_URL` | No | Slack webhook for notifications when the agent needs your input |
+| `APP_URL` | No | Base URL for links in notifications (default: `http://localhost:3000`) |
 
-Generic milestone notes are intentionally excluded from the core validated graph. `templates/report.md` is kept as optional support documentation.
+## Contributing
 
-## License
+```bash
+npx vitest run        # Unit tests
+npx playwright test   # E2E tests
+npm run build         # Production build
+```
 
-MIT, © The Agile Monkeys. See [LICENSE](./LICENSE).
+Deployment requires a long-running server (`npm start` or Docker) — serverless platforms won't work because the agent needs a persistent process.
+
+## Architecture
+
+Limina uses the [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code) (`@anthropic-ai/claude-agent-sdk`) to run the research agent directly as a library — no external orchestration CLI needed. The agent runs in the web server process with session continuity across iterations, enabling mid-loop directive injection.
+
+```
+Observatory (Next.js)
+  ├── /api/status     → polls kb/ for artifacts
+  ├── /api/directive  → sends instructions to the agent mid-loop
+  └── MissionRunner   → manages the Claude Agent SDK session
+       ├── work phase    → agent follows CLAUDE.md methodology
+       ├── directive     → queued directives delivered between phases
+       └── review phase  → agent checks if mission is achieved
+```

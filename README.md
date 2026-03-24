@@ -90,6 +90,37 @@ limina start
 
 All artifacts are markdown files in `kb/`. The observatory polls this directory and renders progress in real-time.
 
+## Writing a good mission
+
+`limina init` will ask you to describe your problem. Think of it as a **research brief**, not a coding request. The agent should understand:
+
+1. **Research objective** — what problem it is trying to solve or improve
+2. **Evaluation target** — what "better" means and what failure is unacceptable
+3. **Baseline** — the current system, method, or repo it should beat or replace
+4. **Resource envelope** — what compute, budget, datasets, APIs, and services it can use
+5. **Autonomy boundaries** — what it is allowed to generate on its own (evaluation sets, synthetic data, benchmarks)
+6. **Escalation rules** — when it should ask the human for more budget, tools, or approvals
+
+### Example
+
+```text
+Your objective is to improve a multilingual retrieval system for a product catalog.
+
+The system should support both natural-language intent queries and traditional keyword search.
+Success requires high precision, high recall, and strong latency. Missing relevant items or
+returning irrelevant ones is not acceptable.
+
+You have an existing baseline system to improve.
+You may use the datasets, services, and API keys available in the project environment.
+You also have a bounded compute budget and should optimize for effective iteration, not long
+expensive runs by default.
+
+If evaluation data does not exist, generate it yourself and document how it was created.
+If additional tools, budget, or access are needed, ask with a clear justification.
+```
+
+This works because it gives the agent a concrete objective, a measurable bar, a baseline to beat, a resource envelope, ownership of evaluation setup, and a clear rule for when to escalate.
+
 ## Project structure
 
 ```

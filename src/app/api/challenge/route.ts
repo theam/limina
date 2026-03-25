@@ -23,9 +23,11 @@ export async function POST() {
           prompt: challengePrompt,
           options: {
             cwd,
+            model: process.env.LIMINA_MODEL || "claude-opus-4-6",
+            thinking: { type: "adaptive" },
             permissionMode: "bypassPermissions" as const,
             allowDangerouslySkipPermissions: true,
-            allowedTools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent"],
+            tools: { type: "preset", preset: "claude_code" },
             settingSources: ["project" as const],
             maxTurns: 10,
             env: {

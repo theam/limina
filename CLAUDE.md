@@ -2,14 +2,22 @@
 
 # Limina
 
-Autonomous research agent web app. Next.js single-process architecture.
+Autonomous research agent web app. Two-service architecture.
 
 ## Architecture
 
-Single Next.js app. No database — filesystem-based state (`missions/{id}/kb/` + `mission.json`). Polls KB for changes every 5s. Spawns `cook` CLI via `child_process` for research execution. Claude Code only (v1).
+Two services: Next.js UI server + Fastify agent service. No database — filesystem-based state (`missions/{id}/kb/` + `mission.json`). UI polls KB for changes every 5s. Agent service runs the Claude Agent SDK in a separate process. Services communicate via HTTP.
+
+```
+CLI (supervisor)
+  ├── Next.js server (UI — reads filesystem)
+  └── Agent service  (Fastify — runs MissionRunner, writes filesystem)
+```
 
 Key modules:
-- `src/lib/mission-runner.ts` — MissionRunner class + agent session lifecycle via Claude Agent SDK
+- `src/agent-service/server.ts` — Fastify HTTP server wrapping MissionRunner (start/kill/directive/health endpoints)
+- `src/lib/mission-runner-core.ts` — MissionRunner class + agent session lifecycle via Claude Agent SDK
+- `src/lib/mission-runner.ts` — HTTP client to agent service (same API surface, used by Next.js routes)
 - `src/lib/kb-parser.ts` — shared parser for all KB artifact types (H, E, F, CR, SR, T, L)
 - `src/lib/mission.ts` — CHALLENGE.md templates, mission CRUD, atomic writes
 - `src/lib/notify.ts` — Slack webhook notifications

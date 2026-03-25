@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFile, writeFile, rename } from "fs/promises";
 import { join } from "path";
 import { parseDirectives } from "../../../lib/kb-parser";
-import { getMissionRunner } from "../../../lib/mission-runner";
+import { sendDirective } from "../../../lib/mission-runner";
 
 function getMissionDir(): string {
   return process.env.MISSION_DIR || process.cwd();
@@ -61,14 +61,11 @@ export async function POST(request: NextRequest) {
     await writeFile(tmp, updated);
     await rename(tmp, directivesPath);
 
-    // Inject into running agent session if active
+    // Inject into running agent session if active (via HTTP to agent service)
     try {
-      const runner = getMissionRunner();
-      if (runner) {
-        await runner.injectDirective(instruction.trim());
-      }
+      sendDirective(instruction.trim());
     } catch {
-      // Runner not available — directive will be picked up from file at next iteration
+      // Agent service unreachable — directive will be picked up from file at next iteration
     }
 
     return NextResponse.json({ success: true, id: nextId });

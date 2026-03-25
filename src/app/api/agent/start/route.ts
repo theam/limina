@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Check if already running
-  const activeId = getActiveMissionId();
+  const activeId = await getActiveMissionId();
   if (activeId) {
     return NextResponse.json(
       { error: `Mission ${activeId} is already running` },

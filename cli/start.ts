@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import color from "chalk";
-import { existsSync, writeFileSync, readFileSync } from "fs";
+import { existsSync, writeFileSync, readFileSync, createWriteStream } from "fs";
 import { join } from "path";
 import { spawn, exec } from "child_process";
 import { createServer } from "net";
@@ -251,28 +251,69 @@ export async function start(options: { port?: string; open?: boolean }) {
     }
   }
 
-  // Find available port
+  // Find available ports for both services
   const s2 = p.spinner();
-  s2.start("Starting observatory");
+  s2.start("Starting services");
 
-  const port = options.port ? parseInt(options.port, 10) : await getFreePort();
-  const portStr = String(port);
+  const uiPort = options.port ? parseInt(options.port, 10) : await getFreePort();
+  const agentPort = await getFreePort();
 
   const observatoryDir = join(__dirname, "..");
   const nextBin = join(observatoryDir, "node_modules/.bin/next");
+  const tsxBin = join(observatoryDir, "node_modules/.bin/tsx");
+  const agentServicePath = join(observatoryDir, "src", "agent-service", "server.ts");
 
-  const webServer = spawn(nextBin, ["dev", "--port", portStr], {
+  // Log files for both services
+  const uiLogPath = join(cwd, "ui-server.log");
+  const agentLogPath = join(cwd, "agent-service.log");
+  const uiLogStream = createWriteStream(uiLogPath, { flags: "a" });
+  const agentLogStream = createWriteStream(agentLogPath, { flags: "a" });
+
+  // Start agent service first (Next.js needs its URL)
+  const agentService = spawn(tsxBin, [agentServicePath], {
     cwd: observatoryDir,
-    env: { ...process.env, MISSION_DIR: cwd, PORT: portStr },
+    env: { ...process.env, AGENT_PORT: String(agentPort), MISSION_DIR: cwd },
     stdio: ["ignore", "pipe", "pipe"],
   });
+  agentService.stdout?.pipe(agentLogStream);
+  agentService.stderr?.pipe(agentLogStream);
 
-  s2.stop(green("✓") + " Observatory on " + color.underline(`http://localhost:${port}`));
+  // Wait for agent service to be ready
+  const waitForAgentService = async () => {
+    for (let i = 0; i < 20; i++) {
+      try {
+        const res = await fetch(`http://127.0.0.1:${agentPort}/health`);
+        if (res.ok) return true;
+      } catch {}
+      await sleep(500);
+    }
+    return false;
+  };
+
+  const agentReady = await waitForAgentService();
+  if (!agentReady) {
+    agentService.kill();
+    p.cancel("Agent service failed to start. Check logs.");
+    process.exit(1);
+  }
+
+  // Start Next.js UI server with agent service URL
+  const agentServiceUrl = `http://127.0.0.1:${agentPort}`;
+
+  const webServer = spawn(nextBin, ["dev", "--port", String(uiPort)], {
+    cwd: observatoryDir,
+    env: { ...process.env, MISSION_DIR: cwd, PORT: String(uiPort), AGENT_SERVICE_URL: agentServiceUrl },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  webServer.stdout?.pipe(uiLogStream);
+  webServer.stderr?.pipe(uiLogStream);
+
+  s2.stop(green("✓") + " Observatory on " + color.underline(`http://localhost:${uiPort}`));
 
   await sleep(200);
 
-  // Write PID file (agent runs inside the web server process)
-  writeFileSync(pidFile, `${process.pid}\n${webServer.pid}`);
+  // Write PID file (CLI pid, web server pid, agent service pid)
+  writeFileSync(pidFile, `${process.pid}\n${webServer.pid}\n${agentService.pid}`);
 
   await sleep(300);
 
@@ -282,7 +323,7 @@ export async function start(options: { port?: string; open?: boolean }) {
     [
       `${bright("Mission:")}  ${dim(shortObj)}`,
       `${bright("Agent:")}    ${dim("Claude Code (autonomous)")}`,
-      `${bright("View:")}     ${color.underline(dim(`http://localhost:${port}`))}`,
+      `${bright("View:")}     ${color.underline(dim(`http://localhost:${uiPort}`))}`,
       "",
       dim("The agent is now researching autonomously."),
       dim("Open the observatory to monitor progress."),
@@ -299,7 +340,7 @@ export async function start(options: { port?: string; open?: boolean }) {
   const waitForServer = async () => {
     for (let i = 0; i < 20; i++) {
       try {
-        await fetch(`http://localhost:${port}`);
+        await fetch(`http://localhost:${uiPort}`);
         return true;
       } catch {
         await sleep(500);
@@ -310,10 +351,10 @@ export async function start(options: { port?: string; open?: boolean }) {
 
   const ready = await waitForServer();
   if (ready) {
-    // Start the agent via the web server's API (agent runs in web server process)
+    // Start the agent via the web server's API (proxied to agent service)
     try {
       const apiKey = process.env.MISSION_API_KEY || "";
-      await fetch(`http://localhost:${port}/api/agent/start`, {
+      await fetch(`http://localhost:${uiPort}/api/agent/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -329,28 +370,30 @@ export async function start(options: { port?: string; open?: boolean }) {
       const openCmd =
         process.platform === "darwin" ? "open" :
         process.platform === "win32" ? "start" : "xdg-open";
-      exec(`${openCmd} http://localhost:${port}`);
+      exec(`${openCmd} http://localhost:${uiPort}`);
     }
   }
 
   s3.stop(green("✓") + " Research agent running");
 
-  p.outro(green("Research in progress") + dim(" — observatory at localhost:" + port));
+  p.outro(green("Research in progress") + dim(" — observatory at localhost:" + uiPort));
 
-  // Keep alive
-  process.on("SIGINT", () => {
-    console.log();
-    console.log(dim("  Shutting down..."));
+  // Keep alive — kill both services on shutdown
+  const shutdown = (signal: string) => {
+    if (signal === "SIGINT") {
+      console.log();
+      console.log(dim("  Shutting down..."));
+    }
+    agentService.kill();
     webServer.kill();
     try { require("fs").unlinkSync(pidFile); } catch {}
-    console.log(green("  ✓") + " Stopped. Research state preserved.");
-    console.log();
+    if (signal === "SIGINT") {
+      console.log(green("  ✓") + " Stopped. Research state preserved.");
+      console.log();
+    }
     process.exit(0);
-  });
+  };
 
-  process.on("SIGTERM", () => {
-    webServer.kill();
-    try { require("fs").unlinkSync(pidFile); } catch {}
-    process.exit(0);
-  });
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
 }

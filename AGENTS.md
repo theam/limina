@@ -1,6 +1,6 @@
-# Researcher Template — Codex Runtime Adapter
+# Limina — Codex Runtime Adapter
 
-This file is the **Codex runtime adapter** for the shared Researcher Template contract.
+This file is the **Codex runtime adapter** for the shared Limina contract.
 
 `README.md` is the canonical human-readable specification. `CLAUDE.md` and `AGENTS.md` must stay **functionally equivalent** while using runtime-specific tools and wording.
 

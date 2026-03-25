@@ -1,4 +1,4 @@
-# Autonomous Researcher — cook instructions
+# Limina — cook instructions
 
 This repository has a persistent research and engineering operating model.
 

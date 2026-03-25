@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate the Researcher template knowledge base.
+Validate the Limina knowledge base.
 
 The validator is intentionally read-only. It validates the core tracked
 artifact model documented in README.md / CLAUDE.md / AGENTS.md.

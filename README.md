@@ -1,6 +1,6 @@
-# Autonomous Researcher
+# Limina
 
-Autonomous Researcher is a framework for building **long-running autonomous research agents**.
+Limina is a framework for building **long-running autonomous research agents**.
 
 It is built for agents that can stay focused on a research objective over time, accumulate knowledge, design and run experiments, evaluate progress, challenge their own direction, and keep improving with minimal human involvement.
 
@@ -33,7 +33,7 @@ Most agent repos stop at one of these layers:
 - agent orchestration
 - experiment scripts
 
-Autonomous Researcher is different because it is a **persistent research operating model**:
+Limina is different because it is a **persistent research operating model**:
 
 - not just a prompt
 - not just a loop
@@ -44,7 +44,7 @@ The point is not only to run tasks autonomously, but to make **measurable resear
 
 ## Compatibility
 
-Autonomous Researcher keeps the same functional contract across all supported runtimes while adapting to their native mechanics.
+Limina keeps the same functional contract across all supported runtimes while adapting to their native mechanics.
 
 | Capability | Claude Code | Codex | OpenCode |
 |---|---|---|---|

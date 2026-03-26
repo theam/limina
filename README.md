@@ -49,21 +49,21 @@ This repository is a **template/starter system** — clone it, start an agent, a
 Open [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](https://openai.com/index/introducing-codex/) and paste:
 
 ```text
-Clone https://github.com/theam/limina into a new directory for my research project.
-Install any missing prerequisites (python3, git, etc.). Set up the workspace structure,
-then walk me through defining my research problem step by step — ask me about my
-objective, what success looks like, what I've already tried, and what resources are
-available. Then start the autonomous research loop following @CLAUDE.md.
+Install the Limina research skill by running:
+curl -fsSL https://raw.githubusercontent.com/theam/limina/main/setup.sh | bash
+Then tell me to change my Claude Code working directory to the folder where I want
+my research project to live, and run /limina to set up my first project.
 ```
 
-> **Note:** Limina works best with full autonomy enabled — `claude --dangerously-skip-permissions` for Claude Code, or Full Auto mode for Codex. The agent needs to create files, run experiments, and iterate without waiting for approval at every step.
+The agent will install the skill, ask you to switch to your preferred directory, then guide you through everything — project name, research objective, context, success criteria.
 
-The agent will:
+When setup is done, open Claude Code in the new project directory:
 
-1. Clone the template and install any missing prerequisites
-2. Set up the `kb/` directory structure
-3. Ask you about your research problem — objective, success criteria, context, constraints
-4. Write the mission brief and start researching autonomously following the methodology in `CLAUDE.md`
+```bash
+cd <your-project-name> && claude --dangerously-skip-permissions
+```
+
+The agent reads the methodology automatically and starts researching. For future projects, just type `/limina`.
 
 ### What to expect
 

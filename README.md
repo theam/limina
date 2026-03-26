@@ -51,8 +51,8 @@ Open [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](ht
 ```text
 Install the Limina research skill by running:
 curl -fsSL https://raw.githubusercontent.com/theam/limina/main/setup.sh | bash
-Then tell me to change my Claude Code working directory to the folder where I want
-my research project to live, and run /limina to set up my first project.
+Then ask me to change my Claude Code working directory to the folder where I want
+my research project to live, and help me set up a new Limina research project.
 ```
 
 The agent will install the skill, ask you to switch to your preferred directory, then guide you through everything — project name, research objective, context, success criteria.
@@ -63,7 +63,7 @@ When setup is done, open Claude Code in the new project directory:
 cd <your-project-name> && claude --dangerously-skip-permissions
 ```
 
-The agent reads the methodology automatically and starts researching. For future projects, just type `/limina`.
+The agent reads the methodology automatically and starts researching.
 
 ### What to expect
 

@@ -16,11 +16,19 @@
 
 Built by [The Agile Monkeys](https://theagilemonkeys.com).
 
-Give Limina a hard technical problem. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution backed by evidence, or tells you what it learned trying.
+Give Limina a problem with a measurable goal. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution backed by evidence, or tells you what it learned trying.
 
 ## What is this
 
-Limina is an autonomous AI research agent framework. You give it a hard technical problem with clear success criteria, and it works through it using a structured approach: break the problem down, survey existing work, form hypotheses, design and run experiments, challenge its own direction, and iterate — until it reaches a solution or exhausts the approaches and tells you what it learned.
+Limina is an autonomous research harness for AI agents. You describe a problem with clear success criteria, and the agent works through it: break it down, survey existing approaches, form hypotheses, design and run experiments, challenge its own assumptions, and iterate — until it reaches a solution or exhausts the approaches and tells you what it learned.
+
+It works on anything with a measurable outcome. Our team uses it for:
+
+- Optimizing a search engine for a large e-commerce platform
+- A/B testing product features
+- Researching state-of-the-art approaches for audio transcription
+- Optimizing social media reach with data-driven experiments
+- Investigating root causes of production performance issues
 
 Everything the agent does is written to a persistent knowledge base (`kb/`). Hypotheses link to experiments. Experiments link to findings. Decisions are logged with reasoning. If the agent gets stuck, it escalates to you instead of guessing. You don't just get a result — you get the full trail of how it got there and why.
 
@@ -29,10 +37,11 @@ This repository is a **template/starter system** — clone it, start an agent, a
 ## Who is this for
 
 - **Technical leads** — You need to make a decision between approaches and don't have weeks to run the comparison yourself. Limina does the legwork and gives you the evidence to decide.
+- **Product teams** — You want to optimize a metric — conversion rate, latency, cost, user engagement — and need systematic experimentation, not guesswork.
 - **Research engineers** — You're tired of manually setting up experiment after experiment, tracking what you tried, and remembering why you discarded something three days ago. The agent keeps the full trail for you.
 - **Scientists** — Your research involves systematic evaluation across many variables. Limina runs the loop — hypothesize, test, record, review, iterate — so you can focus on the questions, not the bookkeeping.
 - **Business intelligence** — You have a question that requires more than pulling a dashboard. Something that needs real investigation: gathering data from multiple sources, testing assumptions, building evidence for a recommendation.
-- **Anyone with a very hard technical question** — The kind that takes multiple experiments to answer, where you need to track what worked, what didn't, and why. If you've ever lost track of what you already tried, this is for that.
+- **Anyone with a goal that can be measured** — If you can define what "better" looks like, Limina can research how to get there.
 
 ## What you can do with it
 
@@ -129,6 +138,19 @@ You have access to the repo, CloudWatch logs, and APM traces.
 Success means P99 back under 200ms with the fix verified in staging.
 
 If you need access to production or want to run load tests, ask first.
+```
+
+**Product optimization:**
+
+```text
+We need to improve the conversion rate of our landing page.
+Current conversion is 2.3% and we want to reach 4%.
+
+Run A/B tests on copy, layout, and CTA variations. You can generate
+test variants and analyze results from our analytics API.
+Track what you tested, what worked, and why.
+
+If you need to deploy a variant to production, ask first.
 ```
 
 ## How it works

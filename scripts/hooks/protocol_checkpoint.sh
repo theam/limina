@@ -3,7 +3,14 @@
 # Replaces the original 12-line counter with actionable checks.
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-PROJECT_HASH=$(echo "$PROJECT_ROOT" | md5sum 2>/dev/null | cut -c1-8 || echo "$PROJECT_ROOT" | md5 -q | cut -c1-8)
+# Compute a per-repo hash. md5sum is GNU, md5 -q is macOS — test explicitly.
+if command -v md5sum >/dev/null 2>&1; then
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | md5sum | cut -c1-8)
+elif command -v md5 >/dev/null 2>&1; then
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | md5 -q | cut -c1-8)
+else
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | cksum | cut -d' ' -f1)
+fi
 COUNTER_FILE="/tmp/limina-checkpoint-${PROJECT_HASH}"
 SESSION_FILE="/tmp/limina-session-${PROJECT_HASH}"
 
@@ -16,7 +23,25 @@ echo "$COUNT" > "$COUNTER_FILE"
 
 # Every 25 tool uses: check if BACKLOG.md has been read
 if [ $((COUNT % 25)) -eq 0 ]; then
-  if [ ! -f "$SESSION_FILE" ] || [ "$(find "$SESSION_FILE" -mmin +30 2>/dev/null)" ]; then
+  # Check session file freshness using portable stat (works on both GNU and BSD/macOS)
+  STALE=false
+  if [ ! -f "$SESSION_FILE" ]; then
+    STALE=true
+  else
+    NOW=$(date +%s)
+    if stat -c %Y "$SESSION_FILE" >/dev/null 2>&1; then
+      # GNU stat
+      MTIME=$(stat -c %Y "$SESSION_FILE")
+    else
+      # BSD/macOS stat
+      MTIME=$(stat -f %m "$SESSION_FILE")
+    fi
+    AGE=$(( NOW - MTIME ))
+    if [ "$AGE" -gt 1800 ]; then
+      STALE=true
+    fi
+  fi
+  if [ "$STALE" = true ]; then
     echo "CHECKPOINT ($COUNT tool calls): You have not re-read BACKLOG.md recently."
     echo "Read kb/mission/BACKLOG.md now to stay oriented on current task state."
   fi

@@ -535,18 +535,23 @@ def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
         )
 
     # Check referenced artifacts exist on disk
+    # Task references checked for all artifact types that require them
+    _task_ref = [("Task", "T", "tasks")]
     ref_checks = {
-        "E": [("Hypothesis", "H", "research/hypotheses")],
-        "F": [
+        "H": _task_ref,
+        "E": _task_ref + [("Hypothesis", "H", "research/hypotheses")],
+        "F": _task_ref + [
             ("Experiment", "E", "research/experiments"),
             ("Hypothesis", "H", "research/hypotheses"),
         ],
-        "INV": [("Feature", "FT", "engineering/features")],
-        "IMP": [
+        "L": _task_ref,
+        "FT": _task_ref,
+        "INV": _task_ref + [("Feature", "FT", "engineering/features")],
+        "IMP": _task_ref + [
             ("Feature", "FT", "engineering/features"),
             ("Investigation", "INV", "engineering/investigations"),
         ],
-        "RET": [
+        "RET": _task_ref + [
             ("Feature", "FT", "engineering/features"),
             ("Implementation", "IMP", "engineering/implementations"),
         ],

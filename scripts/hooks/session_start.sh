@@ -31,6 +31,13 @@ else
   echo "=== WARNING: kb/mission/BACKLOG.md not found (fresh project?) ==="
 fi
 
-# Mark session start for checkpoint tracking
+# Mark session start for checkpoint tracking — use same hash logic as protocol_checkpoint.sh
+if command -v md5sum >/dev/null 2>&1; then
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | md5sum | cut -c1-8)
+elif command -v md5 >/dev/null 2>&1; then
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | md5 -q | cut -c1-8)
+else
+  PROJECT_HASH=$(echo "$PROJECT_ROOT" | cksum | cut -d' ' -f1)
+fi
 SESSION_ID="$(date +%s)-$$"
-echo "$SESSION_ID" > "/tmp/limina-session-$(echo "$PROJECT_ROOT" | md5sum 2>/dev/null | cut -c1-8 || echo "$PROJECT_ROOT" | md5 -q | cut -c1-8)"
+echo "$SESSION_ID" > "/tmp/limina-session-${PROJECT_HASH}"

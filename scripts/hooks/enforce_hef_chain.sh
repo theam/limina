@@ -15,14 +15,59 @@ if [ -z "$FILE_PATH" ]; then
   exit 0
 fi
 
+# Extract a metadata reference from content using Python — only from
+# YAML frontmatter or blockquote metadata lines, NOT from body text.
+extract_meta_ref() {
+  local content="$1"
+  local field="$2"      # e.g. "hypothesis" or "Hypothesis"
+  local ref_pattern="$3" # e.g. "H[0-9]{3}"
+  local file="$4"       # existing file to check (may not exist)
+
+  python3 -c "
+import re, sys
+try:
+    import frontmatter
+    has_fm = True
+except ImportError:
+    has_fm = False
+
+content = sys.stdin.read()
+field_lower = '${field}'.lower()
+ref_re = re.compile(r'(${ref_pattern})')
+meta_re = re.compile(r'^>\s+\*\*(.+?)\*\*:\s*(.+?)\s*$')
+
+# Try YAML frontmatter
+if has_fm:
+    try:
+        post = frontmatter.loads(content)
+        val = str(post.metadata.get(field_lower, ''))
+        m = ref_re.search(val)
+        if m:
+            print(m.group(1))
+            sys.exit(0)
+    except Exception:
+        pass
+
+# Try blockquote metadata
+for line in content.splitlines():
+    mm = meta_re.match(line.strip())
+    if mm and mm.group(1).strip().lower() == field_lower:
+        m = ref_re.search(mm.group(2))
+        if m:
+            print(m.group(1))
+            sys.exit(0)
+
+# Nothing found in content
+" <<< "$content"
+}
+
 # Check if this is an experiment file being created/edited
 if echo "$FILE_PATH" | grep -qE 'kb/research/experiments/E[0-9]{3}-.*\.md$'; then
-  # Look for hypothesis reference in the content being written
-  HYPO_ID=$(echo "$CONTENT" | grep -oE 'H[0-9]{3}' | head -1)
+  HYPO_ID=$(extract_meta_ref "$CONTENT" "hypothesis" 'H[0-9]{3}' "$FILE_PATH")
 
   # Also check existing file if it already exists (for edits)
   if [ -z "$HYPO_ID" ] && [ -f "$FILE_PATH" ]; then
-    HYPO_ID=$(grep -oE 'H[0-9]{3}' "$FILE_PATH" | head -1)
+    HYPO_ID=$(extract_meta_ref "$(cat "$FILE_PATH")" "hypothesis" 'H[0-9]{3}' "")
   fi
 
   if [ -z "$HYPO_ID" ]; then
@@ -42,10 +87,10 @@ fi
 
 # Check if this is a finding file being created/edited
 if echo "$FILE_PATH" | grep -qE 'kb/research/findings/F[0-9]{3}-.*\.md$'; then
-  EXP_ID=$(echo "$CONTENT" | grep -oE 'E[0-9]{3}' | head -1)
+  EXP_ID=$(extract_meta_ref "$CONTENT" "experiment" 'E[0-9]{3}' "$FILE_PATH")
 
   if [ -z "$EXP_ID" ] && [ -f "$FILE_PATH" ]; then
-    EXP_ID=$(grep -oE 'E[0-9]{3}' "$FILE_PATH" | head -1)
+    EXP_ID=$(extract_meta_ref "$(cat "$FILE_PATH")" "experiment" 'E[0-9]{3}' "")
   fi
 
   if [ -z "$EXP_ID" ]; then

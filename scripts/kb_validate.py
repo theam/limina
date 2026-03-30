@@ -161,20 +161,24 @@ def _normalize_frontmatter(fm: dict[str, str]) -> dict[str, str]:
 
 
 def parse_metadata(text: str) -> dict[str, str]:
-    """Parse metadata from blockquote format, falling back to YAML frontmatter."""
+    """Parse metadata from blockquote format and YAML frontmatter, merging both.
+
+    YAML frontmatter takes priority over blockquote metadata, because
+    frontmatter is what Obsidian and other tools edit directly.
+    """
     metadata: dict[str, str] = {}
+    # First pass: blockquote metadata
     for line in text.splitlines():
         match = META_RE.match(line.strip())
         if match:
             metadata[match.group(1).strip()] = match.group(2).strip()
-    # If blockquote metadata is sparse, try YAML frontmatter as supplement
-    if len(metadata) < 2:
-        fm = parse_frontmatter(text)
-        if fm:
-            normalized = _normalize_frontmatter(fm)
-            for key, value in normalized.items():
-                if key not in metadata:
-                    metadata[key] = value
+    # Second pass: YAML frontmatter (always, not just as fallback)
+    fm = parse_frontmatter(text)
+    if fm:
+        normalized = _normalize_frontmatter(fm)
+        # Frontmatter wins on conflict — it's the editable source of truth
+        for key, value in normalized.items():
+            metadata[key] = value
     return metadata
 
 

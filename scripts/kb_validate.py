@@ -16,6 +16,12 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+try:
+    import frontmatter as _fm
+    HAS_FRONTMATTER = True
+except ImportError:
+    HAS_FRONTMATTER = False
+
 
 CORE_ARTIFACTS = {
     "T": {"dir": Path("tasks"), "prefix": "T"},
@@ -91,6 +97,17 @@ def parse_args() -> argparse.Namespace:
         default="text",
         help="Output format (default: text)",
     )
+    parser.add_argument(
+        "--check-file",
+        dest="check_file",
+        default=None,
+        help="Validate a single file in isolation (lightweight, fast)",
+    )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Suppress output when validation passes",
+    )
     return parser.parse_args()
 
 
@@ -98,12 +115,70 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def parse_frontmatter(text: str) -> dict[str, str]:
+    """Parse YAML frontmatter from Markdown text, returning metadata as strings."""
+    if not HAS_FRONTMATTER:
+        return {}
+    try:
+        post = _fm.loads(text)
+        return {str(k): str(v) for k, v in post.metadata.items() if v is not None and str(v) != ""}
+    except Exception:
+        return {}
+
+
+# Mapping from YAML frontmatter keys to blockquote metadata keys
+_FRONTMATTER_TO_META = {
+    "status": "Status",
+    "priority": "Priority",
+    "task_type": "Type",
+    "task": "Task",
+    "hypothesis": "Hypothesis",
+    "experiment": "Experiment",
+    "impact": "Impact",
+    "source_type": "Type",
+    "relevance": "Relevance",
+    "feature": "Feature",
+    "investigation": "Investigation",
+    "implementation": "Implementation",
+    "target": "Target",
+    "requested_by": "Requested by",
+    "reviewer": "Reviewer",
+    "scope": "Scope",
+    "challenge_review": "Challenge Review",
+    "created": "Date",
+    "last_updated": "Last updated",
+}
+
+
+def _normalize_frontmatter(fm: dict[str, str]) -> dict[str, str]:
+    """Convert YAML frontmatter keys to the blockquote metadata key names used by the validator."""
+    result: dict[str, str] = {}
+    for key, value in fm.items():
+        meta_key = _FRONTMATTER_TO_META.get(key)
+        if meta_key:
+            result[meta_key] = value
+    return result
+
+
 def parse_metadata(text: str) -> dict[str, str]:
+    """Parse metadata from blockquote format and YAML frontmatter, merging both.
+
+    YAML frontmatter takes priority over blockquote metadata, because
+    frontmatter is what Obsidian and other tools edit directly.
+    """
     metadata: dict[str, str] = {}
+    # First pass: blockquote metadata
     for line in text.splitlines():
         match = META_RE.match(line.strip())
         if match:
             metadata[match.group(1).strip()] = match.group(2).strip()
+    # Second pass: YAML frontmatter (always, not just as fallback)
+    fm = parse_frontmatter(text)
+    if fm:
+        normalized = _normalize_frontmatter(fm)
+        # Frontmatter wins on conflict — it's the editable source of truth
+        for key, value in normalized.items():
+            metadata[key] = value
     return metadata
 
 
@@ -270,10 +345,20 @@ def check_gaps_and_last_ids(
 
 
 def parse_task_title(text: str) -> str:
-    first = text.splitlines()[0].strip()
-    if "—" in first:
-        return first.split("—", 1)[1].strip()
-    return first
+    for line in text.splitlines():
+        stripped = line.strip()
+        # Skip YAML frontmatter delimiters and frontmatter content
+        if stripped == "---":
+            continue
+        if ":" in stripped and not stripped.startswith("#"):
+            continue
+        if not stripped:
+            continue
+        # Found the first meaningful line (should be the heading)
+        if "—" in stripped:
+            return stripped.split("—", 1)[1].strip()
+        return stripped
+    return ""
 
 
 def check_backlog_task_sync(
@@ -398,6 +483,140 @@ def check_traceability(artifacts: dict[str, dict[str, Artifact]], result: Valida
     )
 
 
+def _detect_artifact_type(
+    file_path: Path, kb_root: Path, result: ValidationResult | None = None
+) -> str | None:
+    """Detect artifact type from file path relative to kb_root.
+
+    If the file is in a core artifact directory but has a malformed filename,
+    and a ValidationResult is provided, an error is recorded.
+    Multiple prefixes can share a directory (e.g. CR and SR in reports/).
+    """
+    try:
+        rel = file_path.resolve().relative_to(kb_root.resolve())
+    except ValueError:
+        return None
+
+    # Collect all prefixes whose directory matches this file's location.
+    # Use Path.parts comparison to avoid prefix collisions (e.g. tasks vs tasks-archive).
+    # Require the file to be a direct child of the core directory (not in a subdirectory).
+    rel_parts = rel.parts
+    matching_prefixes = [
+        prefix for prefix, config in CORE_ARTIFACTS.items()
+        if (rel_parts[:len(config["dir"].parts)] == config["dir"].parts
+            and len(rel_parts) == len(config["dir"].parts) + 1)
+    ]
+    if not matching_prefixes:
+        return None
+
+    # Check if the filename matches any of the candidate prefixes
+    for prefix in matching_prefixes:
+        if FILENAME_RE[prefix].match(file_path.name):
+            return prefix
+
+    # File is in a core directory but doesn't match any prefix's pattern
+    if result is not None and file_path.suffix == ".md":
+        expected = " or ".join(f"{p}NNN-slug.md" for p in matching_prefixes)
+        result.add_error(
+            "filenames",
+            f"Malformed filename in {matching_prefixes[0]} directory: {file_path.name} "
+            f"(expected {expected})",
+            file_path,
+        )
+    return None
+
+
+def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
+    """Validate a single kb/ artifact file in isolation (fast, lightweight)."""
+    result = ValidationResult()
+    path = Path(file_path).resolve()
+    kb = Path(kb_root).resolve()
+
+    if not path.exists():
+        result.add_error("filesystem", f"File not found: {path}", path)
+        return result
+
+    prefix = _detect_artifact_type(path, kb, result)
+    if prefix is None:
+        # Not a core artifact (or malformed filename — error already recorded)
+        return result
+
+    text = read_text(path)
+    metadata = parse_metadata(text)
+
+    # Check required metadata
+    required = {
+        "T": ["Status", "Priority", "Type"],
+        "H": ["Status", "Task"],
+        "E": ["Status", "Hypothesis", "Task"],
+        "F": ["Task", "Hypothesis", "Experiment", "Impact"],
+        "L": ["Task", "Type", "Relevance"],
+        "FT": ["Task", "Status"],
+        "INV": ["Task", "Feature", "Status"],
+        "IMP": ["Task", "Feature", "Investigation", "Status"],
+        "RET": ["Task", "Feature", "Implementation"],
+        "CR": ["Date", "Target", "Requested by", "Reviewer"],
+        "SR": ["Date", "Scope", "Challenge Review"],
+    }
+    missing = [field for field in required.get(prefix, []) if field not in metadata]
+    if missing:
+        artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
+        result.add_error(
+            "required_metadata",
+            f"{artifact_id} is missing metadata fields: {', '.join(missing)}",
+            path,
+        )
+
+    # Check referenced artifacts exist on disk
+    # Task references checked for all artifact types that require them
+    _task_ref = [("Task", "T", "tasks")]
+    ref_checks = {
+        "H": _task_ref,
+        "E": _task_ref + [("Hypothesis", "H", "research/hypotheses")],
+        "F": _task_ref + [
+            ("Experiment", "E", "research/experiments"),
+            ("Hypothesis", "H", "research/hypotheses"),
+        ],
+        "L": _task_ref,
+        "FT": _task_ref,
+        "INV": _task_ref + [("Feature", "FT", "engineering/features")],
+        "IMP": _task_ref + [
+            ("Feature", "FT", "engineering/features"),
+            ("Investigation", "INV", "engineering/investigations"),
+        ],
+        "RET": _task_ref + [
+            ("Feature", "FT", "engineering/features"),
+            ("Implementation", "IMP", "engineering/implementations"),
+        ],
+        "SR": [("Challenge Review", "CR", "reports")],
+    }
+    for field, ref_prefix, ref_dir in ref_checks.get(prefix, []):
+        ref_value = metadata.get(field)
+        if not ref_value:
+            continue
+        ref_pattern = re.compile(rf"^{ref_prefix}\d{{3}}$")
+        if not ref_pattern.match(ref_value):
+            artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
+            result.add_error(
+                "traceability",
+                f"{artifact_id} has malformed {field} reference: '{ref_value}' (expected {ref_prefix}NNN)",
+                path,
+            )
+            continue
+        ref_dir_path = kb / ref_dir
+        if ref_dir_path.exists():
+            matches = list(ref_dir_path.glob(f"{ref_value}-*.md"))
+            if not matches:
+                artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
+                result.add_error(
+                    "traceability",
+                    f"{artifact_id} references {field}: {ref_value}, but no matching file found in {ref_dir}/",
+                    path,
+                )
+
+    return result
+
+
 def validate_kb(kb_root: Path) -> ValidationResult:
     result = ValidationResult()
     backlog_path = kb_root / "mission" / "BACKLOG.md"
@@ -437,7 +656,15 @@ def render_text(result: ValidationResult) -> str:
 def main() -> int:
     args = parse_args()
     kb_root = Path(args.kb_root).resolve()
-    result = validate_kb(kb_root)
+
+    if args.check_file:
+        result = validate_file(kb_root, Path(args.check_file))
+    else:
+        result = validate_kb(kb_root)
+
+    if args.quiet and result.ok:
+        return 0
+
     if args.output_format == "json":
         print(json.dumps(result.as_json(), indent=2))
     else:

@@ -90,11 +90,13 @@ Write your review to kb/reports/CR{NUM}-engineering-sprint-T{NUM}.md.
 ### Phase 6: Coordinate
 
 As team lead:
-1. **Use delegate mode** — coordinate, don't implement
+1. **Use delegate mode** — STEER, don't execute. Review subagent output critically and course-correct.
 2. **Approve Builder's plan** before letting them implement
-3. Route Reviewer's findings to Builder for fixes
-4. Route Critic's challenges to Builder for response (address or justify dismissal)
-5. Don't close until Reviewer approves and Critic's critical issues are addressed
+3. If the Builder's approach is weak, send it back with specific feedback. If the Reviewer's review is shallow, push for depth. If the Critic is missing edge cases, redirect them.
+4. Route Reviewer's findings to Builder for fixes
+5. Route Critic's challenges to Builder for response (address or justify dismissal)
+6. Don't close until Reviewer approves and Critic's critical issues are addressed
+7. If you find yourself writing feature code, tests, or implementation details — STOP. You have left delegate mode.
 
 ### Phase 7: Synthesize and Close
 

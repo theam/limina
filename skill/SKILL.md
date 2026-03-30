@@ -41,6 +41,12 @@ git init
 
 Verify that `python3` and `git` are available. If missing, attempt to install them or tell the user what to install.
 
+Install Python dependencies needed by the validator and provenance scripts:
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Step 5: Guide mission definition
 
 Ask the user about their research problem step by step. Show examples before each question to help them think. Use AskUserQuestion when available.
@@ -117,9 +123,13 @@ Tell the user:
 > To start the research agent, open Claude Code in the project directory:
 >
 > ```bash
-> cd <project-name> && claude --dangerously-skip-permissions
+> cd <project-name> && claude
 > ```
 >
 > Or for Codex, open the project folder in Full Auto mode.
 >
-> The agent will read the methodology and start researching your problem automatically. For future projects, just type `/limina`.
+> The agent will read the methodology automatically at session start (via a SessionStart hook) and begin researching your problem. Runtime hooks enforce the research process — experiments can't be created without hypotheses, and every completed experiment triggers a devil's advocate review.
+>
+> Optional: run `bash scripts/obsidian_init.sh` to set up an Obsidian vault over your knowledge base for a visual dashboard.
+>
+> For future projects, just type `/limina`.

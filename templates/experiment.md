@@ -1,3 +1,14 @@
+---
+id: "E{NUM}"
+type: experiment
+status: DESIGNED
+hypothesis: "H{NUM}"
+task: "T{NUM}"
+created: "{date}"
+completed: ""
+tags: []
+---
+
 # E{NUM} — {Title}
 
 > **Status**: DESIGNED | RUNNING | COMPLETED | FAILED

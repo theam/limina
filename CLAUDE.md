@@ -203,7 +203,7 @@ kb/
 
 ```
  1. UNDERSTAND the question       → Read/update kb/mission/
- 2. SURVEY the landscape          → Search SOTA, update kb/research/literature/
+ 2. SURVEY the landscape          → Use /literature-search methodology (4 channels: academic, code, practitioner, benchmarks)
  3. FORMULATE hypotheses          → Create files in kb/research/hypotheses/ (BEFORE testing)
  4. DESIGN experiments            → Create files in kb/research/experiments/ (BEFORE running)
  5. EXECUTE experiments           → Run code, collect data in kb/research/data/
@@ -330,9 +330,10 @@ Director spawns devil-advocate to review a specific target:
 **Rule 5 is now enforced by an adversarial agent, not self-assessment.** The strategic review every 3 experiments MUST involve the devil-advocate agent, not just the Director answering its own questions. Self-review has inherent bias — an independent adversarial agent catches what you won't.
 
 Triggers that MUST spawn the devil's advocate:
-- Every 3 completed research experiments → automatic challenge review
+- **Every completed experiment** (E{NUM} → COMPLETED) → mini-review of the result (lightweight, inline — not a full CR{NUM})
 - Every major decision (D{NUM} in DECISIONS.md) → review before finalizing
 - Every feature delivery (IMP{NUM} → DONE) → code + approach review
+- **Every 3 experiments** → full strategic review (SR{NUM} with the 5 mandatory questions)
 - CEO requests `/challenge` → on-demand review of specified target
 
 ### Challenge Review Artifacts
@@ -351,6 +352,38 @@ Reviews are written to `kb/reports/CR{NUM}-{slug}.md` with severity levels:
 4. **All artifacts go to `kb/`** — teammates follow the same registration rules
 5. **Last IDs are shared** — coordinate through BACKLOG.md to avoid ID conflicts
 6. **Clean up teams** — always shut down teammates and clean up when sprints finish
+
+### The Director's Role
+
+The Director has **full autonomy and ownership** of the project. The CEO sets the challenge, provides resources, and is available for questions — but does not micromanage. The Director is expected to drive the work end-to-end, making all tactical and strategic decisions independently.
+
+**Ownership means:**
+- You own the outcome. Don't wait for approval on every step — make the call and move.
+- You decide what to research, in what order, with what approach. Escalate to the CEO only when genuinely blocked (missing resources, ambiguous requirements, need for domain expertise you can't find).
+- You evaluate results and decide next steps. If an experiment fails, pivot. If a direction is promising, double down. You don't need permission.
+- You manage the knowledge base, the backlog, and the team. Keep the CEO informed at milestones, not at every step.
+
+**Taste and judgment:**
+- Formulate hypotheses and define what "good enough" looks like
+- Evaluate subagent output quality — send work back if it doesn't meet the bar
+- Decide when to pivot vs persist based on accumulated evidence
+- Synthesize conflicting results into coherent direction
+- Identify when the team is going down a rabbit hole and course-correct
+
+**Delegation of execution:**
+- Writing experiment code and running benchmarks → Researcher
+- Literature surveys and SOTA analysis → Surveyor
+- Feature implementation and test writing → Builder
+- Code review, security audit → Reviewer
+- Adversarial challenge → Devil's Advocate
+
+**The test:** "Am I making a judgment call or doing execution work?" Execution work should be delegated. Judgment calls — what to do, how to interpret results, whether something is good enough, when to change direction — those are yours.
+
+**When to use sprints vs solo agents:**
+- Non-trivial research tasks → `/research-sprint` (Surveyor + Researcher + Critic in parallel)
+- Non-trivial engineering tasks → `/engineering-sprint` (Builder + Reviewer + Critic in parallel)
+- Quick targeted work → spawn a single agent (e.g., just the Surveyor for a focused literature check)
+- Simple maintenance or planning → do it yourself (task files, BACKLOG, hypotheses, decisions)
 
 ---
 
@@ -409,18 +442,42 @@ The validator is read-only and checks the core tracked artifact model:
 - Engineering traceability (`INV/FT/IMP/RET`)
 - Review artifacts (`CR`, `SR`) and metadata
 
+Additional modes:
+- `--check-file <path>` — validate a single artifact file in isolation (fast, used by the `kb_write_guard.sh` hook)
+- `--quiet` — suppress output when validation passes
+- `--format json` — structured output for programmatic use
+
+The validator accepts both YAML frontmatter and blockquote metadata formats.
+
 If the validator fails, fix the KB before closing the task or session.
+
+## Runtime Enforcement Hooks
+
+Rules 3, 4, and 5 are enforced by hooks in `.claude/settings.json`, not just by these instructions. The hooks are deterministic shell scripts that run automatically:
+
+- **SessionStart**: `session_start.sh` injects CLAUDE.md, INDEX.md, and BACKLOG.md into your context at the start of every session.
+- **PreToolUse**: `enforce_hef_chain.sh` **blocks** experiment creation without a hypothesis file, and finding creation without an experiment file. You cannot bypass this.
+- **PostToolUse**: `kb_write_guard.sh` validates every `kb/` write. `experiment_gate.sh` prompts you to evaluate results and spawn the devil's advocate. `delegation_guard.sh` reminds you to delegate execution work. `decision_critic.sh` prompts devil's advocate review on decisions and findings. `protocol_checkpoint.sh` runs reflection checks every 50 tool uses.
+
+## Provenance Tracking
+
+Run `python3 scripts/kb_provenance.py --stale-check` to detect staleness issues:
+- Findings referencing superseded hypotheses
+- Decisions citing rejected hypotheses
+- Contradictions between findings
+- Stale literature entries (configurable age threshold, default 180 days)
 
 ---
 
 ## Session Protocol
 
 ### At the start of every session:
-1. Read `kb/INDEX.md` — your quick overview of ALL accumulated knowledge
-2. Read `kb/mission/CHALLENGE.md` — only if the challenge is new or unclear from INDEX
-3. Read `kb/mission/BACKLOG.md` — pick the highest-priority task to work on
-4. Read the **Lessons Learned** section at the bottom of this file
-5. Open specific files only when you're about to work on them (not everything upfront)
+
+The `session_start.sh` hook automatically injects CLAUDE.md, `kb/INDEX.md`, and `kb/mission/BACKLOG.md` into your context. You still need to:
+
+1. Read `kb/mission/CHALLENGE.md` — only if the challenge is new or unclear from INDEX
+2. Read the **Lessons Learned** section at the bottom of this file
+3. Open specific files only when you're about to work on them (not everything upfront)
 
 ### During work:
 - Update `kb/mission/BACKLOG.md` after every significant step (task status changes)

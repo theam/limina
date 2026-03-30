@@ -1,3 +1,13 @@
+---
+id: "H{NUM}"
+type: hypothesis
+status: PROPOSED
+task: "T{NUM}"
+created: "{date}"
+last_updated: "{date}"
+tags: []
+---
+
 # H{NUM} — {Title}
 
 > **Status**: PROPOSED | TESTING | CONFIRMED | REJECTED

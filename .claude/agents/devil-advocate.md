@@ -92,6 +92,22 @@ Write your review to `kb/reports/CR{NUM}-{slug}.md` using this structure:
 {Concrete next steps ordered by priority}
 ```
 
+## Mini-Review Format
+
+For per-experiment reviews (triggered after every experiment completion), use this lighter format. Do NOT create a full CR{NUM} for every experiment — reserve CR{NUM} for strategic reviews and on-demand challenges.
+
+Write the mini-review directly in the experiment file's **Analysis** section, or as a brief addendum:
+
+**Mini-review checklist:**
+- Does the experiment actually test the hypothesis it claims to?
+- Is the baseline comparison fair?
+- Could the result be explained by a confound?
+- Are the metrics meaningful (not degenerate — e.g., 0% error, 100% accuracy)?
+- Does the conclusion follow from the data?
+- What would a skeptic challenge about this result?
+
+If the mini-review reveals a critical issue, escalate to the Director and recommend a full CR{NUM} review.
+
 ## Rules
 
 - NEVER rubber-stamp. If you're asked to review something, find at least ONE thing to improve. If everything is genuinely solid, explain WHY it's solid and what would break it.

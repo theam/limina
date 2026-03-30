@@ -1,3 +1,13 @@
+---
+id: "FT{NUM}"
+type: feature
+status: PROPOSED
+task: "T{NUM}"
+created: "{date}"
+delivered: ""
+tags: []
+---
+
 # FT{NUM} — {Feature Title}
 
 > **Status**: PROPOSED | INVESTIGATING | IN PROGRESS | DELIVERED | ITERATING

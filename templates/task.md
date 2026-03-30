@@ -1,3 +1,13 @@
+---
+id: "T{NUM}"
+type: task
+status: BACKLOG
+priority: P2
+task_type: research
+created: "{date}"
+tags: []
+---
+
 # T{NUM} — {Title}
 
 > **Status**: BACKLOG | TODO | IN_PROGRESS | DONE | BLOCKED

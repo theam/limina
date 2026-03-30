@@ -60,7 +60,7 @@ The agent will install the skill, ask you to switch to your preferred directory,
 When setup is done, open Claude Code in the new project directory:
 
 ```bash
-cd <your-project-name> && claude --dangerously-skip-permissions
+cd <your-project-name> && claude
 ```
 
 The agent reads the methodology automatically and starts researching.
@@ -200,14 +200,18 @@ cook "Run /challenge with target 'Research direction'" review \
 
 ## What you get
 
-- A persistent knowledge base in `kb/`
+- A persistent knowledge base in `kb/` with Obsidian-compatible YAML frontmatter
 - A research-first workflow:
   - research: Hypothesis → Experiment → Finding
   - engineering: Investigation → Feature → Implementation → Retrospective
+- **Runtime enforcement hooks** — the H→E→F chain, delegation, and decision review are enforced mechanically, not just by instructions
 - First-class review artifacts: Challenge Reviews and Strategic Reviews
+- A devil's advocate that reviews every experiment, not just every third
 - Adapters for Claude Code, Codex, and OpenCode
 - Core artifact templates in `templates/`
 - A read-only KB validator: `python3 scripts/kb_validate.py`
+- Provenance and staleness tracking: `python3 scripts/kb_provenance.py`
+- Optional Obsidian vault integration: `bash scripts/obsidian_init.sh`
 
 ## Core model
 
@@ -238,7 +242,7 @@ These are the file-backed artifact types enforced by the validator:
 | `CR` | Challenge review | `kb/reports/` |
 | `SR` | Strategic review | `kb/reports/` |
 
-The validator is read-only in v1. It checks:
+The validator is read-only. It checks:
 
 - last-ID declarations in `BACKLOG.md`
 - task file and backlog row consistency
@@ -247,6 +251,47 @@ The validator is read-only in v1. It checks:
 - engineering traceability across investigations, features, implementations, retrospectives
 - challenge review and strategic review metadata and naming
 - malformed filenames, duplicate IDs, and ID gaps
+
+The validator supports both YAML frontmatter and blockquote metadata formats. Additional modes:
+
+- `--check-file <path>` — validate a single file in isolation (fast, used by hooks)
+- `--quiet` — suppress output when validation passes
+- `--format json` — output results as JSON
+
+### Runtime enforcement
+
+In Claude Code, hooks in `.claude/settings.json` enforce rules automatically at runtime:
+
+| Hook | Type | What it does |
+|---|---|---|
+| `session_start.sh` | SessionStart | Injects CLAUDE.md, INDEX.md, and BACKLOG.md into agent context |
+| `enforce_hef_chain.sh` | PreToolUse | **Blocks** experiment creation without a hypothesis, and finding creation without an experiment |
+| `kb_write_guard.sh` | PostToolUse | Validates every `kb/` write against the artifact schema in real-time |
+| `experiment_gate.sh` | PostToolUse | Prompts the agent to evaluate results and spawn the devil's advocate after experiment completion |
+| `protocol_checkpoint.sh` | PostToolUse | Reminds the agent to re-read state every 25 tool calls; injects a reflection prompt every 50 |
+| `delegation_guard.sh` | PostToolUse | Nudges the Director when it writes execution artifacts directly instead of delegating |
+| `decision_critic.sh` | PostToolUse | Prompts a devil's advocate review whenever a decision or finding is recorded |
+
+The hooks are deterministic shell scripts — the agent cannot choose to skip them. Blocking hooks (exit code 2) prevent the action entirely; non-blocking hooks (exit code 0) inject guidance into the agent's context.
+
+### Provenance and staleness
+
+`python3 scripts/kb_provenance.py --stale-check` detects:
+
+- Findings referencing superseded hypotheses
+- Decisions citing rejected hypotheses
+- Contradictions between findings on the same hypothesis
+- Literature entries older than a configurable threshold
+
+### Obsidian integration
+
+`bash scripts/obsidian_init.sh` sets up an optional Obsidian vault over `kb/`:
+
+- Creates `.obsidian/` config with Dataview plugin settings
+- Generates a `DASHBOARD.md` with live queries for tasks, experiments, findings, and literature
+- Configures graph view color groups (research, engineering, reports)
+
+The `kb/` remains a Git-backed Markdown source of truth. Obsidian is the human UI layer.
 
 ## Contributing
 

@@ -1,3 +1,15 @@
+---
+id: "IMP{NUM}"
+type: implementation
+status: "IN PROGRESS"
+feature: "FT{NUM}"
+task: "T{NUM}"
+investigation: "INV{NUM}"
+created: "{date}"
+delivered: ""
+tags: []
+---
+
 # IMP{NUM} — {Implementation Title}
 
 > **Feature**: FT{NUM}

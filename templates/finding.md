@@ -1,3 +1,14 @@
+---
+id: "F{NUM}"
+type: finding
+task: "T{NUM}"
+hypothesis: "H{NUM}"
+experiment: "E{NUM}"
+impact: HIGH
+created: "{date}"
+tags: []
+---
+
 # F{NUM} — {Title}
 
 > **Date**: {date}

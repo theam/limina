@@ -117,9 +117,13 @@ Tell the user:
 > To start the research agent, open Claude Code in the project directory:
 >
 > ```bash
-> cd <project-name> && claude --dangerously-skip-permissions
+> cd <project-name> && claude
 > ```
 >
 > Or for Codex, open the project folder in Full Auto mode.
 >
-> The agent will read the methodology and start researching your problem automatically. For future projects, just type `/limina`.
+> The agent will read the methodology automatically at session start (via a SessionStart hook) and begin researching your problem. Runtime hooks enforce the research process — experiments can't be created without hypotheses, and every completed experiment triggers a devil's advocate review.
+>
+> Optional: run `bash scripts/obsidian_init.sh` to set up an Obsidian vault over your knowledge base for a visual dashboard.
+>
+> For future projects, just type `/limina`.

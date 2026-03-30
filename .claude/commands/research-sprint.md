@@ -51,6 +51,8 @@ Create an agent team and spawn 3 teammates:
 You are the Surveyor for research task T{NUM}: "{task title}".
 Your job: find and synthesize existing work relevant to this task.
 Read the task file at kb/tasks/T{NUM}-slug.md for full context.
+Follow the /literature-search methodology: use all 4 search channels (academic, code, practitioner, benchmarks),
+evaluate sources on recency/reproducibility/relevance/rigor/bias, and use snowball citations.
 Create literature files (L{NUM}) in kb/research/literature/ for each significant source.
 Focus on: SOTA approaches, baselines we should compare against, and approaches nobody has tried.
 Report findings to the team lead when done.
@@ -80,10 +82,12 @@ Report critical issues to the team lead immediately.
 ### Phase 5: Coordinate
 
 As team lead:
-1. **Use delegate mode** — don't implement yourself, coordinate
-2. Wait for surveyor to establish baselines before researcher finalizes experiment design
-3. Route critic's feedback to the researcher (e.g., "Critic found issue X with your experiment design — address before running")
-4. Synthesize all findings when teammates complete their work
+1. **Use delegate mode** — STEER, don't execute. Your job is to review subagent output critically and course-correct.
+2. If a researcher's experiment design is weak, send it back with specific feedback. If the surveyor missed an important angle, redirect them. If the critic's review is superficial, push for depth.
+3. Wait for surveyor to establish baselines before researcher finalizes experiment design
+4. Route critic's feedback to the researcher (e.g., "Critic found issue X with your experiment design — address before running")
+5. Synthesize all findings when teammates complete their work
+6. If you find yourself writing experiment code, literature files, or data analysis — STOP. You have left delegate mode. Send the work to the appropriate teammate.
 
 ### Phase 6: Synthesize and Close
 

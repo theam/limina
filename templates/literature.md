@@ -1,3 +1,14 @@
+---
+id: "L{NUM}"
+type: literature
+source_type: PAPER
+task: "T{NUM}"
+relevance: HIGH
+source_url: ""
+created: "{date}"
+tags: []
+---
+
 # L{NUM} — {Paper/Topic Title}
 
 > **Type**: PAPER | BLOG | REPO | BENCHMARK | SURVEY

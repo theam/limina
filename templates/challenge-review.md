@@ -1,3 +1,13 @@
+---
+id: "CR{NUM}"
+type: challenge-review
+target: "{what was reviewed}"
+requested_by: ""
+reviewer: "Devil's Advocate"
+created: "{date}"
+tags: []
+---
+
 # CR{NUM} — Challenge Review: {Target}
 
 > **Date**: {date}

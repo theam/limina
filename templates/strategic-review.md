@@ -1,3 +1,12 @@
+---
+id: "SR{NUM}"
+type: strategic-review
+scope: "{research direction or initiative}"
+challenge_review: "CR{NUM}"
+created: "{date}"
+tags: []
+---
+
 # SR{NUM} — Strategic Review: {Scope}
 
 > **Date**: {date}

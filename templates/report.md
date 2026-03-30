@@ -1,3 +1,11 @@
+---
+id: ""
+type: report
+status: Draft
+created: "{date}"
+tags: []
+---
+
 # Optional Milestone Note — {Title}
 
 > **Date**: {date}

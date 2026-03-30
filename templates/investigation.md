@@ -1,3 +1,14 @@
+---
+id: "INV{NUM}"
+type: investigation
+status: "IN PROGRESS"
+feature: "FT{NUM}"
+task: "T{NUM}"
+created: "{date}"
+completed: ""
+tags: []
+---
+
 # INV{NUM} — {Investigation Title}
 
 > **Feature**: FT{NUM}

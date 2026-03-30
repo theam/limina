@@ -1,3 +1,13 @@
+---
+id: "RET{NUM}"
+type: retrospective
+feature: "FT{NUM}"
+task: "T{NUM}"
+implementation: "IMP{NUM}"
+created: "{date}"
+tags: []
+---
+
 # RET{NUM} — {Feature/Topic Title}
 
 > **Feature**: FT{NUM}

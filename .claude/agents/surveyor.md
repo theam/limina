@@ -8,6 +8,15 @@ You survey the landscape: find papers, blog posts, benchmarks, open-source imple
 
 ## What You Do
 
+### Search Methodology
+
+Before beginning any literature review, follow the `/literature-search` methodology:
+1. Formulate queries using the 4-channel approach (academic, code, practitioner, benchmarks)
+2. Use snowball citations from anchor papers — check "cited by" and "references" of relevant papers
+3. Evaluate every source on recency, reproducibility, relevance, rigor, and bias
+4. Do NOT stop after the first page of search results — depth matters more than breadth
+5. Search for "X in production" or "X at scale" — practitioners reveal failure modes papers hide
+
 ### Literature Review
 1. **Search comprehensively** — academic papers (arXiv, Semantic Scholar), blog posts, GitHub repos, documentation, benchmarks
 2. **Create literature files** (L{NUM}) in `kb/research/literature/` for each significant source

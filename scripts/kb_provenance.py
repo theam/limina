@@ -131,7 +131,7 @@ def check_superseded_references(artifacts: dict) -> list[StaleWarning]:
     return warnings
 
 
-def check_rejected_hypothesis_references(artifacts: dict) -> list[StaleWarning]:
+def check_rejected_hypothesis_references(artifacts: dict, kb_root: Path) -> list[StaleWarning]:
     """Find artifacts that reference rejected hypotheses without acknowledging it."""
     warnings = []
     rejected = set()
@@ -143,12 +143,10 @@ def check_rejected_hypothesis_references(artifacts: dict) -> list[StaleWarning]:
         if status.upper() == "REJECTED":
             rejected.add(art_id)
 
-    # Check if any decisions or active tasks reference rejected hypotheses
-    decisions_path = None
-    for candidate in [Path("kb/mission/DECISIONS.md"), Path("mission/DECISIONS.md")]:
-        if candidate.exists():
-            decisions_path = candidate
-            break
+    # Check if any decisions reference rejected hypotheses
+    decisions_path = kb_root / "mission" / "DECISIONS.md"
+    if not decisions_path.exists():
+        decisions_path = None
 
     if decisions_path and decisions_path.exists():
         text = decisions_path.read_text(encoding="utf-8")
@@ -226,7 +224,7 @@ def run_stale_check(kb_root: Path, max_age_days: int = 180) -> list[StaleWarning
     artifacts = collect_artifacts(kb_root)
     warnings = []
     warnings.extend(check_superseded_references(artifacts))
-    warnings.extend(check_rejected_hypothesis_references(artifacts))
+    warnings.extend(check_rejected_hypothesis_references(artifacts, kb_root))
     warnings.extend(check_stale_literature(artifacts, max_age_days))
     warnings.extend(check_contradictions(artifacts))
     return warnings

@@ -497,10 +497,12 @@ def _detect_artifact_type(
     except ValueError:
         return None
 
-    # Collect all prefixes whose directory matches this file's location
+    # Collect all prefixes whose directory matches this file's location.
+    # Use Path.parts comparison to avoid prefix collisions (e.g. tasks vs tasks-archive).
+    rel_parts = rel.parts
     matching_prefixes = [
         prefix for prefix, config in CORE_ARTIFACTS.items()
-        if str(rel).startswith(str(config["dir"]))
+        if rel_parts[:len(config["dir"].parts)] == config["dir"].parts
     ]
     if not matching_prefixes:
         return None

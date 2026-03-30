@@ -39,10 +39,20 @@ class StaleWarning:
 
 
 def parse_metadata(text: str) -> dict[str, str]:
-    """Parse metadata from YAML frontmatter or blockquote format."""
+    """Parse metadata from blockquote format and YAML frontmatter, merging both.
+
+    YAML frontmatter takes priority over blockquote metadata, matching
+    the validator's behavior (frontmatter is the editable source of truth).
+    """
     metadata: dict[str, str] = {}
 
-    # Try YAML frontmatter first
+    # First pass: blockquote metadata
+    for line in text.splitlines():
+        match = META_RE.match(line.strip())
+        if match:
+            metadata[match.group(1).strip()] = match.group(2).strip()
+
+    # Second pass: YAML frontmatter wins on conflict
     if HAS_FRONTMATTER:
         try:
             post = frontmatter.loads(text)
@@ -51,12 +61,6 @@ def parse_metadata(text: str) -> dict[str, str]:
                     metadata[str(k)] = str(v)
         except Exception:
             pass
-
-    # Also parse blockquote metadata
-    for line in text.splitlines():
-        match = META_RE.match(line.strip())
-        if match:
-            metadata[match.group(1).strip()] = match.group(2).strip()
 
     return metadata
 

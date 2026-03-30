@@ -499,10 +499,12 @@ def _detect_artifact_type(
 
     # Collect all prefixes whose directory matches this file's location.
     # Use Path.parts comparison to avoid prefix collisions (e.g. tasks vs tasks-archive).
+    # Require the file to be a direct child of the core directory (not in a subdirectory).
     rel_parts = rel.parts
     matching_prefixes = [
         prefix for prefix, config in CORE_ARTIFACTS.items()
-        if rel_parts[:len(config["dir"].parts)] == config["dir"].parts
+        if (rel_parts[:len(config["dir"].parts)] == config["dir"].parts
+            and len(rel_parts) == len(config["dir"].parts) + 1)
     ]
     if not matching_prefixes:
         return None
@@ -594,6 +596,12 @@ def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
             continue
         ref_pattern = re.compile(rf"^{ref_prefix}\d{{3}}$")
         if not ref_pattern.match(ref_value):
+            artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
+            result.add_error(
+                "traceability",
+                f"{artifact_id} has malformed {field} reference: '{ref_value}' (expected {ref_prefix}NNN)",
+                path,
+            )
             continue
         ref_dir_path = kb / ref_dir
         if ref_dir_path.exists():

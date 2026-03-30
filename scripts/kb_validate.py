@@ -483,8 +483,14 @@ def check_traceability(artifacts: dict[str, dict[str, Artifact]], result: Valida
     )
 
 
-def _detect_artifact_type(file_path: Path, kb_root: Path) -> str | None:
-    """Detect artifact type from file path relative to kb_root."""
+def _detect_artifact_type(
+    file_path: Path, kb_root: Path, result: ValidationResult | None = None
+) -> str | None:
+    """Detect artifact type from file path relative to kb_root.
+
+    If the file is in a core artifact directory but has a malformed filename,
+    and a ValidationResult is provided, an error is recorded.
+    """
     try:
         rel = file_path.resolve().relative_to(kb_root.resolve())
     except ValueError:
@@ -494,6 +500,15 @@ def _detect_artifact_type(file_path: Path, kb_root: Path) -> str | None:
             regex = FILENAME_RE[prefix]
             if regex.match(file_path.name):
                 return prefix
+            # File is in a core directory but has a bad filename
+            if result is not None and file_path.suffix == ".md":
+                result.add_error(
+                    "filenames",
+                    f"Malformed filename for {prefix} artifact: {file_path.name} "
+                    f"(expected {prefix}NNN-slug.md)",
+                    file_path,
+                )
+            return None
     return None
 
 
@@ -507,9 +522,9 @@ def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
         result.add_error("filesystem", f"File not found: {path}", path)
         return result
 
-    prefix = _detect_artifact_type(path, kb)
+    prefix = _detect_artifact_type(path, kb, result)
     if prefix is None:
-        # Not a core artifact — nothing to validate
+        # Not a core artifact (or malformed filename — error already recorded)
         return result
 
     text = read_text(path)

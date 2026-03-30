@@ -41,6 +41,12 @@ git init
 
 Verify that `python3` and `git` are available. If missing, attempt to install them or tell the user what to install.
 
+Install Python dependencies needed by the validator and provenance scripts:
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Step 5: Guide mission definition
 
 Ask the user about their research problem step by step. Show examples before each question to help them think. Use AskUserQuestion when available.

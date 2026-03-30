@@ -63,12 +63,9 @@ for line in content.splitlines():
 
 # Check if this is an experiment file being created/edited
 if echo "$FILE_PATH" | grep -qE 'kb/research/experiments/E[0-9]{3}-.*\.md$'; then
+  # _parse_hook_input.py already simulates Edit results, so CONTENT
+  # reflects the post-edit state for both Write and Edit operations.
   HYPO_ID=$(extract_meta_ref "$CONTENT" "hypothesis" 'H[0-9]{3}' "$FILE_PATH")
-
-  # Also check existing file if it already exists (for edits)
-  if [ -z "$HYPO_ID" ] && [ -f "$FILE_PATH" ]; then
-    HYPO_ID=$(extract_meta_ref "$(cat "$FILE_PATH")" "hypothesis" 'H[0-9]{3}' "")
-  fi
 
   if [ -z "$HYPO_ID" ]; then
     echo "BLOCKED: Cannot create experiment without a hypothesis reference." >&2
@@ -88,10 +85,6 @@ fi
 # Check if this is a finding file being created/edited
 if echo "$FILE_PATH" | grep -qE 'kb/research/findings/F[0-9]{3}-.*\.md$'; then
   EXP_ID=$(extract_meta_ref "$CONTENT" "experiment" 'E[0-9]{3}' "$FILE_PATH")
-
-  if [ -z "$EXP_ID" ] && [ -f "$FILE_PATH" ]; then
-    EXP_ID=$(extract_meta_ref "$(cat "$FILE_PATH")" "experiment" 'E[0-9]{3}' "")
-  fi
 
   if [ -z "$EXP_ID" ]; then
     echo "BLOCKED: Cannot create finding without an experiment reference." >&2

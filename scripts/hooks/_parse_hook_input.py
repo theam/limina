@@ -24,7 +24,7 @@ old_string = data.get("old_string", "")  # Edit tool
 new_string = data.get("new_string", "")  # Edit tool
 
 # For Edit operations, simulate the edit to produce the post-edit content
-if not content and old_string and new_string and fp:
+if not content and old_string and fp:
     try:
         existing = Path(fp).read_text(encoding="utf-8")
         content = existing.replace(old_string, new_string, 1)

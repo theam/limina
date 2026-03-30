@@ -490,25 +490,35 @@ def _detect_artifact_type(
 
     If the file is in a core artifact directory but has a malformed filename,
     and a ValidationResult is provided, an error is recorded.
+    Multiple prefixes can share a directory (e.g. CR and SR in reports/).
     """
     try:
         rel = file_path.resolve().relative_to(kb_root.resolve())
     except ValueError:
         return None
-    for prefix, config in CORE_ARTIFACTS.items():
-        if str(rel).startswith(str(config["dir"])):
-            regex = FILENAME_RE[prefix]
-            if regex.match(file_path.name):
-                return prefix
-            # File is in a core directory but has a bad filename
-            if result is not None and file_path.suffix == ".md":
-                result.add_error(
-                    "filenames",
-                    f"Malformed filename for {prefix} artifact: {file_path.name} "
-                    f"(expected {prefix}NNN-slug.md)",
-                    file_path,
-                )
-            return None
+
+    # Collect all prefixes whose directory matches this file's location
+    matching_prefixes = [
+        prefix for prefix, config in CORE_ARTIFACTS.items()
+        if str(rel).startswith(str(config["dir"]))
+    ]
+    if not matching_prefixes:
+        return None
+
+    # Check if the filename matches any of the candidate prefixes
+    for prefix in matching_prefixes:
+        if FILENAME_RE[prefix].match(file_path.name):
+            return prefix
+
+    # File is in a core directory but doesn't match any prefix's pattern
+    if result is not None and file_path.suffix == ".md":
+        expected = " or ".join(f"{p}NNN-slug.md" for p in matching_prefixes)
+        result.add_error(
+            "filenames",
+            f"Malformed filename in {matching_prefixes[0]} directory: {file_path.name} "
+            f"(expected {expected})",
+            file_path,
+        )
     return None
 
 

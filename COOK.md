@@ -23,7 +23,7 @@ Only then act. Your job is not to follow a list — it is to advance the mission
 
 ## Cross-mission knowledge
 
-If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md` at mission start and grep `shared-knowledge/cards/` for terms related to your challenge. Prior missions may have already discovered relevant insights.
+If `shared-knowledge/` exists, run `python3 scripts/search_knowledge.py "<key terms>"` at mission start to find relevant Knowledge Cards from prior missions. Read the top-ranked results.
 
 ## When blocked
 

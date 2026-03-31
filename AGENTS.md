@@ -29,8 +29,8 @@ Use Codex-native mechanisms to satisfy the shared contract:
 At the start of a new mission (first session only):
 
 1. If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md`
-2. Grep `shared-knowledge/cards/` for terms related to the challenge
-3. Read relevant Knowledge Cards and note applicable insights
+2. Run `python3 scripts/search_knowledge.py "<key terms from challenge>"` to find relevant cards
+3. Read the top-ranked cards and note applicable insights
 
 At the start of every session:
 

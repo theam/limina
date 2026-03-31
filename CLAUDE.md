@@ -475,11 +475,12 @@ Run `python3 scripts/kb_provenance.py --stale-check` to detect staleness issues:
 When starting a **new mission** (first session only), check for prior knowledge before diving in:
 
 1. If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md`
-2. Grep `shared-knowledge/cards/` for terms related to the challenge in `CHALLENGE.md`
-3. Read relevant Knowledge Cards — note applicable insights in your initial context
-4. Proceed with the normal Session Protocol below
+2. Run `python3 scripts/search_knowledge.py "<key terms from your challenge>"` to find relevant Knowledge Cards
+3. Read the top-ranked cards returned by the search
+4. Note applicable insights in your initial context
+5. Proceed with the normal Session Protocol below
 
-This step prevents re-discovering what a previous mission already learned. Only read cards relevant to your challenge — don't load everything.
+This step prevents re-discovering what a previous mission already learned. The search script ranks cards by relevance — only read what it returns, don't scan everything.
 
 ## Mission Close Protocol
 

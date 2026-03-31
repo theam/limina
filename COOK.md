@@ -19,6 +19,11 @@ Only then act. Your job is not to follow a list — it is to advance the mission
 
 - Everything gets registered in `kb/`. No exceptions.
 - Be autonomous and proactive in your work. You have full ownership of the mission and the resources to achieve it.
+- Before closing a mission (all tasks DONE), synthesize reusable knowledge into Knowledge Cards (`templates/knowledge-card.md`). Write them to `shared-knowledge/cards/` if available.
+
+## Cross-mission knowledge
+
+If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md` at mission start and grep `shared-knowledge/cards/` for terms related to your challenge. Prior missions may have already discovered relevant insights.
 
 ## When blocked
 

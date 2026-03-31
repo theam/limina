@@ -22,6 +22,7 @@ These rules are ABSOLUTE. They survive memory compaction. Re-read them if unsure
 7. **After memory compaction, re-read state before continuing.** Read INDEX.md and BACKLOG.md before doing anything else. Your compressed context may be stale or incomplete. See the After Memory Compaction section.
 8. **Update the Lessons Learned section (bottom of this file) after every significant lesson.** This section auto-loads with CLAUDE.md. If a lesson isn't here, you WILL forget it next session.
 9. **Always follow this file.** Especially when your context is compacted and you're tempted to skip steps.
+10. **Synthesize before closing a mission.** When all tasks are DONE, run `/close-mission` to distill reusable knowledge into Knowledge Cards. The expert agent you've become during this mission disappears when it ends — Knowledge Cards are how that expertise survives.
 
 ## After Memory Compaction
 
@@ -469,6 +470,28 @@ Run `python3 scripts/kb_provenance.py --stale-check` to detect staleness issues:
 
 ---
 
+## Mission Start Protocol
+
+When starting a **new mission** (first session only), check for prior knowledge before diving in:
+
+1. If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md`
+2. Grep `shared-knowledge/cards/` for terms related to the challenge in `CHALLENGE.md`
+3. Read relevant Knowledge Cards — note applicable insights in your initial context
+4. Proceed with the normal Session Protocol below
+
+This step prevents re-discovering what a previous mission already learned. Only read cards relevant to your challenge — don't load everything.
+
+## Mission Close Protocol
+
+When all tasks are DONE and the mission is complete, **synthesize before closing**:
+
+1. Run `/close-mission` — this guides you through distilling findings, decisions, and lessons into Knowledge Cards
+2. Cards are written to `shared-knowledge/cards/` (if available) or `kb/cards/` (local fallback)
+3. A mission summary is written to `shared-knowledge/missions/`
+4. Post a final summary in chat
+
+**This step is non-negotiable** (Rule 10). The expert agent built during this mission disappears when it ends. Knowledge Cards are how that expertise persists.
+
 ## Session Protocol
 
 ### At the start of every session:
@@ -566,6 +589,7 @@ Every implementation must have:
 ├── kb/                    ← Knowledge base (documentation, decisions, findings)
 ├── templates/             ← Templates for kb/ artifacts
 ├── scripts/               ← Utility scripts (validation, sync, automation)
+├── shared-knowledge/      ← Cross-mission knowledge (Knowledge Cards from past missions)
 ├── skills/                ← Installable skills (article-strategy, notion-sync-kb)
 ├── experiments/           ← Experiment code, one directory per experiment (e.g., experiments/E001/)
 └── src/                   ← Engineering feature code

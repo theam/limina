@@ -73,13 +73,27 @@ Create a mission summary file:
 
 If `shared-knowledge/INDEX.md` exists, add entries for all new cards and the mission summary.
 
-### Step 7: Final summary
+### Step 7: Commit and push shared knowledge
+
+If `shared-knowledge/` is a git repo (has a `.git` directory):
+
+```bash
+cd shared-knowledge
+git add -A
+git commit -m "Add Knowledge Cards from mission: {mission-name}"
+git push
+cd ..
+```
+
+If the push fails (auth, permissions), tell the user and provide the commands to run manually.
+
+### Step 8: Final summary
 
 Post a concise summary in chat:
 - How many Knowledge Cards were generated
 - What domains they cover
 - Where they were saved
-- Remind the user to commit and push shared-knowledge/ if it's a git repo
+- Whether they were pushed to the shared repo (or if manual push is needed)
 
 ### Guidelines
 

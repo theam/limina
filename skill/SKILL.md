@@ -113,7 +113,7 @@ Ask the user:
 
 > "Do you have a shared knowledge repo from previous missions? (git URL, local path, or skip)"
 
-Show this example: `https://github.com/yourorg/limina-shared-knowledge.git` or `~/limina-shared-knowledge`
+Show this example: `https://github.com/theam/limina-shared-knowledge.git` or `~/limina-shared-knowledge`
 
 - If the user provides a **git URL**: clone it into `shared-knowledge/` inside the project
   ```bash

@@ -617,6 +617,57 @@ def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
     return result
 
 
+KNOWLEDGE_CARD_RE = re.compile(r"^K(\d{3})-.+\.md$")
+KNOWLEDGE_CARD_REQUIRED_META = ["Source mission", "Domain", "Confidence"]
+
+
+def check_shared_knowledge(project_root: Path, result: ValidationResult) -> None:
+    """Validate Knowledge Cards in shared-knowledge/ (if present)."""
+    shared_dir = project_root / "shared-knowledge"
+    if not shared_dir.exists():
+        return
+
+    cards_dir = shared_dir / "cards"
+    index_path = shared_dir / "INDEX.md"
+
+    if not cards_dir.exists():
+        result.add_error("shared_knowledge", "shared-knowledge/ exists but cards/ directory is missing.", cards_dir)
+        return
+
+    # Collect cards
+    card_ids: set[str] = set()
+    for path in sorted(cards_dir.glob("*.md")):
+        match = KNOWLEDGE_CARD_RE.match(path.name)
+        if not match:
+            result.add_error("shared_knowledge", f"Malformed Knowledge Card filename: {path.name} (expected KNNN-slug.md)", path)
+            continue
+        card_id = f"K{match.group(1)}"
+        card_ids.add(card_id)
+
+        # Check required metadata
+        metadata = parse_metadata(read_text(path))
+        missing = [f for f in KNOWLEDGE_CARD_REQUIRED_META if f not in metadata]
+        if missing:
+            result.add_error(
+                "shared_knowledge",
+                f"{card_id} is missing metadata fields: {', '.join(missing)}",
+                path,
+            )
+
+    # Check INDEX.md references all cards
+    if index_path.exists() and card_ids:
+        index_text = read_text(index_path)
+        for card_id in sorted(card_ids):
+            if card_id not in index_text:
+                result.add_error(
+                    "shared_knowledge",
+                    f"{card_id} exists in cards/ but is not referenced in shared-knowledge/INDEX.md.",
+                    index_path,
+                )
+
+    result.set_check("shared_knowledge", cards_found=len(card_ids))
+
+
 def validate_kb(kb_root: Path) -> ValidationResult:
     result = ValidationResult()
     backlog_path = kb_root / "mission" / "BACKLOG.md"
@@ -632,6 +683,8 @@ def validate_kb(kb_root: Path) -> ValidationResult:
     check_backlog_task_sync(backlog_tasks, artifacts, result)
     check_index_coverage(kb_root, artifacts, result)
     check_traceability(artifacts, result)
+    # Validate shared knowledge cards (if shared-knowledge/ exists)
+    check_shared_knowledge(kb_root.parent, result)
     return result
 
 

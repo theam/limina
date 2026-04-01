@@ -60,6 +60,11 @@
                         "type": "command",
                         "command": "bash scripts/hooks/decision_critic.sh",
                         "timeout": 5
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash scripts/hooks/mission_close_reminder.sh",
+                        "timeout": 5
                     }
                 ]
             }

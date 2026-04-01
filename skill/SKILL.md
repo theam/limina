@@ -107,6 +107,24 @@ Create `kb/mission/CHALLENGE.md` with the user's answers:
 When blocked on resources, access, or decisions, create an entry in `kb/mission/CEO_REQUESTS.md` with status PENDING. Do not proceed on blocked items — wait for a response.
 ```
 
+### Step 6b: Connect shared knowledge (optional)
+
+Ask the user:
+
+> "Do you have a shared knowledge repo from previous missions? (git URL, local path, or skip)"
+
+Show this example: `https://github.com/theam/limina-shared-knowledge.git` or `~/limina-shared-knowledge`
+
+- If the user provides a **git URL**: clone it into `shared-knowledge/` inside the project
+  ```bash
+  git clone <url> shared-knowledge
+  ```
+- If the user provides a **local path**: create a symlink
+  ```bash
+  ln -s <path> shared-knowledge
+  ```
+- If the user **skips**: do nothing. The `shared-knowledge/` scaffold from the template is already present. Tell them they can connect one later.
+
 ### Step 7: Initial commit
 
 ```bash

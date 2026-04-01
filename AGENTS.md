@@ -13,6 +13,7 @@ This file is the **Codex runtime adapter** for the shared Limina contract.
 5. `CR` and `SR` are first-class review artifacts. Use them, do not collapse them into generic notes.
 6. Communicate milestones, blockers, and handoffs in the active session; do not assume an external notification channel.
 7. Run `python3 scripts/kb_validate.py` after substantial KB edits and before closing KB-heavy work.
+8. Synthesize before closing a mission. When all tasks are DONE, distill reusable knowledge into Knowledge Cards (`templates/knowledge-card.md`). Write them to `shared-knowledge/cards/` if available, else `kb/cards/`.
 
 ## Runtime Mapping
 
@@ -25,7 +26,13 @@ Use Codex-native mechanisms to satisfy the shared contract:
 
 ## Working Protocol
 
-At the start of a session:
+At the start of a new mission (first session only):
+
+1. If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md`
+2. Run `python3 scripts/search_knowledge.py "<key terms from challenge>"` to find relevant cards
+3. Read the top-ranked cards and note applicable insights
+
+At the start of every session:
 
 1. Read `kb/INDEX.md`
 2. Read `kb/mission/BACKLOG.md`
@@ -45,6 +52,14 @@ Before closing KB-heavy work:
 2. Run `python3 scripts/kb_validate.py`
 3. Fix KB errors before treating the work as complete
 4. Post a concise handoff summary in the active session
+
+Before closing a mission (all tasks DONE):
+
+1. Review findings (HIGH/MEDIUM impact), decisions, and lessons learned
+2. Generate Knowledge Cards for reusable insights using `templates/knowledge-card.md`
+3. Write cards to `shared-knowledge/cards/` (or `kb/cards/` if no shared dir)
+4. Update `shared-knowledge/INDEX.md` with new card entries
+5. Write a mission summary to `shared-knowledge/missions/`
 
 ## Artifact Model
 

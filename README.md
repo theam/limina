@@ -234,6 +234,7 @@ cook "Run /challenge with target 'Research direction'" review \
 - A read-only KB validator: `python3 scripts/kb_validate.py`
 - Provenance and staleness tracking: `python3 scripts/kb_provenance.py`
 - Optional Obsidian vault integration: `bash scripts/obsidian_init.sh`
+- **Cross-mission knowledge persistence** — synthesize findings into reusable Knowledge Cards at mission close, indexed at next mission start
 
 ## Core model
 
@@ -293,6 +294,25 @@ In Claude Code, hooks in `.claude/settings.json` enforce rules automatically at 
 | `protocol_checkpoint.sh` | PostToolUse | Reminds the agent to re-read state every 25 tool calls; injects a reflection prompt every 50 |
 | `delegation_guard.sh` | PostToolUse | Nudges the Director when it writes execution artifacts directly instead of delegating |
 | `decision_critic.sh` | PostToolUse | Prompts a devil's advocate review whenever a decision or finding is recorded |
+| `mission_close_reminder.sh` | PostToolUse | Reminds the agent to run `/close-mission` when all tasks are DONE |
+
+### Cross-mission knowledge
+
+Missions accumulate expertise that disappears when they end. The **Knowledge Card** system preserves reusable insights across missions.
+
+**How it works:**
+
+1. At mission close, the agent runs `/close-mission` to distill findings, decisions, and lessons into Knowledge Cards (`K001`, `K002`, ...)
+2. Cards are written to `shared-knowledge/cards/` — a directory that can be a separate git repo shared across projects
+3. At the start of a new mission, the agent reads `shared-knowledge/INDEX.md` and greps for terms related to the new challenge
+4. Only relevant cards are loaded — no context contamination
+
+**Knowledge Cards** are analytical ("what works and why"), not procedural ("how to do X step by step"). Each card captures: key finding, what works, what doesn't, conditions, pitfalls, and links back to the source mission's evidence.
+
+**Setup options** for `shared-knowledge/`:
+- **Local**: the scaffold is included in the template; cards stay in the project
+- **Git repo** (recommended): maintain a separate repo, clone it into each project at setup
+- **Git submodule**: add as a submodule to the template
 
 The hooks are deterministic shell scripts — the agent cannot choose to skip them. Blocking hooks (exit code 2) prevent the action entirely; non-blocking hooks (exit code 0) inject guidance into the agent's context.
 

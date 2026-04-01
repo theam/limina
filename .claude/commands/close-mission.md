@@ -31,7 +31,10 @@ For each reusable item, create a Knowledge Card using the template at `templates
 
 - **ID**: Sequential K{NUM} — check the shared knowledge INDEX.md for the last used ID
 - **Source mission**: The name of this project/repo
-- **Confidence**: HIGH if backed by multiple experiments, MEDIUM if backed by one, LOW if analytical/theoretical
+- **Confidence**: Numeric 0.0-1.0 (0.85+ if backed by multiple experiments, 0.60-0.85 if backed by one, <0.60 if analytical/theoretical)
+- **Description**: One sentence that says WHAT this card is about AND WHEN to use it — optimized for search retrieval
+- **Staleness metadata**: Set `valid_from` to today, `last_validated` to today, `status: ACTIVE`, `superseded_by: null`
+- **Related cards**: List IDs of cards that relate to this one (if any exist)
 - **What Works / What Doesn't Work**: Be specific. Include the approach AND the evidence.
 - **Conditions**: Be explicit about when this applies and when it doesn't. Overgeneralization is worse than undergeneralization.
 - **Pitfalls**: Things that wasted time or caused errors. These are often the most valuable part.

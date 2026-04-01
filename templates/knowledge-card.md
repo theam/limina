@@ -3,8 +3,14 @@ id: "K{NUM}"
 type: knowledge-card
 source_mission: "{mission-name}"
 domain: "{topic}"
-confidence: HIGH | MEDIUM | LOW
+confidence: 0.85
 created: "{date}"
+valid_from: "{date}"
+last_validated: "{date}"
+status: ACTIVE
+superseded_by: null
+related_cards: []
+description: "{What this card is about AND when to use it — one sentence optimized for search}"
 tags: []
 ---
 
@@ -13,7 +19,7 @@ tags: []
 > **Source mission**: {mission-name}
 > **Date**: {date}
 > **Domain**: {topic}
-> **Confidence**: HIGH | MEDIUM | LOW
+> **Confidence**: 0.85
 
 ## Key Finding
 

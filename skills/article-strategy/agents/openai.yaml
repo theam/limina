@@ -2,3 +2,5 @@ interface:
   display_name: "KB Article Strategy"
   short_description: "Create article ideas and drafts from kb"
   default_prompt: "Use $article-strategy to propose and draft articles from this repository knowledge base."
+policy:
+  allow_implicit_invocation: false

@@ -57,6 +57,29 @@ cd <your-project-name> && claude
 
 Or open the folder in Codex.
 
+## Bundled Skills
+
+The template ships with one launcher skill plus repo-local companion skills:
+
+- `limina` — set up and launch a Limina research project
+- `experiment-rigor` — design, review, and conclude decision-grade `H -> E -> F` work
+- `exploratory-sota-research` — map mechanism landscapes, literature, and reproducibility signals
+- `article-strategy` — turn kb evidence into publishable article ideas and drafts
+- `notion-sync-kb` — sync `kb/` into Notion
+
+After creating a project from this template, install the bundled skills from inside the repo:
+
+```bash
+bash scripts/install_skills.sh
+```
+
+Runtime-specific wrappers are also available:
+
+```bash
+bash scripts/install_claude_skills.sh
+bash scripts/install_codex_skills.sh
+```
+
 ## Knowledge Base Layout
 
 ```text

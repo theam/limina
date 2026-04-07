@@ -2,3 +2,5 @@ interface:
   display_name: "Notion KB Sync"
   short_description: "Sync kb markdown into Notion pages"
   default_prompt: "Use $notion-sync-kb to sync this repository knowledge base to Notion."
+policy:
+  allow_implicit_invocation: false

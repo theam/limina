@@ -1,0 +1,6 @@
+interface:
+  display_name: "Exploratory SOTA Research"
+  short_description: "Map the AI/ML state of the art for a concrete problem and recommend generalizable mechanisms."
+  default_prompt: "Use $exploratory-sota-research to map the state of the art for: "
+policy:
+  allow_implicit_invocation: false

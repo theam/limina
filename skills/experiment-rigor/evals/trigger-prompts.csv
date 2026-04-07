@@ -1,0 +1,10 @@
+id,should_trigger,prompt
+rigor-01,true,"Use $experiment-rigor to review whether H003 is specific enough before we run E007."
+rigor-02,true,"Design a fair experiment to compare a new reranker against the incumbent with clear guardrails."
+rigor-03,true,"Decide whether this negative result is a true method failure or just an invalid setup."
+rigor-04,true,"Help me choose baselines, slices, and stopping rules for this Limina experiment."
+rigor-05,true,"Review this finding and tell me whether it is conclusive or still inconclusive."
+rigor-06,false,"Map the state of the art for retrieval under domain shift."
+rigor-07,false,"Summarize this paper for me."
+rigor-08,false,"Implement the eval pipeline in Python."
+rigor-09,false,"Give me three product ideas for AI search."

@@ -50,6 +50,11 @@ Use concise examples and keep the prompt focused on the research problem, not on
 Create `kb/mission/CHALLENGE.md` with:
 
 ```markdown
+---
+aliases: ["CHALLENGE"]
+type: mission
+---
+
 # Research Mission
 
 ## Objective
@@ -69,11 +74,21 @@ Create `kb/mission/CHALLENGE.md` with:
 - Ask when blocked on access, trust in the evaluation, or strategic decisions.
 - Persist durable evidence in `kb/`.
 - Keep active state in `kb/ACTIVE.md`.
+
+## Links
+
+- Active State: [[ACTIVE]]
+- Dashboard: [[DASHBOARD]]
 ```
 
 Create `kb/ACTIVE.md` with:
 
 ```markdown
+---
+aliases: ["ACTIVE"]
+type: active-state
+---
+
 # Active State
 
 ## Current Objective
@@ -90,7 +105,7 @@ None.
 
 ## Links
 
-- `kb/mission/CHALLENGE.md`
+- Mission: [[CHALLENGE]]
 ```
 
 ### Step 7: Initial commit
@@ -115,3 +130,9 @@ Tell the user:
 > Or open the folder in Codex.
 >
 > The runtime loads the mission brief and active state at startup. Hooks enforce `H -> E -> F`, validate kb writes, and run a final kb validation before stop.
+>
+> To install the bundled repo-local companion skills (`experiment-rigor`, `exploratory-sota-research`, `article-strategy`, `notion-sync-kb`) into Claude Code and/or Codex from inside the project repo, run:
+>
+> ```bash
+> bash scripts/install_skills.sh
+> ```

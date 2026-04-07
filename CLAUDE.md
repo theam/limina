@@ -1,6 +1,6 @@
 # Limina — Claude Adapter
 
-@AGENTS.md
+Follow what `AGENTS.md` says.
 
 ## Claude Notes
 

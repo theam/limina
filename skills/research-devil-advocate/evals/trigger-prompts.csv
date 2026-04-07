@@ -1,0 +1,10 @@
+id,should_trigger,prompt
+devil-01,true,"Use $research-devil-advocate to challenge whether this retrieval direction still deserves more time after two noisy experiments."
+devil-02,true,"Give me a step-back review on this Limina research plan and tell me whether we should continue, pivot, stop, or escalate."
+devil-03,true,"These findings conflict with our earlier conclusion. Use $research-devil-advocate to audit the direction."
+devil-04,true,"Before we spend a week on this hypothesis, run a devil's-advocate checkpoint on the current evidence."
+devil-05,true,"We may be stuck in a local maximum. Challenge the current research direction and propose the smallest next move."
+devil-06,false,"Design a rigorous experiment to compare two rankers."
+devil-07,false,"Map the state of the art for long-context memory."
+devil-08,false,"Refactor this code for maintainability."
+devil-09,false,"Summarize this paper for me."

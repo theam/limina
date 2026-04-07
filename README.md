@@ -1,225 +1,260 @@
-# Limina
+```
+  ██╗     ██╗███╗   ███╗██╗███╗   ██╗ █████╗
+  ██║     ██║████╗ ████║██║████╗  ██║██╔══██╗
+  ██║     ██║██╔████╔██║██║██╔██╗ ██║███████║
+  ██║     ██║██║╚██╔╝██║██║██║╚██╗██║██╔══██║
+  ███████╗██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║
+  ╚══════╝╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
 
-Limina is a research-first template for autonomous technical investigation.
+  from Latin līmen — "threshold"
+  Cross the boundary between known and unknown.
+```
 
-It is intentionally small:
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/theam/limina)](https://github.com/theam/limina/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/theam/limina)](https://github.com/theam/limina/network/members)
 
-- one shared machine-facing contract
-- one active-state file
-- one required research flow: `H -> E -> F`
-- a small persistent knowledge base in `kb/`
-- only deterministic hooks and validation in the runtime
+Built by [The Agile Monkeys](https://theagilemonkeys.com).
 
-The goal is not to model every kind of work. The goal is to help an agent run clean research with durable evidence and low context noise.
+Give Limina a hard technical problem. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution backed by evidence, or tells you what it learned trying.
 
-## Core Idea
+## What is this
 
-Limina treats research as the primary workflow.
+Limina is an autonomous AI research agent framework. You give it a hard technical problem with clear success criteria, and it works through it using a structured approach: break the problem down, survey existing work, form hypotheses, design and run experiments, challenge its own direction, and iterate — until it reaches a solution or exhausts the approaches and tells you what it learned.
 
-- `H` hypotheses capture what might work and why.
-- `E` experiments capture how it was tested.
-- `F` findings capture what the evidence actually says.
-- `CR` and `SR` are review artifacts for real decision points, not routine bureaucracy.
+Everything the agent does is written to a persistent knowledge base (`kb/`). Hypotheses link to experiments. Experiments link to findings. Decisions are logged with reasoning. If the agent gets stuck, it escalates to you instead of guessing. You don't just get a result — you get the full trail of how it got there and why.
 
-Implementation can happen, but it is an outcome of research, not a parallel artifact graph in the core contract.
+This repository is a **template/starter system** — clone it, start an agent, and describe your problem.
 
-## Why This Version Is Smaller
+## Who is this for
 
-The template used to carry:
+- **Technical leads** — You need to make a decision between approaches and don't have weeks to run the comparison yourself. Limina does the legwork and gives you the evidence to decide.
+- **Research engineers** — You're tired of manually setting up experiment after experiment, tracking what you tried, and remembering why you discarded something three days ago. The agent keeps the full trail for you.
+- **Scientists** — Your research involves systematic evaluation across many variables. Limina runs the loop — hypothesize, test, record, review, iterate — so you can focus on the questions, not the bookkeeping.
+- **Business intelligence** — You have a question that requires more than pulling a dashboard. Something that needs real investigation: gathering data from multiple sources, testing assumptions, building evidence for a recommendation.
+- **Anyone with a very hard technical question** — The kind that takes multiple experiments to answer, where you need to track what worked, what didn't, and why. If you've ever lost track of what you already tried, this is for that.
 
-- task files
-- backlogs
-- manual last-ID bookkeeping
-- an engineering artifact graph
-- reminder and nudge hooks
-- a growing lessons block inside runtime instructions
+## What you can do with it
 
-That made the prompt surface large and noisy. The slim contract keeps only the parts that create hard guarantees or durable evidence.
+**Define a mission.** Describe your research objective — what you're trying to figure out, what "better" means, what resources the agent can use, and when it should come to you for a decision.
 
-## Quick Start
+**Let it run.** The agent breaks the problem into tasks, forms hypotheses, runs experiments, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
 
-Open Claude Code or Codex and paste:
+**Steer when needed.** When the agent hits something it can't decide on its own — needs more budget, wants to try a risky approach, reached a fork — it stops and asks you.
+
+**Get the result.** When the agent meets your success criteria — or determines it can't — you have the solution, the full research trail, and the reasoning behind every decision it made along the way.
+
+## Quick start
+
+Open [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](https://openai.com/index/introducing-codex/) and paste:
 
 ```text
 Install the Limina research skill by running:
 curl -fsSL https://raw.githubusercontent.com/theam/limina/main/setup.sh | bash
-Then ask me to change my working directory to the folder where I want
+Then ask me to change my Claude Code working directory to the folder where I want
 my research project to live, and help me set up a new Limina research project.
 ```
 
-The skill clones the template, asks for the mission, and prepares the initial `kb/`.
+The agent will install the skill, ask you to switch to your preferred directory, then guide you through everything — project name, research objective, context, success criteria.
 
-To start:
-
-```bash
-cd <your-project-name> && claude
-```
-
-Or open the folder in Codex.
-
-## Bundled Skills
-
-The template ships with one launcher skill plus repo-local companion skills:
-
-- `limina` — set up and launch a Limina research project
-- `experiment-rigor` — design, review, and conclude decision-grade `H -> E -> F` work
-- `exploratory-sota-research` — map mechanism landscapes, literature, and reproducibility signals
-- `article-strategy` — turn kb evidence into publishable article ideas and drafts
-- `notion-sync-kb` — sync `kb/` into Notion
-
-After creating a project from this template, install the bundled skills from inside the repo:
+When setup is done, open Claude Code in the new project directory:
 
 ```bash
-bash scripts/install_skills.sh
+cd <your-project-name> && claude --dangerously-skip-permissions
 ```
 
-Runtime-specific wrappers are also available:
+The agent reads the methodology automatically and starts researching.
 
-```bash
-bash scripts/install_claude_skills.sh
-bash scripts/install_codex_skills.sh
+### What to expect
+
+As the agent works, it builds a knowledge base in `kb/`:
+
+```
+kb/
+├── mission/
+│   ├── CHALLENGE.md        ← your research brief
+│   └── BACKLOG.md          ← task tracking
+├── research/
+│   ├── hypotheses/H001.md  ← what it thinks might work
+│   ├── experiments/E001.md ← how it tested each hypothesis
+│   └── findings/F001.md   ← what it learned
+├── reports/
+│   └── SR001.md            ← strategic review
+└── tasks/
+    ├── T001.md
+    └── T002.md
 ```
 
-## Knowledge Base Layout
+Check progress anytime by reading the files in `kb/` or asking the agent for a status update. When it gets stuck or needs a decision, it will ask you.
+
+## Writing a good mission
+
+The agent will ask you about your problem interactively. You'll get better results if your description reads like a **research brief** — here's what to include:
+
+1. **Research objective** — what problem you're trying to solve or improve
+2. **Evaluation target** — what "better" means and what failure is unacceptable
+3. **Baseline** — the current system, method, or repo to beat or replace
+4. **Resource envelope** — what compute, budget, datasets, APIs, and services are available
+5. **Autonomy boundaries** — what the agent is allowed to generate on its own (evaluation sets, synthetic data, benchmarks)
+6. **Escalation rules** — when it should ask you for more budget, tools, or approvals
+
+### Examples
+
+**Research & optimization:**
 
 ```text
-kb/
-├── ACTIVE.md
-├── mission/
-│   └── CHALLENGE.md
-├── research/
-│   ├── hypotheses/
-│   ├── experiments/
-│   ├── findings/
-│   ├── literature/
-│   └── data/
-├── reports/
-└── lessons/
+Your objective is to improve a multilingual retrieval system for a product catalog.
+
+The system should support both natural-language intent queries and traditional keyword search.
+Success requires high precision, high recall, and strong latency. Missing relevant items or
+returning irrelevant ones is not acceptable.
+
+You have an existing baseline system to improve.
+You may use the datasets, services, and API keys available in the project environment.
+You also have a bounded compute budget and should optimize for effective iteration, not long
+expensive runs by default.
+
+If evaluation data does not exist, generate it yourself and document how it was created.
+If additional tools, budget, or access are needed, ask with a clear justification.
 ```
 
-### What Each Part Is For
+**Investigation & root cause analysis:**
 
-- `kb/ACTIVE.md`: current objective, next step, blocker, working links
-- `kb/mission/CHALLENGE.md`: mission brief and success criteria
-- `kb/research/*`: the durable research graph
-- `kb/reports/`: challenge and strategic reviews
-- `kb/lessons/`: small topic files with reusable lessons; not auto-loaded by default
+```text
+Our API's P99 latency jumped from 120ms to 800ms after the last deploy.
+We need to find the root cause and a fix.
 
-## Shared Runtime Contract
+The service is a Node.js app on ECS with a PostgreSQL database.
+You have access to the repo, CloudWatch logs, and APM traces.
+Success means P99 back under 200ms with the fix verified in staging.
 
-`AGENTS.md` is the shared machine-facing contract.
+If you need access to production or want to run load tests, ask first.
+```
 
-- Codex reads `AGENTS.md` directly.
-- Claude Code reads `CLAUDE.md`, which imports `AGENTS.md`.
+## How it works
 
-This keeps the shared instruction surface short while still letting each runtime add small local notes when needed.
+```
+You describe the problem
+  → Agent decomposes into tasks
+  → Hypothesis → Experiment → Finding
+  → Reviews direction, challenges assumptions
+  → Iterates from persistent state across sessions
+```
 
-## Runtime Hooks
+1. You describe the research objective, constraints, and available resources.
+2. The agent decomposes the work into tasks, questions, and hypotheses.
+3. The agent runs experiments, gathers evidence, and records findings.
+4. The agent reviews the direction, challenges assumptions, and updates the plan.
+5. The agent continues from persistent state across sessions instead of starting over.
 
-The core template keeps only deterministic hooks:
+---
 
-- `SessionStart`: inject the mission brief and active state
-- `PreToolUse`: block `E` without `H`, and `F` without `E`
-- `PostToolUse`: validate kb writes
-- `Stop`: run full kb validation before closing
+## Compatibility
 
-The template intentionally does not include reminder hooks, delegation nudges, or periodic reflection hooks in the core runtime.
+Limina works with Claude Code, Codex, and OpenCode. Claude Code loads `CLAUDE.md` automatically; Codex and OpenCode load `AGENTS.md`. Both files are functionally equivalent — they guide the agent through the same methodology using runtime-specific tools.
 
-## Validator
+| Capability | Claude Code | Codex | OpenCode |
+|---|---|---|---|
+| Ask the user for missing information | `AskUserQuestion` | `request_user_input` or a direct question | Direct question |
+| Delegate work | Slash commands and Claude agents | `spawn_agent` / `send_input` | — |
+| Communicate status | Active session/chat | Active session/chat | Active session/chat |
+| Validate KB state | `python3 scripts/kb_validate.py` | `python3 scripts/kb_validate.py` | `python3 scripts/kb_validate.py` |
 
-Run this after substantial kb changes:
+## Autonomous execution with cook
+
+[cook](https://rjcorwin.github.io/cook/) is a universal orchestration CLI that handles work-review-gate cycles across any agent runtime. Use it when you want the agent to run fully autonomously with built-in review gates.
 
 ```bash
-python3 scripts/kb_validate.py
+npm install -g @let-it-cook/cli
 ```
 
-The validator checks the research core only:
-
-- required startup files: `kb/ACTIVE.md`, `kb/mission/CHALLENGE.md`
-- artifact filenames and directories
-- required metadata for `H`, `E`, `F`, `L`, `CR`, `SR`
-- research traceability (`E -> H`, `F -> H/E`, `SR -> CR`)
-- resolvable wikilinks in `## Links`
-- parent backlinks for the core graph
-
-## ID Allocation
-
-There is no manual `Last IDs` ledger.
-
-Use the allocator:
-
+**Continue research (open-ended):**
 ```bash
-python3 scripts/kb_next_id.py H
-python3 scripts/kb_next_id.py E
-python3 scripts/kb_next_id.py F
-python3 scripts/kb_next_id.py CR
+cook "Continue research" review \
+     "Review current status and verify if we achieved the target mission" \
+     "DONE if we achieved the target mission, else ITERATE"
 ```
 
-It derives the next ID from the filesystem.
-
-To create a note and wire its first links:
-
+**Research with iteration cap:**
 ```bash
-python3 scripts/kb_new_artifact.py H "Hypothesis title"
-python3 scripts/kb_new_artifact.py E "Experiment title" --hypothesis H001
-python3 scripts/kb_new_artifact.py F "Finding title" --hypothesis H001 --experiment E001
+cook "Continue research" review \
+     "Review current status and verify if we achieved the target mission" \
+     "DONE if we achieved the target mission, else ITERATE" \
+     --max-iterations 10
 ```
 
-## Obsidian Graph Convention
+**Mixed agents (Codex work, Claude review):**
+```bash
+cook "Continue research" review \
+     "Review current status and verify if we achieved the target mission" \
+     "DONE if we achieved the target mission, else ITERATE" \
+     --work-agent codex --review-agent claude
+```
 
-The kb is meant to be a navigable Obsidian graph, not just a folder of Markdown files.
+**Challenge review:**
+```bash
+cook "Run /challenge with target 'Research direction'" review \
+     "Read the CR report and assess whether critical issues were addressed" \
+     "DONE if no critical issues remain, else ITERATE"
+```
 
-- Every core artifact aliases its ID in frontmatter.
-- Use `[[ID]]` links for artifacts: `[[H001]]`, `[[E003]]`, `[[F010]]`, `[[CR002]]`, `[[SR001]]`.
-- Use filename links for fixed notes: `[[ACTIVE]]`, `[[CHALLENGE]]`, `[[DASHBOARD]]`.
-- Every core note must contain a `## Links` section.
-- Parent and child notes should link to each other.
+## What you get
 
-This keeps the graph easy for agents to maintain and easy for Obsidian to navigate.
+- A persistent knowledge base in `kb/`
+- A research-first workflow:
+  - research: Hypothesis → Experiment → Finding
+  - engineering: Investigation → Feature → Implementation → Retrospective
+- First-class review artifacts: Challenge Reviews and Strategic Reviews
+- Adapters for Claude Code, Codex, and OpenCode
+- Core artifact templates in `templates/`
+- A read-only KB validator: `python3 scripts/kb_validate.py`
 
-## Lessons
+## Core model
 
-Do not keep lessons inside the runtime prompt.
+The system is built around a persistent knowledge base in `kb/`.
 
-Instead:
+- Durable state lives in `kb/`, not only in conversation context
+- Every unit of work is a task
+- Research tasks follow Hypothesis → Experiment → Finding
+- Engineering tasks follow Investigation → Feature → Implementation → Retrospective
+- Reviews are first-class artifacts: Challenge Reviews and Strategic Reviews
+- `DECISIONS.md` and `CEO_REQUESTS.md` are mission ledgers, not file-backed artifact types
 
-- store them in `kb/lessons/`
-- keep each file narrow and topic-based
-- read only the lesson files relevant to the current problem
+### Core tracked artifacts
 
-This preserves durable learning without forcing a growing lessons ledger into every session.
+These are the file-backed artifact types enforced by the validator:
 
-## Optional Extensions
+| Prefix | Meaning | Location |
+|---|---|---|
+| `T` | Task | `kb/tasks/` |
+| `H` | Hypothesis | `kb/research/hypotheses/` |
+| `E` | Experiment | `kb/research/experiments/` |
+| `F` | Finding | `kb/research/findings/` |
+| `L` | Literature review | `kb/research/literature/` |
+| `FT` | Feature spec | `kb/engineering/features/` |
+| `INV` | Investigation | `kb/engineering/investigations/` |
+| `IMP` | Implementation log | `kb/engineering/implementations/` |
+| `RET` | Retrospective | `kb/engineering/retrospectives/` |
+| `CR` | Challenge review | `kb/reports/` |
+| `SR` | Strategic review | `kb/reports/` |
 
-Optional workflows belong outside the core contract:
+The validator is read-only in v1. It checks:
 
-- skills
-- scoped rules
-- project-specific docs
-- external orchestration such as `cook`
+- last-ID declarations in `BACKLOG.md`
+- task file and backlog row consistency
+- `INDEX.md` coverage for core artifact files
+- research traceability: experiments link to hypotheses, findings link to experiments
+- engineering traceability across investigations, features, implementations, retrospectives
+- challenge review and strategic review metadata and naming
+- malformed filenames, duplicate IDs, and ID gaps
 
-If a workflow is not essential for every project, it should not live in the main runtime files.
+## Contributing
 
-## Included Templates
+Found a bug? Have an idea? We'd love your input.
 
-Core templates live in `templates/`:
+- [Open an issue](https://github.com/theam/limina/issues) to report problems or suggest features
+- [Start a discussion](https://github.com/theam/limina/discussions) to ask questions or share how you're using Limina
 
-- `active.md`
-- `hypothesis.md`
-- `experiment.md`
-- `finding.md`
-- `literature.md`
-- `challenge-review.md`
-- `strategic-review.md`
+## License
 
-## Philosophy
-
-Limina is opinionated about a few things:
-
-- durable evidence beats chat memory
-- small prompts beat sprawling constitutions
-- deterministic hooks beat reminder text
-- specific artifacts beat generic wrappers
-- research quality matters more than process theater
-
-Everything else is intentionally left lightweight.
+Apache 2.0, © The Agile Monkeys. See [LICENSE](./LICENSE).

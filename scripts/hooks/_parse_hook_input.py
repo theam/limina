@@ -12,11 +12,14 @@ import sys
 from pathlib import Path
 
 try:
-    data = json.load(sys.stdin)
+    raw = sys.stdin.read()
+    data = json.loads(raw)
 except Exception:
     sys.exit(0)
 
-# Handle both flat and nested tool_input formats
+# Handle both flat and nested tool_input formats.
+# For PostToolUse the payload includes tool_response which can be huge —
+# discard it immediately so downstream code only processes tool_input.
 if "tool_input" in data:
     data = data["tool_input"]
 

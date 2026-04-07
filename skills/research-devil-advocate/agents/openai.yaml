@@ -1,0 +1,6 @@
+interface:
+  display_name: "Research Devil's Advocate"
+  short_description: "Adversarial step-back review for Limina research direction"
+  default_prompt: "Use $research-devil-advocate to challenge the current Limina research direction and tell me whether we should continue, continue with fixes, pivot, stop, or escalate."
+policy:
+  allow_implicit_invocation: false

@@ -131,7 +131,7 @@ Tell the user:
 >
 > The runtime loads the mission brief and active state at startup. Hooks enforce `H -> E -> F`, validate kb writes, and run a final kb validation before stop.
 >
-> To install the bundled repo-local companion skills (`experiment-rigor`, `exploratory-sota-research`, `article-strategy`, `notion-sync-kb`) into Claude Code and/or Codex from inside the project repo, run:
+> To install the bundled repo-local companion skills (`experiment-rigor`, `exploratory-sota-research`, `research-devil-advocate`, `build-maintainable-software`) into Claude Code and/or Codex from inside the project repo, run:
 >
 > ```bash
 > bash scripts/install_skills.sh

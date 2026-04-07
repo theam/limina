@@ -1,47 +1,37 @@
 ---
-id: "SR{NUM}"
+id: "{ARTIFACT_ID}"
+aliases: ["{ARTIFACT_ID}"]
 type: strategic-review
-scope: "{research direction or initiative}"
-challenge_review: "CR{NUM}"
-created: "{date}"
+scope: "{SCOPE}"
+challenge_review: "{CHALLENGE_REVIEW_ID}"
+created: "{DATE}"
 tags: []
 ---
 
-# SR{NUM} — Strategic Review: {Scope}
+# {ARTIFACT_ID} — Strategic Review: {SCOPE}
 
-> **Date**: {date}
-> **Scope**: {research direction or initiative}
-> **Challenge Review**: CR{NUM}
+> **Date**: {DATE}
+> **Scope**: {SCOPE}
+> **Challenge Review**: [[{CHALLENGE_REVIEW_ID}]]
 
 ## Executive Summary
 
-_1 paragraph summary of the strategic conclusion._
+_Short summary of the conclusion._
 
 ## Current Ceiling
 
-_How far can the current direction realistically go?_
-
-## Untried Approaches
-
-1. ...
-2. ...
-3. ...
-
-## 10x Hypothesis
-
-_What would be required for an order-of-magnitude improvement?_
-
-## Assumptions to Challenge
-
-- ...
-- ...
+_What is the current direction likely to achieve, and what will it probably never fix?_
 
 ## Direction Decision
 
-_Continue, iterate, or pivot. Explain why._
+_Continue, narrow, reset, or pivot. Explain why._
 
 ## Next Steps
 
 1. ...
 2. ...
 3. ...
+
+## Links
+
+{LINKS_BLOCK}

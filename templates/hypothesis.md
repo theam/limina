@@ -1,46 +1,49 @@
 ---
-id: "H{NUM}"
+id: "{ARTIFACT_ID}"
+aliases: ["{ARTIFACT_ID}"]
 type: hypothesis
 status: PROPOSED
-task: "T{NUM}"
-created: "{date}"
-last_updated: "{date}"
+created: "{DATE}"
+last_updated: "{DATE}"
 tags: []
 ---
 
-# H{NUM} — {Title}
+# {ARTIFACT_ID} — {TITLE}
 
 > **Status**: PROPOSED | TESTING | CONFIRMED | REJECTED
-> **Task**: T{NUM}
-> **Created**: {date}
-> **Last updated**: {date}
+> **Created**: {DATE}
+> **Last updated**: {DATE}
 
 ## Statement
 
-_Clear, falsifiable hypothesis statement._
+_Clear, falsifiable claim._
 
-If [condition], then [expected outcome], because [reasoning].
+## Mechanism
 
-## Rationale
+_What capability or failure mode do you think changes, and why?_
 
-_Why do we believe this might be true? What evidence or intuition supports it?_
+## Why This Might Generalize
+
+_Why should this hold beyond the current eval slice or client-specific wording?_
+
+## Shortcut Risks
+
+_What could make this look good without improving the real capability?_
 
 ## Test Plan
 
-_How will we test this hypothesis? Be concrete — state exact commands and observable thresholds._
-
-- Experiment(s) to run: E{NUM}
-- Data needed: ...
-- Success metric: ...
-- Confirm if: `{command}` → {specific threshold or output}
-- Reject if: `{command}` → {specific threshold or output}
+- Experiment(s): ...
+- Confirm if: `{command}` -> {observable threshold or result}
+- Reject if: `{command}` -> {observable threshold or result}
 
 ## Evidence
 
-| Source | Supports/Contradicts | Notes |
-|---|---|---|
-| ... | ... | ... |
+_Existing sources, prior artifacts, or measurements that motivated the hypothesis._
 
 ## Conclusion
 
-_Final assessment after testing. What did we learn?_
+_Fill this after testing._
+
+## Links
+
+{LINKS_BLOCK}

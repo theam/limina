@@ -121,107 +121,14 @@ DATABASE_DIRS = {
             },
         },
     },
-    "engineering/features": {
-        "emoji": "🛠️",
-        "title_prop": "Feature",
-        "properties": {
-            "ID": {"rich_text": {}},
-            "Status": {
-                "select": {
-                    "options": [
-                        {"name": "PROPOSED", "color": "gray"},
-                        {"name": "INVESTIGATING", "color": "blue"},
-                        {"name": "IN PROGRESS", "color": "yellow"},
-                        {"name": "DELIVERED", "color": "green"},
-                        {"name": "ITERATING", "color": "orange"},
-                    ]
-                }
-            },
-        },
-    },
-    "engineering/investigations": {
-        "emoji": "🔍",
-        "title_prop": "Investigation",
-        "properties": {
-            "ID": {"rich_text": {}},
-            "Status": {
-                "select": {
-                    "options": [
-                        {"name": "IN PROGRESS", "color": "blue"},
-                        {"name": "COMPLETED", "color": "green"},
-                    ]
-                }
-            },
-        },
-    },
-    "engineering/implementations": {
-        "emoji": "⚙️",
-        "title_prop": "Implementation",
-        "properties": {
-            "ID": {"rich_text": {}},
-            "Status": {
-                "select": {
-                    "options": [
-                        {"name": "IN PROGRESS", "color": "blue"},
-                        {"name": "DELIVERED", "color": "green"},
-                        {"name": "NEEDS ITERATION", "color": "orange"},
-                    ]
-                }
-            },
-        },
-    },
-    "engineering/retrospectives": {
-        "emoji": "🔄",
-        "title_prop": "Retrospective",
-        "properties": {
-            "ID": {"rich_text": {}},
-        },
-    },
-    "tasks": {
-        "emoji": "✅",
-        "title_prop": "Task",
-        "properties": {
-            "ID": {"rich_text": {}},
-            "Status": {
-                "select": {
-                    "options": [
-                        {"name": "BACKLOG", "color": "gray"},
-                        {"name": "TODO", "color": "blue"},
-                        {"name": "IN_PROGRESS", "color": "yellow"},
-                        {"name": "DONE", "color": "green"},
-                        {"name": "BLOCKED", "color": "red"},
-                    ]
-                }
-            },
-            "Priority": {
-                "select": {
-                    "options": [
-                        {"name": "P0", "color": "red"},
-                        {"name": "P1", "color": "orange"},
-                        {"name": "P2", "color": "yellow"},
-                        {"name": "P3", "color": "gray"},
-                    ]
-                }
-            },
-            "Type": {
-                "select": {
-                    "options": [
-                        {"name": "research", "color": "purple"},
-                        {"name": "engineering", "color": "blue"},
-                    ]
-                }
-            },
-            "Linked": {"rich_text": {}},
-        },
-    },
 }
 
 # Directories/files that become regular pages
 PAGE_STRUCTURE = {
     "mission": {"emoji": "🎯", "title": "Mission"},
     "research": {"emoji": "🔬", "title": "Research"},
-    "engineering": {"emoji": "🛠️", "title": "Engineering"},
     "reports": {"emoji": "📊", "title": "Reports"},
+    "lessons": {"emoji": "🧠", "title": "Lessons"},
     "articles": {"emoji": "📝", "title": "Articles"},
 }
 
@@ -757,8 +664,8 @@ class NotionSync:
         print(f"  Mode: {'DRY RUN' if self.dry_run else 'LIVE'}")
         print(f"{'='*60}\n")
 
-        # 1. Sync INDEX.md as the root page content
-        self._sync_index()
+        # 1. Sync ACTIVE.md as the root page content
+        self._sync_active()
 
         # 2. Create section pages
         for section, config in PAGE_STRUCTURE.items():
@@ -788,16 +695,16 @@ class NotionSync:
         print(f"  Errors:  {self.stats['errors']}")
         print(f"{'='*60}\n")
 
-    def _sync_index(self):
-        """Sync INDEX.md as content on the root page."""
-        index_path = self.kb_path / "INDEX.md"
-        if not index_path.exists():
+    def _sync_active(self):
+        """Sync ACTIVE.md as content on the root page."""
+        active_path = self.kb_path / "ACTIVE.md"
+        if not active_path.exists():
             return
 
-        print("📑 Syncing INDEX.md to root page...")
-        content = index_path.read_text(encoding="utf-8")
-        file_hash = self._file_hash(index_path)
-        file_key = "INDEX.md"
+        print("📑 Syncing ACTIVE.md to root page...")
+        content = active_path.read_text(encoding="utf-8")
+        file_hash = self._file_hash(active_path)
+        file_key = "ACTIVE.md"
 
         if not self._needs_update(file_key, file_hash):
             print("  ⏭ Skipped (unchanged)")
@@ -808,7 +715,7 @@ class NotionSync:
         if not self.dry_run:
             self._update_page_content(self.root_page_id, blocks)
             self.stats["updated"] += 1
-            print("  ✓ Updated root page with INDEX.md")
+            print("  ✓ Updated root page with ACTIVE.md")
         else:
             print("  [DRY RUN] Would update root page")
 
@@ -841,7 +748,7 @@ class NotionSync:
     def _sync_database_dir(self, dir_key: str, schema: dict):
         """Sync a directory of files as a Notion database."""
         dir_path = self.kb_path / dir_key
-        # Root-level dirs (like "tasks") go under root page; nested dirs go under section
+        # Root-level dirs go under root page; nested dirs go under their section
         if "/" in dir_key:
             section = dir_key.split("/")[0]  # "research" or "engineering"
             parent_id = self._get_section_id(section)

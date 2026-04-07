@@ -1,34 +1,41 @@
 ---
-id: "F{NUM}"
+id: "{ARTIFACT_ID}"
+aliases: ["{ARTIFACT_ID}"]
 type: finding
-task: "T{NUM}"
-hypothesis: "H{NUM}"
-experiment: "E{NUM}"
-impact: HIGH
-created: "{date}"
+hypothesis: "{HYPOTHESIS_ID}"
+experiment: "{EXPERIMENT_ID}"
+impact: "{IMPACT}"
+created: "{DATE}"
 tags: []
 ---
 
-# F{NUM} — {Title}
+# {ARTIFACT_ID} — {TITLE}
 
-> **Date**: {date}
-> **Task**: T{NUM}
-> **Hypothesis**: H{NUM}
-> **Experiment**: E{NUM}
-> **Impact**: HIGH | MEDIUM | LOW
+> **Created**: {DATE}
+> **Hypothesis**: [[{HYPOTHESIS_ID}]]
+> **Experiment**: [[{EXPERIMENT_ID}]]
+> **Impact**: {IMPACT} | CRITICAL | HIGH | MEDIUM | LOW
 
 ## Finding
 
-_Clear statement of what was discovered._
+_One clear statement of what the experiment established._
 
 ## Evidence
 
-_What data, experiments, or analysis supports this?_
+_What measurements, comparisons, or observations support it?_
 
-## Implications
+## What Improved For Real
 
-_What does this mean for the research direction?_
+_What capability changed beyond the benchmark number itself?_
 
-## Actions Taken
+## Remaining Debt
 
-- [ ] ...
+_What is still a workaround, shortcut, or open risk?_
+
+## Next Move
+
+_What should the research do because of this finding?_
+
+## Links
+
+{LINKS_BLOCK}

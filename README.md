@@ -16,11 +16,19 @@
 
 Built by [The Agile Monkeys](https://theagilemonkeys.com).
 
-Give Limina a hard technical problem. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution backed by evidence, or tells you what it learned trying.
+Give Limina a problem with a measurable goal. It will autonomously research it — forming hypotheses, running experiments, challenging its own direction — until it finds a solution backed by evidence, or tells you what it learned trying.
 
 ## What is this
 
-Limina is an autonomous AI research agent framework. You give it a hard technical problem with clear success criteria, and it works through it using a structured approach: break the problem down, survey existing work, form hypotheses, design and run experiments, challenge its own direction, and iterate — until it reaches a solution or exhausts the approaches and tells you what it learned.
+Limina is an autonomous research harness for AI agents. You describe a problem with clear success criteria, and the agent works through it: break it down, survey existing approaches, form hypotheses, design and run experiments, challenge its own assumptions, and iterate — until it reaches a solution or exhausts the approaches and tells you what it learned.
+
+It works on anything with a measurable outcome. Our team uses it for:
+
+- Optimizing a search engine for a large e-commerce platform
+- A/B testing product features
+- Researching state-of-the-art approaches for audio transcription
+- Optimizing social media reach with data-driven experiments
+- Investigating root causes of production performance issues
 
 Everything the agent does is written to a persistent knowledge base (`kb/`). Hypotheses link to experiments. Experiments link to findings. Decisions are logged with reasoning. If the agent gets stuck, it escalates to you instead of guessing. You don't just get a result — you get the full trail of how it got there and why.
 
@@ -29,16 +37,17 @@ This repository is a **template/starter system** — clone it, start an agent, a
 ## Who is this for
 
 - **Technical leads** — You need to make a decision between approaches and don't have weeks to run the comparison yourself. Limina does the legwork and gives you the evidence to decide.
+- **Product teams** — You want to optimize a metric — conversion rate, latency, cost, user engagement — and need systematic experimentation, not guesswork.
 - **Research engineers** — You're tired of manually setting up experiment after experiment, tracking what you tried, and remembering why you discarded something three days ago. The agent keeps the full trail for you.
 - **Scientists** — Your research involves systematic evaluation across many variables. Limina runs the loop — hypothesize, test, record, review, iterate — so you can focus on the questions, not the bookkeeping.
 - **Business intelligence** — You have a question that requires more than pulling a dashboard. Something that needs real investigation: gathering data from multiple sources, testing assumptions, building evidence for a recommendation.
-- **Anyone with a very hard technical question** — The kind that takes multiple experiments to answer, where you need to track what worked, what didn't, and why. If you've ever lost track of what you already tried, this is for that.
+- **Anyone with a goal that can be measured** — If you can define what "better" looks like, Limina can research how to get there.
 
 ## What you can do with it
 
 **Define a mission.** Describe your research objective — what you're trying to figure out, what "better" means, what resources the agent can use, and when it should come to you for a decision.
 
-**Let it run.** The agent breaks the problem into tasks, forms hypotheses, runs experiments, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
+**Let it run.** The agent frames the problem, forms hypotheses, runs experiments, reviews its direction, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
 
 **Steer when needed.** When the agent hits something it can't decide on its own — needs more budget, wants to try a risky approach, reached a fork — it stops and asks you.
 
@@ -60,7 +69,7 @@ The agent will install the skill, ask you to switch to your preferred directory,
 When setup is done, open Claude Code in the new project directory:
 
 ```bash
-cd <your-project-name> && claude --dangerously-skip-permissions
+cd <your-project-name> && claude
 ```
 
 The agent reads the methodology automatically and starts researching.
@@ -71,18 +80,20 @@ As the agent works, it builds a knowledge base in `kb/`:
 
 ```
 kb/
+├── ACTIVE.md              ← current objective, next step, blocker
 ├── mission/
-│   ├── CHALLENGE.md        ← your research brief
-│   └── BACKLOG.md          ← task tracking
+│   └── CHALLENGE.md        ← your research brief
+├── lessons/
+│   └── README.md           ← reusable lessons
 ├── research/
 │   ├── hypotheses/H001.md  ← what it thinks might work
 │   ├── experiments/E001.md ← how it tested each hypothesis
-│   └── findings/F001.md   ← what it learned
+│   ├── findings/F001.md    ← what it learned
+│   └── literature/L001.md  ← relevant external work
 ├── reports/
+│   ├── CR001.md            ← challenge review
 │   └── SR001.md            ← strategic review
-└── tasks/
-    ├── T001.md
-    └── T002.md
+└── DASHBOARD.md            ← Obsidian-friendly overview
 ```
 
 Check progress anytime by reading the files in `kb/` or asking the agent for a status update. When it gets stuck or needs a decision, it will ask you.
@@ -129,6 +140,19 @@ You have access to the repo, CloudWatch logs, and APM traces.
 Success means P99 back under 200ms with the fix verified in staging.
 
 If you need access to production or want to run load tests, ask first.
+```
+
+**Product optimization:**
+
+```text
+We need to improve the conversion rate of our landing page.
+Current conversion is 2.3% and we want to reach 4%.
+
+Run A/B tests on copy, layout, and CTA variations. You can generate
+test variants and analyze results from our analytics API.
+Track what you tested, what worked, and why.
+
+If you need to deploy a variant to production, ask first.
 ```
 
 ## How it works
@@ -200,25 +224,27 @@ cook "Run /challenge with target 'Research direction'" review \
 
 ## What you get
 
-- A persistent knowledge base in `kb/`
+- A persistent knowledge base in `kb/` with Obsidian-compatible YAML frontmatter
 - A research-first workflow:
   - research: Hypothesis → Experiment → Finding
-  - engineering: Investigation → Feature → Implementation → Retrospective
+- **Runtime enforcement hooks** — the H→E→F chain and KB validation are enforced mechanically, not just by instructions
 - First-class review artifacts: Challenge Reviews and Strategic Reviews
+- Installable companion skills for literature research, experiment rigor, adversarial review, and maintainable software work
 - Adapters for Claude Code, Codex, and OpenCode
 - Core artifact templates in `templates/`
-- A read-only KB validator: `python3 scripts/kb_validate.py`
+- A KB validator: `python3 scripts/kb_validate.py`
+- Provenance and staleness tracking: `python3 scripts/kb_provenance.py`
+- Optional Obsidian vault integration: `bash scripts/obsidian_init.sh`
 
 ## Core model
 
 The system is built around a persistent knowledge base in `kb/`.
 
 - Durable state lives in `kb/`, not only in conversation context
-- Every unit of work is a task
-- Research tasks follow Hypothesis → Experiment → Finding
-- Engineering tasks follow Investigation → Feature → Implementation → Retrospective
+- The only required core workflow is Hypothesis → Experiment → Finding
+- `ACTIVE.md` and `CHALLENGE.md` hold the always-on state
 - Reviews are first-class artifacts: Challenge Reviews and Strategic Reviews
-- `DECISIONS.md` and `CEO_REQUESTS.md` are mission ledgers, not file-backed artifact types
+- Skills are part of the default process for major phases like literature search, experiment design, adversarial review, and implementation
 
 ### Core tracked artifacts
 
@@ -226,27 +252,62 @@ These are the file-backed artifact types enforced by the validator:
 
 | Prefix | Meaning | Location |
 |---|---|---|
-| `T` | Task | `kb/tasks/` |
 | `H` | Hypothesis | `kb/research/hypotheses/` |
 | `E` | Experiment | `kb/research/experiments/` |
 | `F` | Finding | `kb/research/findings/` |
 | `L` | Literature review | `kb/research/literature/` |
-| `FT` | Feature spec | `kb/engineering/features/` |
-| `INV` | Investigation | `kb/engineering/investigations/` |
-| `IMP` | Implementation log | `kb/engineering/implementations/` |
-| `RET` | Retrospective | `kb/engineering/retrospectives/` |
 | `CR` | Challenge review | `kb/reports/` |
 | `SR` | Strategic review | `kb/reports/` |
 
-The validator is read-only in v1. It checks:
+Required non-ID files:
 
-- last-ID declarations in `BACKLOG.md`
-- task file and backlog row consistency
-- `INDEX.md` coverage for core artifact files
+- `kb/ACTIVE.md`
+- `kb/mission/CHALLENGE.md`
+
+The validator checks:
+
 - research traceability: experiments link to hypotheses, findings link to experiments
-- engineering traceability across investigations, features, implementations, retrospectives
+- wikilink and parent-child consistency in the research graph
 - challenge review and strategic review metadata and naming
 - malformed filenames, duplicate IDs, and ID gaps
+
+The validator supports both YAML frontmatter and blockquote metadata formats. Additional modes:
+
+- `--check-file <path>` — validate a single file in isolation (fast, used by hooks)
+- `--quiet` — suppress output when validation passes
+- `--format json` — output results as JSON
+
+### Runtime enforcement
+
+In Claude Code, hooks in `.claude/settings.json` enforce rules automatically at runtime:
+
+| Hook | Type | What it does |
+|---|---|---|
+| `session_start.sh` | SessionStart | Injects the current challenge and active state into agent context |
+| `enforce_hef_chain.sh` | PreToolUse | **Blocks** experiment creation without a hypothesis, and finding creation without an experiment |
+| `kb_write_guard.sh` | PostToolUse | Validates every `kb/` write against the artifact schema in real-time |
+| `stop_validate.sh` | Stop | Re-validates the KB before the session closes after KB-heavy work |
+
+The hooks are deterministic shell scripts — the agent cannot choose to skip them. Blocking hooks (exit code 2) prevent the action entirely; non-blocking hooks (exit code 0) inject guidance into the agent's context.
+
+### Provenance and staleness
+
+`python3 scripts/kb_provenance.py --stale-check` detects:
+
+- Findings referencing superseded hypotheses
+- Decisions citing rejected hypotheses
+- Contradictions between findings on the same hypothesis
+- Literature entries older than a configurable threshold
+
+### Obsidian integration
+
+`bash scripts/obsidian_init.sh` sets up an optional Obsidian vault over `kb/`:
+
+- Creates `.obsidian/` config with Dataview plugin settings
+- Generates a `DASHBOARD.md` with live queries for the active state, experiments, findings, and literature
+- Configures graph view color groups for the research core
+
+The `kb/` remains a Git-backed Markdown source of truth. Obsidian is the human UI layer.
 
 ## Contributing
 

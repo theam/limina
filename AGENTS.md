@@ -56,22 +56,25 @@ Use this loop unless the current task clearly requires something else:
 
 1. Frame the current decision, bottleneck, or uncertainty.
 2. Identify the highest-value unknown blocking progress.
-3. Search by mechanism and failure mode, not only by task label.
-4. Create or revise `H` so it states a falsifiable claim, why it should work, why it might generalize, and what shortcut risks remain.
-5. Design and run one decisive `E` with a fair baseline, explicit success criteria, and clear guardrails.
-6. Write `F` as what the evidence actually established, what improved for real, and what debt remains.
-7. Update `kb/ACTIVE.md` with the new objective, next step, blocker, and working set.
-8. Escalate to `CR` or `SR` only if the direction, trust in the setup, or strategic framing has changed.
+3. Choose the primary skill for the current phase before doing non-trivial literature search, experiment design, adversarial review, or implementation work.
+4. Search by mechanism and failure mode, not only by task label.
+5. Create or revise `H` so it states a falsifiable claim, why it should work, why it might generalize, and what shortcut risks remain.
+6. Design and run one decisive `E` with a fair baseline, explicit success criteria, and clear guardrails.
+7. Write `F` as what the evidence actually established, what improved for real, and what debt remains.
+8. Update `kb/ACTIVE.md` with the new objective, next step, blocker, and working set.
+9. Escalate to `CR` or `SR` only if the direction, trust in the setup, or strategic framing has changed.
 
 ## Skill Routing
 
-Before major work, identify the dominant bottleneck and pick the narrowest skill that matches it.
+Skills are part of the default process, not optional extras. Before major work, identify the dominant bottleneck, pick the narrowest matching skill, and use that skill as the primary playbook for the phase.
 
-- Use `$exploratory-sota-research` when the main gap is external landscape search, mechanism discovery, benchmark mapping, or reproducibility scanning.
-- Use `$experiment-rigor` when the main gap is hypothesis quality, experiment design, baseline fairness, metrics, guardrails, or interpreting whether a result is valid, invalid, or inconclusive.
-- Use `$research-devil-advocate` when the main gap is adversarial review of the current direction: continue, continue with fixes, pivot, stop, or escalate.
-- Use `$build-maintainable-software` when the main work is implementation, refactor, API or module design, maintainability review, or safe changeability.
+- Use `$exploratory-sota-research` when the main gap is external landscape search, mechanism discovery, benchmark mapping, or reproducibility scanning. Do not run a substantial literature or SOTA sweep without it.
+- Use `$experiment-rigor` when the main gap is hypothesis quality, experiment design, baseline fairness, metrics, guardrails, or interpreting whether a result is valid, invalid, or inconclusive. Do not design or interpret a non-trivial experiment cycle without it.
+- Use `$research-devil-advocate` when the main gap is adversarial review of the current direction: continue, continue with fixes, pivot, stop, or escalate. Do not perform a serious direction review or reset without it.
+- Use `$build-maintainable-software` when the main work is implementation, refactor, API or module design, maintainability review, or safe changeability. Do not treat implementation as an unstructured side quest.
 - Default to one primary skill. Add a second only when the output of the first naturally hands off to a different kind of work.
+- If one skill clearly matches the phase, use it. Only fall back to the core contract alone when no skill is a strong fit.
+- Make the skill choice explicit in your working summary or `kb/ACTIVE.md` update when it materially shapes the next step.
 - After using a skill, persist any durable result back into `kb/` and update `kb/ACTIVE.md` if the objective, next step, blocker, or working set changed.
 
 ## Evidence Quality

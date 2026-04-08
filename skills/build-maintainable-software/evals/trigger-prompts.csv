@@ -1,0 +1,10 @@
+id,should_trigger,prompt
+maintainable-01,true,"Use $build-maintainable-software to refactor this service so the domain logic is separated from the HTTP handlers."
+maintainable-02,true,"Review this PR for maintainability, API clarity, and future change risk."
+maintainable-03,true,"Help me redesign these module boundaries so state ownership and side effects are clearer."
+maintainable-04,true,"Simplify this over-abstracted code without changing behavior."
+maintainable-05,true,"Implement this feature with a design that is easy to test and hard to misuse."
+maintainable-06,false,"Map the state of the art for long-context agent memory."
+maintainable-07,false,"Design a rigorous experiment to compare two rerankers."
+maintainable-08,false,"Summarize this paper for me."
+maintainable-09,false,"Give me three startup ideas."

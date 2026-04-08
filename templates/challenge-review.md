@@ -1,46 +1,45 @@
 ---
-id: "CR{NUM}"
+id: "{ARTIFACT_ID}"
+aliases: ["{ARTIFACT_ID}"]
 type: challenge-review
-target: "{what was reviewed}"
-requested_by: ""
-reviewer: "Devil's Advocate"
-created: "{date}"
+target: "{TARGET}"
+target_id: "{TARGET_ID}"
+requested_by: "{REQUESTED_BY}"
+reviewer: "{REVIEWER}"
+created: "{DATE}"
 tags: []
 ---
 
-# CR{NUM} — Challenge Review: {Target}
+# {ARTIFACT_ID} — Challenge Review: {TARGET}
 
-> **Date**: {date}
-> **Target**: {what was reviewed}
-> **Requested by**: CEO | automatic trigger | strategic review
-> **Reviewer**: Devil's Advocate
+> **Date**: {DATE}
+> **Target**: {TARGET}
+> **Target ID**: {TARGET_ID_DISPLAY}
+> **Requested by**: {REQUESTED_BY}
+> **Reviewer**: {REVIEWER}
 
 ## Summary
 
-_1-2 sentence executive summary of the review._
+_Short statement of the central criticism._
 
 ## Critical Issues
 
-_Must address before proceeding._
+_What must be fixed before trusting the current direction?_
 
-## High-Priority Issues
+## Alternative Explanations
 
-_Significant flaws that should be addressed._
+_What else could explain the observed result?_
 
-## Medium-Priority Issues
+## What Still Looks Solid
 
-_Real issues with lower urgency._
-
-## Low-Priority Issues
-
-_Improvement opportunities._
-
-## What's Actually Good
-
-_What is solid and why._
+_What should not be thrown away?_
 
 ## Recommendations
 
 1. ...
 2. ...
 3. ...
+
+## Links
+
+{LINKS_BLOCK}

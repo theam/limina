@@ -1,80 +1,151 @@
-# Limina — Codex Runtime Adapter
+# Limina — Shared Runtime Contract
 
-This file is the **Codex runtime adapter** for the shared Limina contract.
+Limina is a research-first contract for autonomous technical investigation.
 
-`README.md` is the canonical human-readable specification. `CLAUDE.md` and `AGENTS.md` must stay **functionally equivalent** while using runtime-specific tools and wording.
+This file is the shared machine-facing instruction surface. Keep it short, specific, and stable. Runtime-specific details belong in adapters, skills, or scoped rules.
 
-## Non-Negotiable Rules
+## Core Rules
 
-1. Everything durable goes in `kb/`. If it only exists in chat, it is not persistent state.
-2. Each unit of work is a task tracked through `kb/mission/BACKLOG.md`.
-3. Research work follows `H -> E -> F`. Do not run experiments before the hypothesis exists.
-4. Engineering work follows `INV -> FT -> IMP -> RET`.
-5. `CR` and `SR` are first-class review artifacts. Use them, do not collapse them into generic notes.
-6. Communicate milestones, blockers, and handoffs in the active session; do not assume an external notification channel.
-7. Run `python3 scripts/kb_validate.py` after substantial KB edits and before closing KB-heavy work.
-8. Synthesize before closing a mission. When all tasks are DONE, distill reusable knowledge into Knowledge Cards (`templates/knowledge-card.md`). Write them to `shared-knowledge/cards/` if available, else `kb/cards/`.
+1. Durable state lives in `kb/`. If it only exists in chat, it is not persistent.
+2. The only required core workflow is `H -> E -> F`.
+3. Do not create an experiment before the hypothesis exists.
+4. Do not create a finding before the experiment exists.
+5. `ACTIVE.md` is the only always-on state file. Keep it narrow.
+6. Keep files small and specific. Prefer a concrete artifact over a generic note.
+7. Store reusable lessons in `kb/lessons/` as small topic files. Read only the ones you need.
+8. Use `CR` and `SR` only for real review points: major criticism, reset, or direction change.
+9. If the evaluation, baseline, or prior state looks untrustworthy, stop optimizing and resolve that first.
+10. Run `python3 scripts/kb_validate.py` after substantial kb edits and before closing kb-heavy work.
+11. Every note in the research core must include a `## Links` section with real wikilinks.
+12. Artifact notes alias their ID in frontmatter, so use `[[H001]]`, `[[E003]]`, `[[F010]]`, and similar links instead of raw file paths. Fixed notes use `[[ACTIVE]]`, `[[CHALLENGE]]`, and `[[DASHBOARD]]`.
 
-## Runtime Mapping
+## Mission First
 
-Use Codex-native mechanisms to satisfy the shared contract:
+Research exists to improve the mission, not to produce activity.
 
-- Ask the user with `request_user_input` when structured options help, or with a direct concise question when they do not.
-- Delegate bounded work with `spawn_agent` and coordinate with `send_input` / `wait`.
-- Keep durable progress in `kb/`, not only in agent messages.
-- Treat `README.md` as the conceptual source of truth and this file as operational guidance.
+- Optimize for decision-quality progress, not local artifact completion.
+- Treat benchmark or eval wins as mission progress only when the underlying capability is credible.
+- Prefer mechanisms that should generalize beyond the current slice, wording, customer, or benchmark.
+- If the current eval, baseline, or assumptions are not trustworthy, fix that before optimizing further.
+- If the problem changes, update the research graph to reflect the new reality instead of forcing continuity.
+
+## Working With The User
+
+The user is the source of challenge framing, domain context, priorities, constraints, access, and missing information.
+
+- Ask early for missing data, access, tools, context, decisions, or clarifications that materially affect the research direction.
+- Do not stay silently blocked behind weak assumptions. Surface the uncertainty before building on it.
+- When asking, state what you need, why it matters now, and what trade-off or degraded path exists if you do not get it.
+- Ask narrowly scoped questions that unblock the next decision, not broad open-ended interviews.
+
+## Session Recovery
+
+Use this at the start of a session, after compaction, or whenever the current context may be partial or stale.
+
+1. Read `kb/mission/CHALLENGE.md`.
+2. Read `kb/ACTIVE.md`.
+3. Open only the linked artifacts needed to reconstruct the current working state. Do not browse unrelated notes until the active scope is clear.
+4. Reconstruct the current state before acting: current objective, next step, blocker, latest decisive evidence, and open decision.
+5. Cross-check key numbers, dates, baselines, and decisions across the artifacts you read. If they disagree, treat that inconsistency as a blocker until resolved.
+6. Search `kb/` before creating a new hypothesis, finding, or review.
+7. Only continue once the active scope and state are coherent.
+
+## Default Research Loop
+
+Use this loop unless the current task clearly requires something else:
+
+1. Frame the current decision, bottleneck, or uncertainty.
+2. Identify the highest-value unknown blocking progress.
+3. Choose the primary skill for the current phase before doing non-trivial literature search, experiment design, adversarial review, or implementation work.
+4. Search by mechanism and failure mode, not only by task label.
+5. Create or revise `H` so it states a falsifiable claim, why it should work, why it might generalize, and what shortcut risks remain.
+6. Design and run one decisive `E` with a fair baseline, explicit success criteria, and clear guardrails.
+7. Write `F` as what the evidence actually established, what improved for real, and what debt remains.
+8. Update `kb/ACTIVE.md` with the new objective, next step, blocker, and working set.
+9. Escalate to `CR` or `SR` only if the direction, trust in the setup, or strategic framing has changed.
+
+## Skill Routing
+
+Skills are part of the default process, not optional extras. Before major work, identify the dominant bottleneck, pick the narrowest matching skill, and use that skill as the primary playbook for the phase.
+
+- Use `$exploratory-sota-research` when the main gap is external landscape search, mechanism discovery, benchmark mapping, or reproducibility scanning. Do not run a substantial literature or SOTA sweep without it.
+- Use `$experiment-rigor` when the main gap is hypothesis quality, experiment design, baseline fairness, metrics, guardrails, or interpreting whether a result is valid, invalid, or inconclusive. Do not design or interpret a non-trivial experiment cycle without it.
+- Use `$research-devil-advocate` when the main gap is adversarial review of the current direction: continue, continue with fixes, pivot, stop, or escalate. Do not perform a serious direction review or reset without it.
+- Use `$build-maintainable-software` when the main work is implementation, refactor, API or module design, maintainability review, or safe changeability. Do not treat implementation as an unstructured side quest.
+- Default to one primary skill. Add a second only when the output of the first naturally hands off to a different kind of work.
+- If one skill clearly matches the phase, use it. Only fall back to the core contract alone when no skill is a strong fit.
+- Make the skill choice explicit in your working summary or `kb/ACTIVE.md` update when it materially shapes the next step.
+- After using a skill, persist any durable result back into `kb/` and update `kb/ACTIVE.md` if the objective, next step, blocker, or working set changed.
+
+## Evidence Quality
+
+Default to these standards:
+
+- Search by challenge, bottleneck, and mechanism family.
+- Prefer generalizable approaches over narrow patches unless a narrow patch is the explicit goal.
+- Compare against the strongest fair baseline you can afford.
+- Control non-essential variables so the result can change a decision.
+- Distinguish `valid negative`, `invalid test`, `implementation failure`, `insufficient signal`, and `trade-off failure`.
+- Be explicit about mechanism, evidence, generalization, and shortcut risk when writing `H` or `F`.
+- Persist decisive evidence in `kb/`, and keep raw metrics under `kb/research/data/` when experiments produce them.
+
+## Anti-Patterns
+
+Do not:
+
+- optimize only for a small eval while claiming mission progress
+- benchmark-hack with prompt glue, aliases, or hidden domain mappings presented as intelligence
+- use strawman baselines or unfair comparisons
+- change too many important variables at once and then claim causality
+- treat one lucky run as decisive evidence
+- reject a method after an invalid setup
+- leave decisive conclusions only in chat
 
 ## Working Protocol
 
-At the start of a new mission (first session only):
-
-1. If `shared-knowledge/` exists, read `shared-knowledge/INDEX.md`
-2. Run `python3 scripts/search_knowledge.py "<key terms from challenge>"` to find relevant cards
-3. Read the top-ranked cards and note applicable insights
-
-At the start of every session:
-
-1. Read `kb/INDEX.md`
-2. Read `kb/mission/BACKLOG.md`
-3. Read the active task file if one exists
-4. Read the relevant local docs before acting
-
-During work:
-
-- Update the current artifact's `Progress` section at stopping points
-- Keep `INDEX.md` and `BACKLOG.md` in sync with core artifact creation and completion
-- Write reusable lessons to the appropriate persistent location, not only to chat
-- Search `kb/` before creating new artifacts to avoid duplicates and contradictions
-
-Before closing KB-heavy work:
-
-1. Ensure task and artifact state is written to `kb/`
-2. Run `python3 scripts/kb_validate.py`
-3. Fix KB errors before treating the work as complete
-4. Post a concise handoff summary in the active session
-
-Before closing a mission (all tasks DONE):
-
-1. Review findings (HIGH/MEDIUM impact), decisions, and lessons learned
-2. Generate Knowledge Cards for reusable insights using `templates/knowledge-card.md`
-3. Write cards to `shared-knowledge/cards/` (or `kb/cards/` if no shared dir)
-4. Update `shared-knowledge/INDEX.md` with new card entries
-5. Write a mission summary to `shared-knowledge/missions/`
+- Update the current artifact's `Progress` section at stopping points.
+- Update `kb/ACTIVE.md` whenever the objective, next step, blocker, or working set changes.
+- Persist durable conclusions in artifacts, not only in chat.
+- Ask the user early when blocked on data, access, decisions, or trust in the evaluation.
+- Keep reviews scoped and evidence-backed.
+- Prefer `python3 scripts/kb_new_artifact.py ...` when creating a new core artifact.
+- When you create a child artifact, ensure the parent note links back to it.
 
 ## Artifact Model
 
-The validator-enforced core artifacts are:
+The validator-enforced research core is:
 
-- `T`, `H`, `E`, `F`, `L`
-- `FT`, `INV`, `IMP`, `RET`
-- `CR`, `SR`
+- `H` hypotheses in `kb/research/hypotheses/`
+- `E` experiments in `kb/research/experiments/`
+- `F` findings in `kb/research/findings/`
+- `L` literature notes in `kb/research/literature/`
+- `CR` challenge reviews in `kb/reports/`
+- `SR` strategic reviews in `kb/reports/`
 
-`DECISIONS.md` and `CEO_REQUESTS.md` are mission ledgers. Optional milestone notes are allowed, but they are not part of the enforced core graph.
+Required non-ID files:
+
+- `kb/ACTIVE.md`
+- `kb/mission/CHALLENGE.md`
+
+## ID Allocation
+
+Do not maintain manual counters in prompt-loaded files.
+
+Use:
+
+```bash
+python3 scripts/kb_next_id.py H
+python3 scripts/kb_new_artifact.py H "Hypothesis title"
+```
+
+Replace `H` with `E`, `F`, `L`, `CR`, or `SR`.
 
 ## Communication
 
 The active session is the default transport for updates.
 
-- Use concise progress summaries for milestones and handoffs
-- Ask the user early when blocked
-- Persist anything that must survive context loss in `kb/`
+- Use concise milestone summaries.
+- Ask direct questions when blocked.
+- Persist anything that must survive context loss.
+
+Implementation work can happen, but it is not a parallel core artifact graph in Limina. Research drives the contract; delivery details belong to the local project, not the shared template.

@@ -1,7 +1,5 @@
 #!/bin/bash
-# Initialize Obsidian vault configuration for the Limina knowledge base.
-# Run: bash scripts/obsidian_init.sh
-# This is optional — the kb/ remains a Git-backed Markdown source of truth.
+# Initialize a lightweight Obsidian vault for the slim Limina kb/.
 
 set -e
 
@@ -9,12 +7,10 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 KB_ROOT="$PROJECT_ROOT/kb"
 OBSIDIAN_DIR="$KB_ROOT/.obsidian"
 
-echo "Initializing Obsidian vault for Limina knowledge base..."
+echo "Initializing Obsidian vault for Limina..."
 
-# Create .obsidian config directory
 mkdir -p "$OBSIDIAN_DIR"
 
-# Basic Obsidian app settings
 cat > "$OBSIDIAN_DIR/app.json" << 'EOF'
 {
   "showLineNumber": true,
@@ -25,14 +21,12 @@ cat > "$OBSIDIAN_DIR/app.json" << 'EOF'
 }
 EOF
 
-# Community plugins list (Dataview is required for dashboard queries)
 cat > "$OBSIDIAN_DIR/community-plugins.json" << 'EOF'
 [
   "dataview"
 ]
 EOF
 
-# Graph view color groups
 cat > "$OBSIDIAN_DIR/graph.json" << 'EOF'
 {
   "colorGroups": [
@@ -41,15 +35,11 @@ cat > "$OBSIDIAN_DIR/graph.json" << 'EOF'
       "color": { "a": 1, "rgb": 4478207 }
     },
     {
-      "query": "path:engineering",
-      "color": { "a": 1, "rgb": 3394611 }
-    },
-    {
       "query": "path:reports",
       "color": { "a": 1, "rgb": 16734003 }
     },
     {
-      "query": "path:tasks",
+      "query": "path:lessons",
       "color": { "a": 1, "rgb": 16776960 }
     },
     {
@@ -60,86 +50,79 @@ cat > "$OBSIDIAN_DIR/graph.json" << 'EOF'
 }
 EOF
 
-# Create DASHBOARD.md with Dataview queries
-cat > "$KB_ROOT/DASHBOARD.md" << 'DASHEOF'
+cat > "$KB_ROOT/DASHBOARD.md" << 'EOF'
 ---
+aliases: ["DASHBOARD"]
 type: dashboard
 ---
 
-# Limina Research Dashboard
+# Limina Dashboard
 
-> This dashboard uses [Dataview](https://github.com/blacksmithgu/obsidian-dataview) queries. Install the Dataview community plugin to see live tables.
+## Entry Points
 
-## Active Tasks
+- [[ACTIVE]]
+- [[CHALLENGE]]
 
-```dataview
-TABLE status, priority, task_type as "Type"
-FROM "tasks"
-WHERE status != "DONE"
-SORT priority ASC
-```
+## Links
 
-## Recent Experiments
+- Active State: [[ACTIVE]]
+- Mission: [[CHALLENGE]]
 
-```dataview
-TABLE status, hypothesis, task
-FROM "research/experiments"
-SORT created DESC
-LIMIT 10
-```
-
-## Hypotheses
+## Active Working Set
 
 ```dataview
-TABLE status, task
-FROM "research/hypotheses"
-SORT created DESC
+TABLE file.outlinks as "Outlinks"
+FROM ""
+WHERE file.name = "ACTIVE"
 ```
 
-## Findings
+## Core Graph
 
 ```dataview
-TABLE impact, hypothesis, experiment
-FROM "research/findings"
-SORT created DESC
+TABLE file.folder as "Folder", length(file.inlinks) as "In", length(file.outlinks) as "Out"
+FROM ""
+WHERE startswith(file.path, "research/") OR startswith(file.path, "reports/") OR startswith(file.path, "lessons/")
+SORT file.name ASC
 ```
 
-## Literature
+## Orphan Notes
 
 ```dataview
-TABLE source_type as "Type", relevance, task
-FROM "research/literature"
-SORT created DESC
-LIMIT 15
+TABLE file.folder as "Folder"
+FROM ""
+WHERE file.name != "README"
+AND file.name != "DASHBOARD"
+AND length(file.inlinks) = 0
+AND length(file.outlinks) = 0
+SORT file.path ASC
 ```
 
-## Engineering Features
+## Notes Missing Outlinks
 
 ```dataview
-TABLE status, task
-FROM "engineering/features"
-SORT created DESC
+TABLE file.folder as "Folder", length(file.inlinks) as "In"
+FROM ""
+WHERE file.name != "README"
+AND file.name != "DASHBOARD"
+AND length(file.outlinks) = 0
+SORT file.path ASC
 ```
 
-## Challenge Reviews
+## Notes Missing Inlinks
 
 ```dataview
-TABLE target, requested_by as "Requested By"
-FROM "reports"
-WHERE type = "challenge-review"
-SORT created DESC
-LIMIT 5
+TABLE file.folder as "Folder", length(file.outlinks) as "Out"
+FROM ""
+WHERE file.name != "README"
+AND file.name != "DASHBOARD"
+AND length(file.inlinks) = 0
+SORT file.path ASC
 ```
+EOF
 
-## Decisions
-
-See [DECISIONS.md](mission/DECISIONS.md) for the full decision log.
-DASHEOF
-
-# Add Obsidian user-specific files to .gitignore if not already there
 GITIGNORE="$PROJECT_ROOT/.gitignore"
 if [ -f "$GITIGNORE" ]; then
-  if ! grep -q '.obsidian/workspace' "$GITIGNORE" 2>/dev/null; then
+  if ! grep -q 'kb/.obsidian/workspace.json' "$GITIGNORE" 2>/dev/null; then
     echo "" >> "$GITIGNORE"
     echo "# Obsidian user-specific files" >> "$GITIGNORE"
     echo "kb/.obsidian/workspace.json" >> "$GITIGNORE"
@@ -159,13 +142,4 @@ fi
 
 echo ""
 echo "Obsidian vault initialized at: $KB_ROOT"
-echo ""
-echo "To use:"
-echo "  1. Open Obsidian"
-echo "  2. Click 'Open folder as vault'"
-echo "  3. Select: $KB_ROOT"
-echo "  4. Install the Dataview community plugin (Settings → Community plugins → Browse → 'Dataview')"
-echo "  5. Open DASHBOARD.md for a live overview of your research"
-echo ""
-echo "Note: The kb/ remains a Git-backed Markdown source of truth."
-echo "Obsidian is the human UI layer — all data lives in plain Markdown + YAML frontmatter."
+echo "Open the folder as a vault and install Dataview to use DASHBOARD.md."

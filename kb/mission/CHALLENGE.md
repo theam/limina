@@ -1,32 +1,29 @@
-# Challenge
+---
+aliases: ["CHALLENGE"]
+type: mission
+---
 
-> **Status**: NOT SET — Awaiting challenge assignment
+# Research Mission
 
 ## Objective
 
-_Describe the research question or problem to solve here._
+{What should the agent research?}
+
+## Context
+
+{What exists today, what has been tried, what constraints matter?}
 
 ## Success Criteria
 
-_How do we know we've succeeded? Define measurable outcomes._
-
-1. ...
-2. ...
+{What counts as a successful research outcome?}
 
 ## Constraints
 
-_Time, compute, data, or methodological constraints._
+- Persist durable evidence in `kb/`.
+- Keep active state in `kb/ACTIVE.md`.
+- Ask the user when blocked on access, trust in the evaluation, or strategic decisions.
 
-- ...
+## Links
 
-## Scope
-
-### In scope
-- ...
-
-### Out of scope
-- ...
-
-## Background
-
-_Any relevant context, motivation, or prior work._
+- Active State: [[ACTIVE]]
+- Dashboard: [[DASHBOARD]]

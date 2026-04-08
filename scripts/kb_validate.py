@@ -1,74 +1,111 @@
 #!/usr/bin/env python3
 """
-Validate the Limina knowledge base.
+Validate the slim Limina knowledge base.
 
-The validator is intentionally read-only. It validates the core tracked
-artifact model documented in README.md / CLAUDE.md / AGENTS.md.
+The validator covers the research graph:
+- kb/ACTIVE.md
+- kb/mission/CHALLENGE.md
+- kb/DASHBOARD.md when present
+- H / E / F / L / CR / SR artifacts
+- wikilinks and parent backlinks in ## Links sections
 """
 
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
-import sys
-from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
 try:
     import frontmatter as _fm
+
     HAS_FRONTMATTER = True
 except ImportError:
     HAS_FRONTMATTER = False
 
 
-CORE_ARTIFACTS = {
-    "T": {"dir": Path("tasks"), "prefix": "T"},
-    "H": {"dir": Path("research/hypotheses"), "prefix": "H"},
-    "E": {"dir": Path("research/experiments"), "prefix": "E"},
-    "F": {"dir": Path("research/findings"), "prefix": "F"},
-    "L": {"dir": Path("research/literature"), "prefix": "L"},
-    "FT": {"dir": Path("engineering/features"), "prefix": "FT"},
-    "INV": {"dir": Path("engineering/investigations"), "prefix": "INV"},
-    "IMP": {"dir": Path("engineering/implementations"), "prefix": "IMP"},
-    "RET": {"dir": Path("engineering/retrospectives"), "prefix": "RET"},
-    "CR": {"dir": Path("reports"), "prefix": "CR"},
-    "SR": {"dir": Path("reports"), "prefix": "SR"},
-}
-
-CORE_ID_RE = re.compile(r"\b(?:FT|INV|IMP|RET|CR|SR|T|H|E|F|L)\d{3}\b")
 META_RE = re.compile(r"^>\s+\*\*(.+?)\*\*:\s*(.+?)\s*$")
-BACKLOG_LAST_IDS_RE = re.compile(r"^>\s+(.+)$")
-FILENAME_RE = {
-    prefix: re.compile(rf"^{prefix}(\d{{3}})-.+\.md$")
-    for prefix in CORE_ARTIFACTS
-}
-HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+FRONTMATTER_BLOCK_RE = re.compile(r"^---\n(.*?)\n---\n?", re.DOTALL)
+WIKILINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
+ARTIFACT_ID_RE = re.compile(r"^(?:CR|SR|H|E|F|L)\d{3}$")
+
+
+@dataclass(frozen=True)
+class ArtifactSpec:
+    prefix: str
+    directory: Path
+    required_fields: tuple[str, ...]
 
 
 @dataclass
-class Artifact:
-    prefix: str
-    id_num: int
-    artifact_id: str
+class NoteRecord:
+    name: str
+    kind: str
     path: Path
+    text: str
     metadata: dict[str, str]
+    aliases: set[str]
+    has_links_section: bool
+    links: set[str]
+    spec: ArtifactSpec | None = None
+
+
+CORE_ARTIFACTS: dict[str, ArtifactSpec] = {
+    "H": ArtifactSpec("H", Path("research/hypotheses"), ("Status", "Created")),
+    "E": ArtifactSpec("E", Path("research/experiments"), ("Status", "Hypothesis", "Created")),
+    "F": ArtifactSpec("F", Path("research/findings"), ("Hypothesis", "Experiment", "Impact", "Created")),
+    "L": ArtifactSpec("L", Path("research/literature"), ("Type", "Date reviewed", "Relevance")),
+    "CR": ArtifactSpec("CR", Path("reports"), ("Target", "Requested by", "Reviewer", "Date")),
+    "SR": ArtifactSpec("SR", Path("reports"), ("Scope", "Challenge Review", "Date")),
+}
+
+SPECIAL_NOTES = {
+    "ACTIVE": {
+        "path": Path("ACTIVE.md"),
+        "required_headings": ("## Current Objective", "## Next Step", "## Blocker", "## Links"),
+    },
+    "CHALLENGE": {
+        "path": Path("mission/CHALLENGE.md"),
+        "required_headings": ("## Objective", "## Context", "## Success Criteria", "## Constraints", "## Links"),
+    },
+    "DASHBOARD": {
+        "path": Path("DASHBOARD.md"),
+        "required_headings": ("## Entry Points", "## Links"),
+    },
+}
+
+_FRONTMATTER_TO_META = {
+    "id": "ID",
+    "status": "Status",
+    "hypothesis": "Hypothesis",
+    "experiment": "Experiment",
+    "impact": "Impact",
+    "source_type": "Type",
+    "relevance": "Relevance",
+    "target": "Target",
+    "target_id": "Target ID",
+    "requested_by": "Requested by",
+    "reviewer": "Reviewer",
+    "scope": "Scope",
+    "challenge_review": "Challenge Review",
+    "created": "Created",
+    "date_reviewed": "Date reviewed",
+    "last_updated": "Last updated",
+}
 
 
 class ValidationResult:
     def __init__(self) -> None:
         self.errors: list[dict[str, str]] = []
-        self.checks: dict[str, dict[str, object]] = {}
 
-    def add_error(self, check: str, message: str, path: Path | None = None) -> None:
+    def add(self, check: str, message: str, path: Path | None = None) -> None:
         error = {"check": check, "message": message}
         if path is not None:
             error["path"] = str(path)
         self.errors.append(error)
-
-    def set_check(self, check: str, **details: object) -> None:
-        self.checks[check] = details
 
     @property
     def ok(self) -> bool:
@@ -79,35 +116,15 @@ class ValidationResult:
             "ok": self.ok,
             "error_count": len(self.errors),
             "errors": self.errors,
-            "checks": self.checks,
         }
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate the kb/ artifact graph.")
-    parser.add_argument(
-        "--kb-root",
-        default="./kb",
-        help="Path to the kb/ directory (default: ./kb)",
-    )
-    parser.add_argument(
-        "--format",
-        dest="output_format",
-        choices=("text", "json"),
-        default="text",
-        help="Output format (default: text)",
-    )
-    parser.add_argument(
-        "--check-file",
-        dest="check_file",
-        default=None,
-        help="Validate a single file in isolation (lightweight, fast)",
-    )
-    parser.add_argument(
-        "--quiet",
-        action="store_true",
-        help="Suppress output when validation passes",
-    )
+    parser = argparse.ArgumentParser(description="Validate the Limina kb/ research graph.")
+    parser.add_argument("--kb-root", default="./kb", help="Path to kb/ (default: ./kb)")
+    parser.add_argument("--check-file", default=None, help="Validate one file in isolation")
+    parser.add_argument("--format", choices=("text", "json"), default="text")
+    parser.add_argument("--quiet", action="store_true", help="Suppress output when validation passes")
     return parser.parse_args()
 
 
@@ -115,613 +132,503 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def parse_frontmatter(text: str) -> dict[str, str]:
-    """Parse YAML frontmatter from Markdown text, returning metadata as strings."""
-    if not HAS_FRONTMATTER:
-        return {}
+def safe_relative_to(path: Path, root: Path) -> Path | None:
     try:
-        post = _fm.loads(text)
-        return {str(k): str(v) for k, v in post.metadata.items() if v is not None and str(v) != ""}
-    except Exception:
+        return path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return None
+
+
+def strip_quotes(value: str) -> str:
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        return value[1:-1]
+    return value
+
+
+def normalize_value(value: object) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, list):
+        return ", ".join(strip_quotes(str(item)) for item in value if str(item).strip())
+    return strip_quotes(str(value)).strip()
+
+
+def parse_frontmatter_values(text: str) -> dict[str, object]:
+    if HAS_FRONTMATTER:
+        try:
+            post = _fm.loads(text)
+            return dict(post.metadata)
+        except Exception:
+            pass
+
+    match = FRONTMATTER_BLOCK_RE.match(text)
+    if not match:
         return {}
 
-
-# Mapping from YAML frontmatter keys to blockquote metadata keys
-_FRONTMATTER_TO_META = {
-    "status": "Status",
-    "priority": "Priority",
-    "task_type": "Type",
-    "task": "Task",
-    "hypothesis": "Hypothesis",
-    "experiment": "Experiment",
-    "impact": "Impact",
-    "source_type": "Type",
-    "relevance": "Relevance",
-    "feature": "Feature",
-    "investigation": "Investigation",
-    "implementation": "Implementation",
-    "target": "Target",
-    "requested_by": "Requested by",
-    "reviewer": "Reviewer",
-    "scope": "Scope",
-    "challenge_review": "Challenge Review",
-    "created": "Date",
-    "last_updated": "Last updated",
-}
+    parsed: dict[str, object] = {}
+    for raw_line in match.group(1).splitlines():
+        line = raw_line.rstrip()
+        if not line or line.lstrip().startswith("#"):
+            continue
+        field_match = re.match(r"^([A-Za-z0-9_-]+):\s*(.*)$", line)
+        if not field_match:
+            continue
+        key, raw_value = field_match.groups()
+        value = raw_value.strip()
+        if not value:
+            parsed[key] = ""
+            continue
+        if value.startswith("[") and value.endswith("]"):
+            try:
+                parsed[key] = ast.literal_eval(value)
+                continue
+            except Exception:
+                pass
+        parsed[key] = strip_quotes(value)
+    return parsed
 
 
-def _normalize_frontmatter(fm: dict[str, str]) -> dict[str, str]:
-    """Convert YAML frontmatter keys to the blockquote metadata key names used by the validator."""
-    result: dict[str, str] = {}
-    for key, value in fm.items():
-        meta_key = _FRONTMATTER_TO_META.get(key)
-        if meta_key:
-            result[meta_key] = value
-    return result
+def extract_aliases(value: object) -> set[str]:
+    if value is None:
+        return set()
+    if isinstance(value, (list, tuple, set)):
+        return {strip_quotes(str(item)).strip() for item in value if str(item).strip()}
+    raw = strip_quotes(str(value)).strip()
+    if not raw:
+        return set()
+    if raw.startswith("[") and raw.endswith("]"):
+        try:
+            parsed = ast.literal_eval(raw)
+        except Exception:
+            parsed = None
+        if isinstance(parsed, (list, tuple, set)):
+            return {strip_quotes(str(item)).strip() for item in parsed if str(item).strip()}
+    return {raw}
 
 
-def parse_metadata(text: str) -> dict[str, str]:
-    """Parse metadata from blockquote format and YAML frontmatter, merging both.
-
-    YAML frontmatter takes priority over blockquote metadata, because
-    frontmatter is what Obsidian and other tools edit directly.
-    """
+def parse_blockquote_metadata(text: str) -> dict[str, str]:
     metadata: dict[str, str] = {}
-    # First pass: blockquote metadata
     for line in text.splitlines():
         match = META_RE.match(line.strip())
         if match:
             metadata[match.group(1).strip()] = match.group(2).strip()
-    # Second pass: YAML frontmatter (always, not just as fallback)
-    fm = parse_frontmatter(text)
-    if fm:
-        normalized = _normalize_frontmatter(fm)
-        # Frontmatter wins on conflict — it's the editable source of truth
-        for key, value in normalized.items():
-            metadata[key] = value
     return metadata
 
 
-def strip_comments(text: str) -> str:
-    return HTML_COMMENT_RE.sub("", text)
+def parse_note_metadata(text: str) -> tuple[dict[str, str], set[str]]:
+    metadata = parse_blockquote_metadata(text)
+    frontmatter = parse_frontmatter_values(text)
+    aliases = extract_aliases(frontmatter.get("aliases"))
+
+    for key, value in frontmatter.items():
+        meta_key = _FRONTMATTER_TO_META.get(str(key))
+        if meta_key is None:
+            continue
+        normalized = normalize_value(value)
+        if normalized:
+            metadata[meta_key] = normalized
+
+    return metadata, aliases
 
 
-def parse_last_ids(backlog_path: Path, result: ValidationResult) -> dict[str, int]:
-    text = read_text(backlog_path)
-    for line in text.splitlines():
-        match = BACKLOG_LAST_IDS_RE.match(line.strip())
-        if not match:
-            continue
-        content = match.group(1)
-        if "T:" not in content:
-            continue
-        parsed: dict[str, int] = {}
-        for part in content.split("|"):
-            item = part.strip()
-            if ":" not in item:
-                continue
-            key, raw_value = item.split(":", 1)
-            key = key.strip()
-            raw_value = raw_value.strip()
-            if key in CORE_ARTIFACTS:
-                try:
-                    parsed[key] = int(raw_value)
-                except ValueError:
-                    result.add_error(
-                        "backlog_last_ids",
-                        f"Invalid last ID value for {key}: {raw_value}",
-                        backlog_path,
-                    )
-        return parsed
-    result.add_error("backlog_last_ids", "Could not find the Last IDs declaration.", backlog_path)
-    return {}
-
-
-def parse_backlog_tasks(backlog_path: Path, result: ValidationResult) -> dict[str, dict[str, str]]:
-    tasks: dict[str, dict[str, str]] = {}
-    in_tasks = False
-    for raw_line in read_text(backlog_path).splitlines():
-        line = raw_line.strip()
-        if line == "## Tasks":
-            in_tasks = True
-            continue
-        if not in_tasks:
-            continue
-        if not line:
-            continue
-        if line.startswith("## "):
+def extract_links_section(text: str) -> tuple[bool, set[str]]:
+    lines = text.splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if line.strip() == "## Links":
+            start = index + 1
             break
-        if not line.startswith("|"):
-            continue
-        columns = [col.strip() for col in line.strip("|").split("|")]
-        if not columns or columns[0] in {"ID", "---"}:
-            continue
-        if len(columns) < 6:
-            result.add_error(
-                "backlog_tasks",
-                f"Malformed task row: {raw_line.strip()}",
-                backlog_path,
-            )
-            continue
-        task_id = columns[0]
-        tasks[task_id] = {
-            "Task": columns[1],
-            "Status": columns[2],
-            "Priority": columns[3],
-            "Type": columns[4],
-            "Linked": columns[5],
-        }
-    return tasks
+    if start is None:
+        return False, set()
+
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if lines[index].startswith("## "):
+            end = index
+            break
+
+    section_text = "\n".join(lines[start:end])
+    links = {match.group(1).strip() for match in WIKILINK_RE.finditer(section_text)}
+    return True, links
 
 
-def collect_artifacts(kb_root: Path, result: ValidationResult) -> dict[str, dict[str, Artifact]]:
-    collected: dict[str, dict[str, Artifact]] = {prefix: {} for prefix in CORE_ARTIFACTS}
-    duplicates: list[tuple[str, Path, Path]] = []
-
-    for prefix, config in CORE_ARTIFACTS.items():
-        artifact_dir = kb_root / config["dir"]
-        if not artifact_dir.exists():
-            result.add_error("filesystem", f"Missing artifact directory for {prefix}: {artifact_dir}", artifact_dir)
-            continue
-        for path in sorted(artifact_dir.glob("*.md")):
-            match = FILENAME_RE[prefix].match(path.name)
-            if not match:
-                if config["dir"] == Path("reports") and not path.name.startswith(prefix):
-                    continue
-                result.add_error("filenames", f"Malformed filename for {prefix}: {path.name}", path)
-                continue
-            id_num = int(match.group(1))
-            artifact_id = f"{prefix}{id_num:03d}"
-            artifact = Artifact(
-                prefix=prefix,
-                id_num=id_num,
-                artifact_id=artifact_id,
-                path=path,
-                metadata=parse_metadata(read_text(path)),
-            )
-            if artifact_id in collected[prefix]:
-                duplicates.append((artifact_id, collected[prefix][artifact_id].path, path))
-            else:
-                collected[prefix][artifact_id] = artifact
-
-    for artifact_id, first, second in duplicates:
-        result.add_error("duplicate_ids", f"Duplicate artifact ID {artifact_id}.", first)
-        result.add_error("duplicate_ids", f"Duplicate artifact ID {artifact_id}.", second)
-
-    return collected
+def normalize_ref(value: str) -> str:
+    raw = strip_quotes(str(value).strip())
+    if raw in {"", "N/A", "None", "null"}:
+        return ""
+    match = WIKILINK_RE.fullmatch(raw)
+    if match:
+        return match.group(1).strip()
+    return raw
 
 
-def check_required_metadata(artifacts: dict[str, dict[str, Artifact]], result: ValidationResult) -> None:
-    required = {
-        "T": ["Status", "Priority", "Type"],
-        "H": ["Status", "Task"],
-        "E": ["Status", "Hypothesis", "Task"],
-        "F": ["Task", "Hypothesis", "Experiment", "Impact"],
-        "L": ["Task", "Type", "Relevance"],
-        "FT": ["Task", "Status"],
-        "INV": ["Task", "Feature", "Status"],
-        "IMP": ["Task", "Feature", "Investigation", "Status"],
-        "RET": ["Task", "Feature", "Implementation"],
-        "CR": ["Date", "Target", "Requested by", "Reviewer"],
-        "SR": ["Date", "Scope", "Challenge Review"],
-    }
-    for prefix, by_id in artifacts.items():
-        for artifact in by_id.values():
-            missing = [field for field in required[prefix] if field not in artifact.metadata]
-            if missing:
-                result.add_error(
-                    "required_metadata",
-                    f"{artifact.artifact_id} is missing metadata fields: {', '.join(missing)}",
-                    artifact.path,
-                )
-
-
-def check_gaps_and_last_ids(
-    artifacts: dict[str, dict[str, Artifact]],
-    last_ids: dict[str, int],
-    result: ValidationResult,
-) -> None:
-    summary: dict[str, dict[str, int]] = {}
-    for prefix, by_id in artifacts.items():
-        numbers = sorted(artifact.id_num for artifact in by_id.values())
-        highest = numbers[-1] if numbers else 0
-        declared = last_ids.get(prefix, 0)
-        if prefix not in last_ids:
-            result.add_error("backlog_last_ids", f"BACKLOG.md is missing a Last IDs entry for {prefix}.")
-        if declared != highest:
-            result.add_error(
-                "backlog_last_ids",
-                f"BACKLOG.md declares {prefix}: {declared:03d}, but highest existing file is {highest:03d}.",
-            )
-        expected = set(range(1, declared + 1))
-        actual = {artifact.id_num for artifact in by_id.values()}
-        for missing in sorted(expected - actual):
-            result.add_error(
-                "id_gaps",
-                f"Missing {prefix}{missing:03d} while BACKLOG.md declares {prefix}: {declared:03d}.",
-            )
-        summary[prefix] = {"declared": declared, "highest_existing": highest, "count": len(actual)}
-    result.set_check("last_ids", summary=summary)
-
-
-def parse_task_title(text: str) -> str:
-    for line in text.splitlines():
-        stripped = line.strip()
-        # Skip YAML frontmatter delimiters and frontmatter content
-        if stripped == "---":
-            continue
-        if ":" in stripped and not stripped.startswith("#"):
-            continue
-        if not stripped:
-            continue
-        # Found the first meaningful line (should be the heading)
-        if "—" in stripped:
-            return stripped.split("—", 1)[1].strip()
-        return stripped
-    return ""
-
-
-def check_backlog_task_sync(
-    backlog_tasks: dict[str, dict[str, str]],
-    artifacts: dict[str, dict[str, Artifact]],
-    result: ValidationResult,
-) -> None:
-    task_files = artifacts["T"]
-    for task_id, task_artifact in task_files.items():
-        if task_id not in backlog_tasks:
-            result.add_error("backlog_tasks", f"{task_id} exists as a task file but has no BACKLOG.md row.", task_artifact.path)
-            continue
-        row = backlog_tasks[task_id]
-        title = parse_task_title(read_text(task_artifact.path))
-        if row["Task"] != title:
-            result.add_error(
-                "backlog_tasks",
-                f"{task_id} title mismatch between task file and BACKLOG.md.",
-                task_artifact.path,
-            )
-        for field in ("Status", "Priority", "Type"):
-            if row[field] != task_artifact.metadata.get(field, ""):
-                result.add_error(
-                    "backlog_tasks",
-                    f"{task_id} {field.lower()} mismatch between task file and BACKLOG.md.",
-                    task_artifact.path,
-                )
-    for task_id in backlog_tasks:
-        if task_id not in task_files:
-            result.add_error("backlog_tasks", f"{task_id} exists in BACKLOG.md but has no task file.")
-    result.set_check(
-        "backlog_tasks",
-        backlog_rows=len(backlog_tasks),
-        task_files=len(task_files),
+def build_note_record(name: str, kind: str, path: Path, spec: ArtifactSpec | None = None) -> NoteRecord:
+    text = read_text(path)
+    metadata, aliases = parse_note_metadata(text)
+    has_links_section, links = extract_links_section(text)
+    return NoteRecord(
+        name=name,
+        kind=kind,
+        path=path,
+        text=text,
+        metadata=metadata,
+        aliases=aliases,
+        has_links_section=has_links_section,
+        links=links,
+        spec=spec,
     )
 
 
-def extract_ids_from_text(text: str) -> set[str]:
-    return set(CORE_ID_RE.findall(strip_comments(text)))
+def collect_special_notes(kb_root: Path) -> dict[str, NoteRecord]:
+    notes: dict[str, NoteRecord] = {}
+    for name, config in SPECIAL_NOTES.items():
+        path = kb_root / config["path"]
+        if path.exists():
+            notes[name] = build_note_record(name, name, path)
+    return notes
 
 
-def check_index_coverage(kb_root: Path, artifacts: dict[str, dict[str, Artifact]], result: ValidationResult) -> None:
-    index_path = kb_root / "INDEX.md"
-    if not index_path.exists():
-        result.add_error("index", "Missing kb/INDEX.md.", index_path)
+def collect_lessons(kb_root: Path) -> dict[str, NoteRecord]:
+    lessons: dict[str, NoteRecord] = {}
+    lesson_root = kb_root / "lessons"
+    if not lesson_root.exists():
+        return lessons
+
+    for path in sorted(lesson_root.glob("*.md")):
+        if path.name.startswith("."):
+            continue
+        lessons[path.stem] = build_note_record(path.stem, "LESSON", path)
+    return lessons
+
+
+def collect_artifacts(kb_root: Path, result: ValidationResult) -> dict[str, NoteRecord]:
+    artifacts: dict[str, NoteRecord] = {}
+    for spec in CORE_ARTIFACTS.values():
+        directory = kb_root / spec.directory
+        if not directory.exists():
+            continue
+
+        expected_re = re.compile(rf"^{spec.prefix}(\d{{3}})-.+\.md$")
+        for path in sorted(directory.glob("*.md")):
+            if path.name.startswith("."):
+                continue
+            if not expected_re.match(path.name):
+                if spec.directory != Path("reports"):
+                    result.add(
+                        "filename",
+                        f"{path.name} does not match the expected {spec.prefix}NNN-slug.md format.",
+                        path,
+                    )
+                continue
+
+            artifact_id = path.name.split("-", 1)[0]
+            if artifact_id in artifacts:
+                result.add("duplicate_id", f"Duplicate artifact ID: {artifact_id}", path)
+                continue
+            artifacts[artifact_id] = build_note_record(artifact_id, spec.prefix, path, spec)
+    return artifacts
+
+
+def register_note_name(
+    name: str,
+    note: NoteRecord,
+    note_index: dict[str, NoteRecord],
+    result: ValidationResult,
+) -> None:
+    key = name.strip()
+    if not key:
         return
-    index_ids = extract_ids_from_text(read_text(index_path))
-    existing_ids = {
-        artifact.artifact_id
-        for prefix, by_id in artifacts.items()
-        for artifact in by_id.values()
-    }
-    for artifact_id in sorted(existing_ids - index_ids):
-        artifact = next(
-            artifact
-            for by_id in artifacts.values()
-            for artifact in by_id.values()
-            if artifact.artifact_id == artifact_id
+    existing = note_index.get(key)
+    if existing is not None and existing.path != note.path:
+        result.add(
+            "alias",
+            f"Link target '{key}' resolves to multiple notes: {existing.path.name} and {note.path.name}.",
+            note.path,
         )
-        result.add_error("index", f"{artifact_id} exists but is not referenced in INDEX.md.", artifact.path)
-    for artifact_id in sorted(index_ids - existing_ids):
-        result.add_error("index", f"INDEX.md references {artifact_id}, but no matching core artifact file exists.", index_path)
-    result.set_check("index", referenced=len(index_ids), existing=len(existing_ids))
+        return
+    note_index[key] = note
+
+
+def build_note_index(
+    special_notes: dict[str, NoteRecord],
+    artifacts: dict[str, NoteRecord],
+    lessons: dict[str, NoteRecord],
+    result: ValidationResult,
+) -> dict[str, NoteRecord]:
+    note_index: dict[str, NoteRecord] = {}
+    for note in [*special_notes.values(), *artifacts.values(), *lessons.values()]:
+        register_note_name(note.path.stem, note, note_index, result)
+        register_note_name(note.name, note, note_index, result)
+        for alias in sorted(note.aliases):
+            register_note_name(alias, note, note_index, result)
+    return note_index
+
+
+def validate_special_note(note: NoteRecord, result: ValidationResult) -> None:
+    config = SPECIAL_NOTES[note.name]
+    for heading in config["required_headings"]:
+        if heading not in note.text:
+            result.add("structure", f"{note.path.name} is missing heading: {heading}", note.path)
+
+    if note.name not in note.aliases:
+        result.add("aliases", f"{note.path.name} must alias '{note.name}' in frontmatter.", note.path)
+
+
+def validate_required_fields(note: NoteRecord, result: ValidationResult) -> None:
+    if note.spec is None:
+        return
+    for field in note.spec.required_fields:
+        if not note.metadata.get(field):
+            result.add("metadata", f"{note.path.name} is missing required metadata field '{field}'.", note.path)
+
+
+def validate_artifact_identity(note: NoteRecord, result: ValidationResult) -> None:
+    declared_id = normalize_ref(note.metadata.get("ID", ""))
+    if declared_id and declared_id != note.name:
+        result.add("metadata", f"{note.path.name} frontmatter id is '{declared_id}', expected '{note.name}'.", note.path)
+
+    if note.name not in note.aliases:
+        result.add("aliases", f"{note.path.name} must alias '{note.name}' in frontmatter.", note.path)
 
 
 def validate_ref(
-    artifact: Artifact,
+    note: NoteRecord,
     field: str,
-    target_prefix: str,
-    artifacts: dict[str, dict[str, Artifact]],
+    expected_prefix: str,
+    artifacts: dict[str, NoteRecord],
+    result: ValidationResult,
+) -> str:
+    ref = normalize_ref(note.metadata.get(field, ""))
+    if not ref:
+        return ""
+    if not ref.startswith(expected_prefix):
+        result.add("reference", f"{field} must reference a {expected_prefix} artifact, got '{ref}'.", note.path)
+        return ref
+    if ref not in artifacts:
+        result.add("reference", f"{note.path.name} references missing artifact {ref}.", note.path)
+    return ref
+
+
+def validate_artifact(note: NoteRecord, artifacts: dict[str, NoteRecord], note_index: dict[str, NoteRecord], result: ValidationResult) -> None:
+    validate_required_fields(note, result)
+    validate_artifact_identity(note, result)
+
+    if note.kind == "E":
+        validate_ref(note, "Hypothesis", "H", artifacts, result)
+    elif note.kind == "F":
+        hypothesis_id = validate_ref(note, "Hypothesis", "H", artifacts, result)
+        experiment_id = validate_ref(note, "Experiment", "E", artifacts, result)
+        if experiment_id in artifacts:
+            experiment_hypothesis = normalize_ref(artifacts[experiment_id].metadata.get("Hypothesis", ""))
+            if experiment_hypothesis and hypothesis_id and experiment_hypothesis != hypothesis_id:
+                result.add(
+                    "reference",
+                    f"{note.path.name} links {hypothesis_id}, but {experiment_id} links {experiment_hypothesis}.",
+                    note.path,
+                )
+    elif note.kind == "CR":
+        target_id = normalize_ref(note.metadata.get("Target ID", ""))
+        if target_id and target_id not in note_index:
+            result.add("reference", f"{note.path.name} references missing target note {target_id}.", note.path)
+    elif note.kind == "SR":
+        validate_ref(note, "Challenge Review", "CR", artifacts, result)
+
+
+def note_links_to_target(note: NoteRecord, target: str, note_index: dict[str, NoteRecord]) -> bool:
+    resolved_target = note_index.get(target)
+    if resolved_target is None:
+        return False
+    for raw_link in note.links:
+        linked_note = note_index.get(raw_link)
+        if linked_note is not None and linked_note.path == resolved_target.path:
+            return True
+    return False
+
+
+def required_links_for(note: NoteRecord) -> set[str]:
+    if note.kind == "ACTIVE":
+        return {"CHALLENGE"}
+    if note.kind == "CHALLENGE":
+        return {"ACTIVE", "DASHBOARD"}
+    if note.kind == "DASHBOARD":
+        return {"ACTIVE", "CHALLENGE"}
+
+    required = {"ACTIVE", "CHALLENGE"}
+    if note.kind == "E":
+        hypothesis_id = normalize_ref(note.metadata.get("Hypothesis", ""))
+        if hypothesis_id:
+            required.add(hypothesis_id)
+    elif note.kind == "F":
+        hypothesis_id = normalize_ref(note.metadata.get("Hypothesis", ""))
+        experiment_id = normalize_ref(note.metadata.get("Experiment", ""))
+        if hypothesis_id:
+            required.add(hypothesis_id)
+        if experiment_id:
+            required.add(experiment_id)
+    elif note.kind == "CR":
+        target_id = normalize_ref(note.metadata.get("Target ID", ""))
+        if target_id:
+            required.add(target_id)
+    elif note.kind == "SR":
+        challenge_review_id = normalize_ref(note.metadata.get("Challenge Review", ""))
+        if challenge_review_id:
+            required.add(challenge_review_id)
+    return required
+
+
+def validate_links(note: NoteRecord, note_index: dict[str, NoteRecord], result: ValidationResult) -> None:
+    if not note.has_links_section:
+        result.add("links", f"{note.path.name} must contain a ## Links section.", note.path)
+        return
+    if not note.links:
+        result.add("links", f"{note.path.name} ## Links section must include at least one wikilink.", note.path)
+        return
+
+    for target in sorted(note.links):
+        if target not in note_index:
+            result.add("links", f"{note.path.name} links missing note [[{target}]].", note.path)
+
+    for target in sorted(required_links_for(note)):
+        if target and not note_links_to_target(note, target, note_index):
+            result.add("links", f"{note.path.name} must link to [[{target}]] in ## Links.", note.path)
+
+
+def validate_backlink(parent_ref: str, child_note: NoteRecord, note_index: dict[str, NoteRecord], result: ValidationResult) -> None:
+    parent_note = note_index.get(parent_ref)
+    if parent_note is None:
+        return
+    if not note_links_to_target(parent_note, child_note.name, note_index):
+        result.add("backlink", f"{parent_note.path.name} must link back to [[{child_note.name}]].", parent_note.path)
+
+
+def validate_backlinks(note: NoteRecord, note_index: dict[str, NoteRecord], result: ValidationResult) -> None:
+    if note.kind == "E":
+        hypothesis_id = normalize_ref(note.metadata.get("Hypothesis", ""))
+        if hypothesis_id:
+            validate_backlink(hypothesis_id, note, note_index, result)
+    elif note.kind == "F":
+        hypothesis_id = normalize_ref(note.metadata.get("Hypothesis", ""))
+        experiment_id = normalize_ref(note.metadata.get("Experiment", ""))
+        if hypothesis_id:
+            validate_backlink(hypothesis_id, note, note_index, result)
+        if experiment_id:
+            validate_backlink(experiment_id, note, note_index, result)
+    elif note.kind == "CR":
+        target_id = normalize_ref(note.metadata.get("Target ID", ""))
+        if target_id:
+            validate_backlink(target_id, note, note_index, result)
+    elif note.kind == "SR":
+        challenge_review_id = normalize_ref(note.metadata.get("Challenge Review", ""))
+        if challenge_review_id:
+            validate_backlink(challenge_review_id, note, note_index, result)
+
+
+def validate_note(
+    note: NoteRecord,
+    artifacts: dict[str, NoteRecord],
+    note_index: dict[str, NoteRecord],
     result: ValidationResult,
 ) -> None:
-    raw_value = artifact.metadata.get(field)
-    if raw_value is None:
+    if note.kind in SPECIAL_NOTES:
+        validate_special_note(note, result)
+    elif note.spec is not None:
+        validate_artifact(note, artifacts, note_index, result)
+    else:
+        result.add("scope", f"{note.path.name} is not part of the validated research graph.", note.path)
         return
-    expected_re = re.compile(rf"^{target_prefix}\d{{3}}$")
-    if not expected_re.match(raw_value):
-        result.add_error(
-            "traceability",
-            f"{artifact.artifact_id} has invalid {field} reference: {raw_value}",
-            artifact.path,
-        )
-        return
-    if raw_value not in artifacts[target_prefix]:
-        result.add_error(
-            "traceability",
-            f"{artifact.artifact_id} references missing {field}: {raw_value}",
-            artifact.path,
-        )
+
+    validate_links(note, note_index, result)
+    validate_backlinks(note, note_index, result)
 
 
-def check_traceability(artifacts: dict[str, dict[str, Artifact]], result: ValidationResult) -> None:
-    for artifact in artifacts["H"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-    for artifact in artifacts["E"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-        validate_ref(artifact, "Hypothesis", "H", artifacts, result)
-    for artifact in artifacts["F"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-        validate_ref(artifact, "Hypothesis", "H", artifacts, result)
-        validate_ref(artifact, "Experiment", "E", artifacts, result)
-    for artifact in artifacts["L"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-    for artifact in artifacts["FT"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-    for artifact in artifacts["INV"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-        validate_ref(artifact, "Feature", "FT", artifacts, result)
-    for artifact in artifacts["IMP"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-        validate_ref(artifact, "Feature", "FT", artifacts, result)
-        validate_ref(artifact, "Investigation", "INV", artifacts, result)
-    for artifact in artifacts["RET"].values():
-        validate_ref(artifact, "Task", "T", artifacts, result)
-        validate_ref(artifact, "Feature", "FT", artifacts, result)
-        validate_ref(artifact, "Implementation", "IMP", artifacts, result)
-    for artifact in artifacts["SR"].values():
-        validate_ref(artifact, "Challenge Review", "CR", artifacts, result)
-    result.set_check(
-        "traceability",
-        checked=sum(len(by_id) for by_id in artifacts.values()),
-    )
-
-
-def _detect_artifact_type(
-    file_path: Path, kb_root: Path, result: ValidationResult | None = None
-) -> str | None:
-    """Detect artifact type from file path relative to kb_root.
-
-    If the file is in a core artifact directory but has a malformed filename,
-    and a ValidationResult is provided, an error is recorded.
-    Multiple prefixes can share a directory (e.g. CR and SR in reports/).
-    """
-    try:
-        rel = file_path.resolve().relative_to(kb_root.resolve())
-    except ValueError:
+def find_note_for_path(
+    path: Path,
+    kb_root: Path,
+    special_notes: dict[str, NoteRecord],
+    artifacts: dict[str, NoteRecord],
+    lessons: dict[str, NoteRecord],
+) -> NoteRecord | None:
+    rel_path = safe_relative_to(path, kb_root)
+    if rel_path is None:
         return None
 
-    # Collect all prefixes whose directory matches this file's location.
-    # Use Path.parts comparison to avoid prefix collisions (e.g. tasks vs tasks-archive).
-    # Require the file to be a direct child of the core directory (not in a subdirectory).
-    rel_parts = rel.parts
-    matching_prefixes = [
-        prefix for prefix, config in CORE_ARTIFACTS.items()
-        if (rel_parts[:len(config["dir"].parts)] == config["dir"].parts
-            and len(rel_parts) == len(config["dir"].parts) + 1)
-    ]
-    if not matching_prefixes:
-        return None
+    if rel_path == SPECIAL_NOTES["ACTIVE"]["path"]:
+        return special_notes.get("ACTIVE")
+    if rel_path == SPECIAL_NOTES["CHALLENGE"]["path"]:
+        return special_notes.get("CHALLENGE")
+    if rel_path == SPECIAL_NOTES["DASHBOARD"]["path"]:
+        return special_notes.get("DASHBOARD")
 
-    # Check if the filename matches any of the candidate prefixes
-    for prefix in matching_prefixes:
-        if FILENAME_RE[prefix].match(file_path.name):
-            return prefix
+    artifact_id = path.name.split("-", 1)[0]
+    if artifact_id in artifacts:
+        return artifacts[artifact_id]
 
-    # File is in a core directory but doesn't match any prefix's pattern
-    if result is not None and file_path.suffix == ".md":
-        expected = " or ".join(f"{p}NNN-slug.md" for p in matching_prefixes)
-        result.add_error(
-            "filenames",
-            f"Malformed filename in {matching_prefixes[0]} directory: {file_path.name} "
-            f"(expected {expected})",
-            file_path,
-        )
+    if rel_path.parent == Path("lessons"):
+        return lessons.get(path.stem)
+
     return None
 
 
-def validate_file(kb_root: Path, file_path: Path) -> ValidationResult:
-    """Validate a single kb/ artifact file in isolation (fast, lightweight)."""
-    result = ValidationResult()
-    path = Path(file_path).resolve()
-    kb = Path(kb_root).resolve()
-
-    if not path.exists():
-        result.add_error("filesystem", f"File not found: {path}", path)
-        return result
-
-    prefix = _detect_artifact_type(path, kb, result)
-    if prefix is None:
-        # Not a core artifact (or malformed filename — error already recorded)
-        return result
-
-    text = read_text(path)
-    metadata = parse_metadata(text)
-
-    # Check required metadata
-    required = {
-        "T": ["Status", "Priority", "Type"],
-        "H": ["Status", "Task"],
-        "E": ["Status", "Hypothesis", "Task"],
-        "F": ["Task", "Hypothesis", "Experiment", "Impact"],
-        "L": ["Task", "Type", "Relevance"],
-        "FT": ["Task", "Status"],
-        "INV": ["Task", "Feature", "Status"],
-        "IMP": ["Task", "Feature", "Investigation", "Status"],
-        "RET": ["Task", "Feature", "Implementation"],
-        "CR": ["Date", "Target", "Requested by", "Reviewer"],
-        "SR": ["Date", "Scope", "Challenge Review"],
-    }
-    missing = [field for field in required.get(prefix, []) if field not in metadata]
-    if missing:
-        artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
-        result.add_error(
-            "required_metadata",
-            f"{artifact_id} is missing metadata fields: {', '.join(missing)}",
-            path,
-        )
-
-    # Check referenced artifacts exist on disk
-    # Task references checked for all artifact types that require them
-    _task_ref = [("Task", "T", "tasks")]
-    ref_checks = {
-        "H": _task_ref,
-        "E": _task_ref + [("Hypothesis", "H", "research/hypotheses")],
-        "F": _task_ref + [
-            ("Experiment", "E", "research/experiments"),
-            ("Hypothesis", "H", "research/hypotheses"),
-        ],
-        "L": _task_ref,
-        "FT": _task_ref,
-        "INV": _task_ref + [("Feature", "FT", "engineering/features")],
-        "IMP": _task_ref + [
-            ("Feature", "FT", "engineering/features"),
-            ("Investigation", "INV", "engineering/investigations"),
-        ],
-        "RET": _task_ref + [
-            ("Feature", "FT", "engineering/features"),
-            ("Implementation", "IMP", "engineering/implementations"),
-        ],
-        "SR": [("Challenge Review", "CR", "reports")],
-    }
-    for field, ref_prefix, ref_dir in ref_checks.get(prefix, []):
-        ref_value = metadata.get(field)
-        if not ref_value:
-            continue
-        ref_pattern = re.compile(rf"^{ref_prefix}\d{{3}}$")
-        if not ref_pattern.match(ref_value):
-            artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
-            result.add_error(
-                "traceability",
-                f"{artifact_id} has malformed {field} reference: '{ref_value}' (expected {ref_prefix}NNN)",
-                path,
-            )
-            continue
-        ref_dir_path = kb / ref_dir
-        if ref_dir_path.exists():
-            matches = list(ref_dir_path.glob(f"{ref_value}-*.md"))
-            if not matches:
-                artifact_id = path.stem.split("-")[0] if "-" in path.stem else path.stem
-                result.add_error(
-                    "traceability",
-                    f"{artifact_id} references {field}: {ref_value}, but no matching file found in {ref_dir}/",
-                    path,
-                )
-
-    return result
-
-
-KNOWLEDGE_CARD_RE = re.compile(r"^K(\d{3})-.+\.md$")
-KNOWLEDGE_CARD_REQUIRED_META = ["Source mission", "Domain", "Confidence"]
-
-
-def check_shared_knowledge(project_root: Path, result: ValidationResult) -> None:
-    """Validate Knowledge Cards in shared-knowledge/ (if present)."""
-    shared_dir = project_root / "shared-knowledge"
-    if not shared_dir.exists():
-        return
-
-    cards_dir = shared_dir / "cards"
-    index_path = shared_dir / "INDEX.md"
-
-    if not cards_dir.exists():
-        result.add_error("shared_knowledge", "shared-knowledge/ exists but cards/ directory is missing.", cards_dir)
-        return
-
-    # Collect cards
-    card_ids: set[str] = set()
-    for path in sorted(cards_dir.glob("*.md")):
-        match = KNOWLEDGE_CARD_RE.match(path.name)
-        if not match:
-            result.add_error("shared_knowledge", f"Malformed Knowledge Card filename: {path.name} (expected KNNN-slug.md)", path)
-            continue
-        card_id = f"K{match.group(1)}"
-        card_ids.add(card_id)
-
-        # Check required metadata
-        metadata = parse_metadata(read_text(path))
-        missing = [f for f in KNOWLEDGE_CARD_REQUIRED_META if f not in metadata]
-        if missing:
-            result.add_error(
-                "shared_knowledge",
-                f"{card_id} is missing metadata fields: {', '.join(missing)}",
-                path,
-            )
-
-    # Check INDEX.md references all cards
-    if index_path.exists() and card_ids:
-        index_text = read_text(index_path)
-        for card_id in sorted(card_ids):
-            if card_id not in index_text:
-                result.add_error(
-                    "shared_knowledge",
-                    f"{card_id} exists in cards/ but is not referenced in shared-knowledge/INDEX.md.",
-                    index_path,
-                )
-
-    result.set_check("shared_knowledge", cards_found=len(card_ids))
-
-
-def validate_kb(kb_root: Path) -> ValidationResult:
-    result = ValidationResult()
-    backlog_path = kb_root / "mission" / "BACKLOG.md"
-    if not backlog_path.exists():
-        result.add_error("filesystem", "Missing kb/mission/BACKLOG.md.", backlog_path)
-        return result
-
-    last_ids = parse_last_ids(backlog_path, result)
-    backlog_tasks = parse_backlog_tasks(backlog_path, result)
-    artifacts = collect_artifacts(kb_root, result)
-    check_required_metadata(artifacts, result)
-    check_gaps_and_last_ids(artifacts, last_ids, result)
-    check_backlog_task_sync(backlog_tasks, artifacts, result)
-    check_index_coverage(kb_root, artifacts, result)
-    check_traceability(artifacts, result)
-    # Validate shared knowledge cards (if shared-knowledge/ exists)
-    check_shared_knowledge(kb_root.parent, result)
-    return result
-
-
-def render_text(result: ValidationResult) -> str:
-    if result.ok:
-        return "KB validation passed. No errors found."
-    grouped: dict[str, list[dict[str, str]]] = defaultdict(list)
+def format_text(result: ValidationResult) -> str:
+    lines = [f"Validation failed with {len(result.errors)} error(s):"]
     for error in result.errors:
-        grouped[error["check"]].append(error)
-
-    lines = [f"KB validation failed with {len(result.errors)} error(s)."]
-    for check in sorted(grouped):
-        lines.append(f"\n[{check}]")
-        for error in grouped[check]:
-            line = f"- {error['message']}"
-            if "path" in error:
-                line += f" ({error['path']})"
-            lines.append(line)
+        prefix = f"- [{error['check']}]"
+        if "path" in error:
+            lines.append(f"{prefix} {error['path']}: {error['message']}")
+        else:
+            lines.append(f"{prefix} {error['message']}")
     return "\n".join(lines)
 
 
 def main() -> int:
     args = parse_args()
     kb_root = Path(args.kb_root).resolve()
+    result = ValidationResult()
 
-    if args.check_file:
-        result = validate_file(kb_root, Path(args.check_file))
+    if not kb_root.exists():
+        result.add("filesystem", f"kb root not found: {kb_root}")
     else:
-        result = validate_kb(kb_root)
+        active_path = kb_root / SPECIAL_NOTES["ACTIVE"]["path"]
+        challenge_path = kb_root / SPECIAL_NOTES["CHALLENGE"]["path"]
+        if not active_path.exists():
+            result.add("filesystem", "Missing kb/ACTIVE.md.", active_path)
+        if not challenge_path.exists():
+            result.add("filesystem", "Missing kb/mission/CHALLENGE.md.", challenge_path)
 
-    if args.quiet and result.ok:
-        return 0
+        special_notes = collect_special_notes(kb_root)
+        lessons = collect_lessons(kb_root)
+        artifacts = collect_artifacts(kb_root, result)
+        note_index = build_note_index(special_notes, artifacts, lessons, result)
 
-    if args.output_format == "json":
+        if args.check_file:
+            target_path = Path(args.check_file).resolve()
+            if not target_path.exists():
+                result.add("filesystem", "File does not exist.", target_path)
+            else:
+                note = find_note_for_path(target_path, kb_root, special_notes, artifacts, lessons)
+                if note is None:
+                    result.add(
+                        "scope",
+                        "File is not part of the validated research graph. Only ACTIVE.md, mission/CHALLENGE.md, DASHBOARD.md, and H/E/F/L/CR/SR artifacts are validated.",
+                        target_path,
+                    )
+                else:
+                    validate_note(note, artifacts, note_index, result)
+        else:
+            for required_name in ("ACTIVE", "CHALLENGE"):
+                if required_name in special_notes:
+                    validate_note(special_notes[required_name], artifacts, note_index, result)
+            if "DASHBOARD" in special_notes:
+                validate_note(special_notes["DASHBOARD"], artifacts, note_index, result)
+            for artifact_id in sorted(artifacts):
+                validate_note(artifacts[artifact_id], artifacts, note_index, result)
+
+    if args.format == "json":
         print(json.dumps(result.as_json(), indent=2))
-    else:
-        print(render_text(result))
+    elif not result.ok or not args.quiet:
+        print("KB validation passed." if result.ok else format_text(result))
+
     return 0 if result.ok else 1
 
 

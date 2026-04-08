@@ -1,55 +1,44 @@
 ---
-id: "L{NUM}"
+id: "{ARTIFACT_ID}"
+aliases: ["{ARTIFACT_ID}"]
 type: literature
-source_type: PAPER
-task: "T{NUM}"
-relevance: HIGH
-source_url: ""
-created: "{date}"
+source_type: "{SOURCE_TYPE}"
+relevance: "{RELEVANCE}"
+source_url: "{SOURCE_URL}"
+date_reviewed: "{DATE}"
 tags: []
 ---
 
-# L{NUM} — {Paper/Topic Title}
+# {ARTIFACT_ID} — {TITLE}
 
-> **Type**: PAPER | BLOG | REPO | BENCHMARK | SURVEY
-> **Task**: T{NUM}
-> **Date reviewed**: {date}
-> **Relevance**: HIGH | MEDIUM | LOW
+> **Type**: {SOURCE_TYPE} | PAPER | BLOG | REPO | BENCHMARK | SURVEY | OTHER
+> **Date reviewed**: {DATE}
+> **Relevance**: {RELEVANCE} | HIGH | MEDIUM | LOW
 
 ## Source
 
-- **Title**: ...
-- **Authors**: ...
-- **URL/DOI**: ...
-- **Year**: ...
+- Title:
+- Authors:
+- URL or DOI:
+- Year:
 
 ## Summary
 
-_2-3 paragraph summary of the key contributions._
+_Short summary of the relevant contribution._
 
-## Key Ideas
+## Useful Ideas
 
-1. ...
-2. ...
-3. ...
+- ...
+- ...
 
-## Methodology
+## Limits
 
-_How did they approach the problem?_
+_What does this source not prove for our case?_
 
-## Results
+## Relevance To The Mission
 
-_Main quantitative and qualitative results._
+_Why does this matter for the current research direction?_
 
-## Relevance to Our Research
+## Links
 
-_How does this relate to our challenge? What can we use?_
-
-## Limitations
-
-_What are the weaknesses or gaps?_
-
-## Actionable Takeaways
-
-- [ ] ...
-- [ ] ...
+{LINKS_BLOCK}

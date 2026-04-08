@@ -47,7 +47,7 @@ This repository is a **template/starter system** — clone it, start an agent, a
 
 **Define a mission.** Describe your research objective — what you're trying to figure out, what "better" means, what resources the agent can use, and when it should come to you for a decision.
 
-**Let it run.** The agent breaks the problem into tasks, forms hypotheses, runs experiments, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
+**Let it run.** The agent frames the problem, forms hypotheses, runs experiments, reviews its direction, and iterates toward your success criteria. It works across hours or days and picks up where it left off after interruptions.
 
 **Steer when needed.** When the agent hits something it can't decide on its own — needs more budget, wants to try a risky approach, reached a fork — it stops and asks you.
 
@@ -80,18 +80,20 @@ As the agent works, it builds a knowledge base in `kb/`:
 
 ```
 kb/
+├── ACTIVE.md              ← current objective, next step, blocker
 ├── mission/
-│   ├── CHALLENGE.md        ← your research brief
-│   └── BACKLOG.md          ← task tracking
+│   └── CHALLENGE.md        ← your research brief
+├── lessons/
+│   └── README.md           ← reusable lessons
 ├── research/
 │   ├── hypotheses/H001.md  ← what it thinks might work
 │   ├── experiments/E001.md ← how it tested each hypothesis
-│   └── findings/F001.md   ← what it learned
+│   ├── findings/F001.md    ← what it learned
+│   └── literature/L001.md  ← relevant external work
 ├── reports/
+│   ├── CR001.md            ← challenge review
 │   └── SR001.md            ← strategic review
-└── tasks/
-    ├── T001.md
-    └── T002.md
+└── DASHBOARD.md            ← Obsidian-friendly overview
 ```
 
 Check progress anytime by reading the files in `kb/` or asking the agent for a status update. When it gets stuck or needs a decision, it will ask you.
@@ -225,27 +227,24 @@ cook "Run /challenge with target 'Research direction'" review \
 - A persistent knowledge base in `kb/` with Obsidian-compatible YAML frontmatter
 - A research-first workflow:
   - research: Hypothesis → Experiment → Finding
-  - engineering: Investigation → Feature → Implementation → Retrospective
-- **Runtime enforcement hooks** — the H→E→F chain, delegation, and decision review are enforced mechanically, not just by instructions
+- **Runtime enforcement hooks** — the H→E→F chain and KB validation are enforced mechanically, not just by instructions
 - First-class review artifacts: Challenge Reviews and Strategic Reviews
-- A devil's advocate that reviews every experiment, not just every third
+- Installable companion skills for literature research, experiment rigor, adversarial review, and maintainable software work
 - Adapters for Claude Code, Codex, and OpenCode
 - Core artifact templates in `templates/`
-- A read-only KB validator: `python3 scripts/kb_validate.py`
+- A KB validator: `python3 scripts/kb_validate.py`
 - Provenance and staleness tracking: `python3 scripts/kb_provenance.py`
 - Optional Obsidian vault integration: `bash scripts/obsidian_init.sh`
-- **Cross-mission knowledge persistence** — synthesize findings into reusable Knowledge Cards at mission close, indexed at next mission start
 
 ## Core model
 
 The system is built around a persistent knowledge base in `kb/`.
 
 - Durable state lives in `kb/`, not only in conversation context
-- Every unit of work is a task
-- Research tasks follow Hypothesis → Experiment → Finding
-- Engineering tasks follow Investigation → Feature → Implementation → Retrospective
+- The only required core workflow is Hypothesis → Experiment → Finding
+- `ACTIVE.md` and `CHALLENGE.md` hold the always-on state
 - Reviews are first-class artifacts: Challenge Reviews and Strategic Reviews
-- `DECISIONS.md` and `CEO_REQUESTS.md` are mission ledgers, not file-backed artifact types
+- Skills are part of the default process for major phases like literature search, experiment design, adversarial review, and implementation
 
 ### Core tracked artifacts
 
@@ -253,25 +252,22 @@ These are the file-backed artifact types enforced by the validator:
 
 | Prefix | Meaning | Location |
 |---|---|---|
-| `T` | Task | `kb/tasks/` |
 | `H` | Hypothesis | `kb/research/hypotheses/` |
 | `E` | Experiment | `kb/research/experiments/` |
 | `F` | Finding | `kb/research/findings/` |
 | `L` | Literature review | `kb/research/literature/` |
-| `FT` | Feature spec | `kb/engineering/features/` |
-| `INV` | Investigation | `kb/engineering/investigations/` |
-| `IMP` | Implementation log | `kb/engineering/implementations/` |
-| `RET` | Retrospective | `kb/engineering/retrospectives/` |
 | `CR` | Challenge review | `kb/reports/` |
 | `SR` | Strategic review | `kb/reports/` |
 
-The validator is read-only. It checks:
+Required non-ID files:
 
-- last-ID declarations in `BACKLOG.md`
-- task file and backlog row consistency
-- `INDEX.md` coverage for core artifact files
+- `kb/ACTIVE.md`
+- `kb/mission/CHALLENGE.md`
+
+The validator checks:
+
 - research traceability: experiments link to hypotheses, findings link to experiments
-- engineering traceability across investigations, features, implementations, retrospectives
+- wikilink and parent-child consistency in the research graph
 - challenge review and strategic review metadata and naming
 - malformed filenames, duplicate IDs, and ID gaps
 
@@ -287,32 +283,10 @@ In Claude Code, hooks in `.claude/settings.json` enforce rules automatically at 
 
 | Hook | Type | What it does |
 |---|---|---|
-| `session_start.sh` | SessionStart | Injects CLAUDE.md, INDEX.md, and BACKLOG.md into agent context |
+| `session_start.sh` | SessionStart | Injects the current challenge and active state into agent context |
 | `enforce_hef_chain.sh` | PreToolUse | **Blocks** experiment creation without a hypothesis, and finding creation without an experiment |
 | `kb_write_guard.sh` | PostToolUse | Validates every `kb/` write against the artifact schema in real-time |
-| `experiment_gate.sh` | PostToolUse | Prompts the agent to evaluate results and spawn the devil's advocate after experiment completion |
-| `protocol_checkpoint.sh` | PostToolUse | Reminds the agent to re-read state every 25 tool calls; injects a reflection prompt every 50 |
-| `delegation_guard.sh` | PostToolUse | Nudges the Director when it writes execution artifacts directly instead of delegating |
-| `decision_critic.sh` | PostToolUse | Prompts a devil's advocate review whenever a decision or finding is recorded |
-| `mission_close_reminder.sh` | PostToolUse | Reminds the agent to run `/close-mission` when all tasks are DONE |
-
-### Cross-mission knowledge
-
-Missions accumulate expertise that disappears when they end. The **Knowledge Card** system preserves reusable insights across missions.
-
-**How it works:**
-
-1. At mission close, the agent runs `/close-mission` to distill findings, decisions, and lessons into Knowledge Cards (`K001`, `K002`, ...)
-2. Cards are written to `shared-knowledge/cards/` — a directory that can be a separate git repo shared across projects
-3. At the start of a new mission, the agent reads `shared-knowledge/INDEX.md` and greps for terms related to the new challenge
-4. Only relevant cards are loaded — no context contamination
-
-**Knowledge Cards** are analytical ("what works and why"), not procedural ("how to do X step by step"). Each card captures: key finding, what works, what doesn't, conditions, pitfalls, and links back to the source mission's evidence.
-
-**Setup options** for `shared-knowledge/`:
-- **Local**: the scaffold is included in the template; cards stay in the project
-- **Git repo** (recommended): maintain a separate repo, clone it into each project at setup
-- **Git submodule**: add as a submodule to the template
+| `stop_validate.sh` | Stop | Re-validates the KB before the session closes after KB-heavy work |
 
 The hooks are deterministic shell scripts — the agent cannot choose to skip them. Blocking hooks (exit code 2) prevent the action entirely; non-blocking hooks (exit code 0) inject guidance into the agent's context.
 
@@ -330,8 +304,8 @@ The hooks are deterministic shell scripts — the agent cannot choose to skip th
 `bash scripts/obsidian_init.sh` sets up an optional Obsidian vault over `kb/`:
 
 - Creates `.obsidian/` config with Dataview plugin settings
-- Generates a `DASHBOARD.md` with live queries for tasks, experiments, findings, and literature
-- Configures graph view color groups (research, engineering, reports)
+- Generates a `DASHBOARD.md` with live queries for the active state, experiments, findings, and literature
+- Configures graph view color groups for the research core
 
 The `kb/` remains a Git-backed Markdown source of truth. Obsidian is the human UI layer.
 

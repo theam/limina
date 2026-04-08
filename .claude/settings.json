@@ -1,73 +1,52 @@
 {
-    "env": {
-        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "true"
-    },
-    "hooks": {
-        "SessionStart": [
-            {
-                "matcher": "",
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/session_start.sh",
-                        "timeout": 15
-                    }
-                ]
-            }
-        ],
-        "PreToolUse": [
-            {
-                "matcher": "Write|Edit|MultiEdit",
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/enforce_hef_chain.sh",
-                        "timeout": 5
-                    }
-                ]
-            }
-        ],
-        "PostToolUse": [
-            {
-                "matcher": "",
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/protocol_checkpoint.sh",
-                        "timeout": 10
-                    }
-                ]
-            },
-            {
-                "matcher": "Write|Edit|MultiEdit",
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/kb_write_guard.sh",
-                        "timeout": 10
-                    },
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/experiment_gate.sh",
-                        "timeout": 5
-                    },
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/delegation_guard.sh",
-                        "timeout": 5
-                    },
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/decision_critic.sh",
-                        "timeout": 5
-                    },
-                    {
-                        "type": "command",
-                        "command": "bash scripts/hooks/mission_close_reminder.sh",
-                        "timeout": 5
-                    }
-                ]
-            }
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/session_start.sh",
+            "timeout": 15
+          }
         ]
-    }
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/enforce_hef_chain.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/kb_write_guard.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/stop_validate.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
 }

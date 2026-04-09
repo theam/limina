@@ -5,6 +5,18 @@
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 KB_ROOT="$PROJECT_ROOT/kb"
+TELEMETRY_SCRIPT="$PROJECT_ROOT/scripts/telemetry.py"
+
+emit_hef_block() {
+  local code="$1"
+  if [ -f "$TELEMETRY_SCRIPT" ]; then
+    python3 "$TELEMETRY_SCRIPT" emit limina_hef_blocked \
+      --runtime-family claude \
+      --emitter claude_hef_guard \
+      --property "result_code=${code}" \
+      --flush >/dev/null 2>&1 || true
+  fi
+}
 
 # Parse hook input — line 1 is file_path, line 2+ is content
 PARSED=$(python3 "$PROJECT_ROOT/scripts/hooks/_parse_hook_input.py" 2>/dev/null) || exit 0
@@ -68,6 +80,7 @@ if echo "$FILE_PATH" | grep -qE 'kb/research/experiments/E[0-9]{3}-.*\.md$'; the
   HYPO_ID=$(extract_meta_ref "$CONTENT" "hypothesis" 'H[0-9]{3}' "$FILE_PATH")
 
   if [ -z "$HYPO_ID" ]; then
+    emit_hef_block "missing_hypothesis_ref"
     echo "BLOCKED: Cannot create experiment without a hypothesis reference." >&2
     echo "Add 'hypothesis: \"H{NUM}\"' to the YAML frontmatter or '> **Hypothesis**: H{NUM}' to the metadata." >&2
     exit 2
@@ -76,6 +89,7 @@ if echo "$FILE_PATH" | grep -qE 'kb/research/experiments/E[0-9]{3}-.*\.md$'; the
   # Check that the hypothesis file exists
   HYPO_FILE=$(find "$KB_ROOT/research/hypotheses/" -name "${HYPO_ID}-*.md" 2>/dev/null | head -1)
   if [ -z "$HYPO_FILE" ]; then
+    emit_hef_block "missing_hypothesis_file"
     echo "BLOCKED: Experiment references $HYPO_ID, but no hypothesis file found in kb/research/hypotheses/." >&2
     echo "Create the hypothesis file first (Rule 3: NEVER run an experiment without a hypothesis file)." >&2
     exit 2
@@ -87,6 +101,7 @@ if echo "$FILE_PATH" | grep -qE 'kb/research/findings/F[0-9]{3}-.*\.md$'; then
   EXP_ID=$(extract_meta_ref "$CONTENT" "experiment" 'E[0-9]{3}' "$FILE_PATH")
 
   if [ -z "$EXP_ID" ]; then
+    emit_hef_block "missing_experiment_ref"
     echo "BLOCKED: Cannot create finding without an experiment reference." >&2
     echo "Add 'experiment: \"E{NUM}\"' to the YAML frontmatter or '> **Experiment**: E{NUM}' to the metadata." >&2
     exit 2
@@ -94,6 +109,7 @@ if echo "$FILE_PATH" | grep -qE 'kb/research/findings/F[0-9]{3}-.*\.md$'; then
 
   EXP_FILE=$(find "$KB_ROOT/research/experiments/" -name "${EXP_ID}-*.md" 2>/dev/null | head -1)
   if [ -z "$EXP_FILE" ]; then
+    emit_hef_block "missing_experiment_file"
     echo "BLOCKED: Finding references $EXP_ID, but no experiment file found in kb/research/experiments/." >&2
     echo "Create the experiment file first (Rule 4: NEVER create a finding without linking it to an experiment)." >&2
     exit 2

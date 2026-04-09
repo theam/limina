@@ -12,8 +12,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -24,6 +26,17 @@ try:
     HAS_FRONTMATTER = True
 except ImportError:
     HAS_FRONTMATTER = False
+
+if os.environ.get("LIMINA_TELEMETRY_INTERNAL") != "1":
+    try:
+        from telemetry import emit_event as telemetry_emit_event
+        from telemetry import ensure_consent as telemetry_ensure_consent
+    except Exception:  # pragma: no cover - telemetry must not block provenance checks
+        telemetry_emit_event = None
+        telemetry_ensure_consent = None
+else:  # pragma: no cover - internal telemetry calls skip recursion
+    telemetry_emit_event = None
+    telemetry_ensure_consent = None
 
 
 ARTIFACT_ID_RE = re.compile(r"\b(?:CR|SR|H|E|F|L)\d{3}\b")
@@ -42,10 +55,35 @@ _FRONTMATTER_TO_META = {
 
 @dataclass
 class StaleWarning:
+    code: str
     severity: str
     artifact_id: str
     message: str
     path: str
+
+
+def maybe_prompt_telemetry() -> None:
+    if telemetry_ensure_consent is None:
+        return
+    try:
+        telemetry_ensure_consent("kb_provenance")
+    except Exception:
+        return
+
+
+def maybe_emit_provenance_warnings(warnings: list[StaleWarning]) -> None:
+    if telemetry_emit_event is None or not warnings:
+        return
+    counts = Counter(warning.code for warning in warnings)
+    for code, count in counts.items():
+        try:
+            telemetry_emit_event(
+                "limina_provenance_issue_found",
+                emitter="kb_provenance",
+                properties={"result_code": code, "count_warning_total": count},
+            )
+        except Exception:
+            continue
 
 
 def parse_metadata(text: str) -> dict[str, str]:
@@ -117,6 +155,7 @@ def check_superseded_references(artifacts: dict[str, dict]) -> list[StaleWarning
             if ref in superseded_by:
                 warnings.append(
                     StaleWarning(
+                        code="superseded_reference",
                         severity="HIGH",
                         artifact_id=artifact_id,
                         message=f"{artifact_id} references {ref}, which was superseded by {superseded_by[ref]}.",
@@ -143,6 +182,7 @@ def check_stale_literature(artifacts: dict[str, dict], max_age_days: int) -> lis
                 if reviewed_at < cutoff:
                     warnings.append(
                         StaleWarning(
+                            code="stale_literature",
                             severity="LOW",
                             artifact_id=artifact_id,
                             message=f"{artifact_id} was reviewed on {date_str}. Consider checking for newer work.",
@@ -171,6 +211,7 @@ def check_multiple_findings_per_hypothesis(artifacts: dict[str, dict]) -> list[S
         if len(findings) > 1:
             warnings.append(
                 StaleWarning(
+                    code="multiple_findings_per_hypothesis",
                     severity="MEDIUM",
                     artifact_id=hypothesis,
                     message=f"Multiple findings reference {hypothesis}: {', '.join(sorted(findings))}.",
@@ -196,6 +237,7 @@ def main() -> int:
     parser.add_argument("--max-age-days", type=int, default=180, help="Age threshold for literature notes")
     parser.add_argument("--format", choices=("text", "json"), default="text")
     args = parser.parse_args()
+    maybe_prompt_telemetry()
 
     kb_root = Path(args.kb_root).resolve()
     if not kb_root.exists():
@@ -203,6 +245,7 @@ def main() -> int:
         return 1
 
     warnings = run_checks(kb_root, args.max_age_days)
+    maybe_emit_provenance_warnings(warnings)
 
     if args.format == "json":
         print(

@@ -33,3 +33,4 @@ fi
 echo ""
 echo "  Limina skill installed. Type /limina in Claude Code or Codex to start a research project."
 echo "  After you create a project from the template, run 'bash scripts/install_skills.sh' inside that repo to install the bundled companion skills."
+echo "  Telemetry stays off by default and will only be offered later inside the project install flow."

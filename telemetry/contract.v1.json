@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "default_relay_url": "https://limina-telemetry.vercel.app",
+  "duration_buckets": [
+    "lt_1s",
+    "1s_to_5s",
+    "5s_to_30s",
+    "30s_to_2m",
+    "2m_to_10m",
+    "10m_to_1h",
+    "gte_1h"
+  ],
+  "property_specs": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "limina_version": {
+      "type": "version"
+    },
+    "event_name": {
+      "type": "enum",
+      "values": [
+        "limina_telemetry_consent_granted",
+        "limina_skills_installed",
+        "limina_session_started",
+        "limina_session_completed",
+        "limina_artifact_created",
+        "limina_kb_validation_failed",
+        "limina_hef_blocked",
+        "limina_provenance_issue_found",
+        "limina_research_graph_snapshot"
+      ]
+    },
+    "runtime_family": {
+      "type": "enum",
+      "values": [
+        "claude",
+        "codex",
+        "opencode"
+      ]
+    },
+    "consent_tier": {
+      "type": "enum",
+      "values": [
+        "anonymous",
+        "community"
+      ]
+    },
+    "emitter": {
+      "type": "enum",
+      "values": [
+        "install_skills",
+        "manual",
+        "kb_new_artifact",
+        "kb_validate",
+        "kb_provenance",
+        "claude_session_start",
+        "claude_stop",
+        "claude_hef_guard",
+        "snapshot"
+      ]
+    },
+    "artifact_type": {
+      "type": "enum",
+      "values": [
+        "H",
+        "E",
+        "F",
+        "L",
+        "CR",
+        "SR"
+      ]
+    },
+    "result_code": {
+      "type": "enum",
+      "values": [
+        "alias",
+        "aliases",
+        "backlink",
+        "duplicate_id",
+        "filename",
+        "filesystem",
+        "links",
+        "metadata",
+        "reference",
+        "scope",
+        "structure",
+        "missing_hypothesis_ref",
+        "missing_hypothesis_file",
+        "missing_experiment_ref",
+        "missing_experiment_file",
+        "superseded_reference",
+        "stale_literature",
+        "multiple_findings_per_hypothesis",
+        "success",
+        "validation_failed"
+      ]
+    },
+    "duration_bucket": {
+      "type": "enum",
+      "values": [
+        "lt_1s",
+        "1s_to_5s",
+        "5s_to_30s",
+        "30s_to_2m",
+        "2m_to_10m",
+        "10m_to_1h",
+        "gte_1h"
+      ]
+    },
+    "count_total_installed": {
+      "type": "integer",
+      "min": 0,
+      "max": 1000
+    },
+    "count_validation_errors": {
+      "type": "integer",
+      "min": 1,
+      "max": 100000
+    },
+    "count_warning_total": {
+      "type": "integer",
+      "min": 1,
+      "max": 100000
+    },
+    "count_h": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_e": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_f": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_l": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_cr": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_sr": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_h_without_e": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "count_e_without_f": {
+      "type": "integer",
+      "min": 0,
+      "max": 100000
+    },
+    "flag_active_blocker_present": {
+      "type": "boolean"
+    },
+    "flag_validation_clean": {
+      "type": "boolean"
+    },
+    "flag_provenance_clean": {
+      "type": "boolean"
+    }
+  },
+  "events": {
+    "limina_telemetry_consent_granted": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "consent_tier",
+        "emitter"
+      ],
+      "optional_properties": [
+        "runtime_family"
+      ]
+    },
+    "limina_skills_installed": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "count_total_installed"
+      ],
+      "optional_properties": []
+    },
+    "limina_session_started": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter"
+      ],
+      "optional_properties": []
+    },
+    "limina_session_completed": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "result_code",
+        "duration_bucket"
+      ],
+      "optional_properties": []
+    },
+    "limina_artifact_created": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "artifact_type"
+      ],
+      "optional_properties": []
+    },
+    "limina_kb_validation_failed": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "result_code",
+        "count_validation_errors"
+      ],
+      "optional_properties": []
+    },
+    "limina_hef_blocked": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "result_code"
+      ],
+      "optional_properties": []
+    },
+    "limina_provenance_issue_found": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "result_code",
+        "count_warning_total"
+      ],
+      "optional_properties": []
+    },
+    "limina_research_graph_snapshot": {
+      "required_properties": [
+        "schema_version",
+        "limina_version",
+        "event_name",
+        "runtime_family",
+        "consent_tier",
+        "emitter",
+        "count_h",
+        "count_e",
+        "count_f",
+        "count_l",
+        "count_cr",
+        "count_sr",
+        "count_h_without_e",
+        "count_e_without_f",
+        "flag_active_blocker_present",
+        "flag_validation_clean",
+        "flag_provenance_clean"
+      ],
+      "optional_properties": []
+    }
+  }
+}

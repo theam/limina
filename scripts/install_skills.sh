@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLAUDE_HOME_DIR="${CLAUDE_HOME:-$HOME/.claude}"
 CODEX_HOME_DIR="${CODEX_HOME:-$HOME/.codex}"
+TELEMETRY_SCRIPT="${ROOT_DIR}/scripts/telemetry.py"
 
 usage() {
   cat <<'EOF'
@@ -17,6 +18,7 @@ EOF
 install_target() {
   local home_dir="$1"
   local label="$2"
+  local runtime_family="$3"
   local target_dir="${home_dir}/skills"
   local installed=0
 
@@ -36,11 +38,27 @@ install_target() {
   done
 
   echo "Installed ${installed} skill(s) for ${label}."
+  if [[ -f "${TELEMETRY_SCRIPT}" ]]; then
+    python3 "${TELEMETRY_SCRIPT}" emit limina_skills_installed \
+      --runtime-family "${runtime_family}" \
+      --emitter install_skills \
+      --property "count_total_installed=${installed}" >/dev/null 2>&1 || true
+  fi
+}
+
+flush_telemetry() {
+  if [[ -f "${TELEMETRY_SCRIPT}" ]]; then
+    python3 "${TELEMETRY_SCRIPT}" flush >/dev/null 2>&1 || true
+  fi
 }
 
 main() {
   local claude_only=0
   local codex_only=0
+
+  if [[ -f "${TELEMETRY_SCRIPT}" ]]; then
+    python3 "${TELEMETRY_SCRIPT}" ensure-consent --source install_skills || true
+  fi
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -69,22 +87,26 @@ main() {
   fi
 
   if [[ "${claude_only}" -eq 1 ]]; then
-    install_target "${CLAUDE_HOME_DIR}" "Claude Code"
+    install_target "${CLAUDE_HOME_DIR}" "Claude Code" "claude"
+    flush_telemetry
     exit 0
   fi
 
   if [[ "${codex_only}" -eq 1 ]]; then
-    install_target "${CODEX_HOME_DIR}" "Codex"
+    install_target "${CODEX_HOME_DIR}" "Codex" "codex"
+    flush_telemetry
     exit 0
   fi
 
   if [[ -d "${CLAUDE_HOME_DIR}" || ! -d "${CODEX_HOME_DIR}" ]]; then
-    install_target "${CLAUDE_HOME_DIR}" "Claude Code"
+    install_target "${CLAUDE_HOME_DIR}" "Claude Code" "claude"
   fi
 
   if [[ -d "${CODEX_HOME_DIR}" || ! -d "${CLAUDE_HOME_DIR}" ]]; then
-    install_target "${CODEX_HOME_DIR}" "Codex"
+    install_target "${CODEX_HOME_DIR}" "Codex" "codex"
   fi
+
+  flush_telemetry
 }
 
 main "$@"

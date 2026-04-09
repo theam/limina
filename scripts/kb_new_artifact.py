@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from datetime import date
@@ -42,6 +43,39 @@ SPECIAL_NOTES = {
     "CHALLENGE": Path("kb/mission/CHALLENGE.md"),
     "DASHBOARD": Path("kb/DASHBOARD.md"),
 }
+
+if os.environ.get("LIMINA_TELEMETRY_INTERNAL") != "1":
+    try:
+        from telemetry import emit_event as telemetry_emit_event
+        from telemetry import ensure_consent as telemetry_ensure_consent
+    except Exception:  # pragma: no cover - telemetry must not block artifact creation
+        telemetry_emit_event = None
+        telemetry_ensure_consent = None
+else:  # pragma: no cover - internal telemetry calls skip recursion
+    telemetry_emit_event = None
+    telemetry_ensure_consent = None
+
+
+def maybe_prompt_telemetry() -> None:
+    if telemetry_ensure_consent is None:
+        return
+    try:
+        telemetry_ensure_consent("kb_new_artifact")
+    except Exception:
+        return
+
+
+def maybe_emit_artifact_created(prefix: str) -> None:
+    if telemetry_emit_event is None:
+        return
+    try:
+        telemetry_emit_event(
+            "limina_artifact_created",
+            emitter="kb_new_artifact",
+            properties={"artifact_type": prefix},
+        )
+    except Exception:
+        return
 
 
 def parse_args() -> argparse.Namespace:
@@ -210,6 +244,7 @@ def backlink_targets(prefix: str, artifact_id: str, args: argparse.Namespace) ->
 
 def main() -> int:
     args = parse_args()
+    maybe_prompt_telemetry()
     project_root = Path(args.project_root).resolve()
     prefix = args.prefix
 
@@ -272,6 +307,7 @@ def main() -> int:
         if target_path is not None:
             add_link_to_note(target_path, label, artifact_id)
 
+    maybe_emit_artifact_created(prefix)
     print(artifact_path)
     return 0
 

@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,6 +26,17 @@ try:
     HAS_FRONTMATTER = True
 except ImportError:
     HAS_FRONTMATTER = False
+
+if os.environ.get("LIMINA_TELEMETRY_INTERNAL") != "1":
+    try:
+        from telemetry import emit_event as telemetry_emit_event
+        from telemetry import ensure_consent as telemetry_ensure_consent
+    except Exception:  # pragma: no cover - telemetry must not block validation
+        telemetry_emit_event = None
+        telemetry_ensure_consent = None
+else:  # pragma: no cover - internal telemetry calls skip recursion
+    telemetry_emit_event = None
+    telemetry_ensure_consent = None
 
 
 META_RE = re.compile(r"^>\s+\*\*(.+?)\*\*:\s*(.+?)\s*$")
@@ -117,6 +129,34 @@ class ValidationResult:
             "error_count": len(self.errors),
             "errors": self.errors,
         }
+
+
+def maybe_prompt_telemetry() -> None:
+    if telemetry_ensure_consent is None:
+        return
+    try:
+        telemetry_ensure_consent("kb_validate")
+    except Exception:
+        return
+
+
+def maybe_emit_validation_failure(result: ValidationResult) -> None:
+    if telemetry_emit_event is None or result.ok:
+        return
+    error_codes = sorted({str(error["check"]) for error in result.errors})
+    if not error_codes:
+        return
+    try:
+        telemetry_emit_event(
+            "limina_kb_validation_failed",
+            emitter="kb_validate",
+            properties={
+                "result_code": error_codes[0],
+                "count_validation_errors": len(result.errors),
+            },
+        )
+    except Exception:
+        return
 
 
 def parse_args() -> argparse.Namespace:
@@ -583,6 +623,7 @@ def format_text(result: ValidationResult) -> str:
 
 def main() -> int:
     args = parse_args()
+    maybe_prompt_telemetry()
     kb_root = Path(args.kb_root).resolve()
     result = ValidationResult()
 
@@ -629,6 +670,7 @@ def main() -> int:
     elif not result.ok or not args.quiet:
         print("KB validation passed." if result.ok else format_text(result))
 
+    maybe_emit_validation_failure(result)
     return 0 if result.ok else 1
 
 

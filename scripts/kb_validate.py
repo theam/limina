@@ -131,8 +131,18 @@ class ValidationResult:
         }
 
 
-def maybe_prompt_telemetry() -> None:
+def should_prompt_telemetry(args: argparse.Namespace) -> bool:
     if telemetry_ensure_consent is None:
+        return False
+    if args.format == "json":
+        return False
+    if args.check_file:
+        return False
+    return True
+
+
+def maybe_prompt_telemetry(args: argparse.Namespace) -> None:
+    if not should_prompt_telemetry(args):
         return
     try:
         telemetry_ensure_consent("kb_validate")
@@ -623,7 +633,7 @@ def format_text(result: ValidationResult) -> str:
 
 def main() -> int:
     args = parse_args()
-    maybe_prompt_telemetry()
+    maybe_prompt_telemetry(args)
     kb_root = Path(args.kb_root).resolve()
     result = ValidationResult()
 

@@ -29,6 +29,7 @@ OUTBOX_PATH = STATE_DIR / "outbox.jsonl"
 SESSION_PATH = STATE_DIR / "session.json"
 SESSION_IDLE_LIMIT = timedelta(hours=8)
 WRITE_TOKEN_SAFETY_MARGIN = timedelta(seconds=30)
+AUTH_FAILURE_STATUSES = {401, 403}
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][A-Za-z0-9._-]+)?$")
 FRONTMATTER_LINE_RE = re.compile(r"^([A-Za-z0-9_-]+):\s*(.*)$")
 META_LINE_RE = re.compile(r"^>\s+\*\*(.+?)\*\*:\s*(.+?)\s*$")
@@ -237,6 +238,23 @@ def clear_local_state(config: dict[str, Any], *, consent_state: str) -> dict[str
     save_config(updated)
     delete_path(OUTBOX_PATH)
     delete_path(SESSION_PATH)
+    return updated
+
+
+def reset_write_token() -> None:
+    if not SESSION_PATH.exists():
+        return
+    session = load_session()
+    session["write_token"] = ""
+    session["write_token_expires_at"] = ""
+    save_session(session)
+
+
+def reset_install_token(config: dict[str, Any]) -> dict[str, Any]:
+    updated = dict(config)
+    updated["install_token"] = ""
+    save_config(updated)
+    reset_write_token()
     return updated
 
 
@@ -607,6 +625,14 @@ def ensure_write_token(config: dict[str, Any]) -> str:
         "install_id": config["install_id"],
     }
     status, data = http_json(f"{relay_url}/api/session", payload=payload, headers=headers)
+    if status in AUTH_FAILURE_STATUSES:
+        config = reset_install_token(config)
+        config = register_install(config)
+        install_token = str(config.get("install_token") or "")
+        if not install_token:
+            return ""
+        headers = {"Authorization": f"Bearer {install_token}"}
+        status, data = http_json(f"{relay_url}/api/session", payload=payload, headers=headers)
     if status != 200 or not data or not data.get("session_token"):
         return ""
 
@@ -627,12 +653,11 @@ def flush_outbox(limit: int = 100) -> int:
         return 0
 
     relay_url = str(config["relay_url"]).rstrip("/")
-    write_token = ensure_write_token(config)
-    if not write_token:
-        return 0
-
     sent = 0
     while events:
+        write_token = ensure_write_token(load_config())
+        if not write_token:
+            break
         session_uuid = str(events[0].get("session_uuid", ""))
         batch: list[dict[str, Any]] = []
         for event in events:
@@ -649,10 +674,19 @@ def flush_outbox(limit: int = 100) -> int:
             "seq_end": max(int(item["seq"]) for item in batch),
             "events": batch,
         }
-        headers = {"Authorization": f"Bearer {write_token}"}
-        status, data = http_json(f"{relay_url}/api/events", payload=payload, headers=headers)
-        if status != 200 or not data or int(data.get("processed", 0)) != len(batch):
-            break
+        auth_retry = False
+        while True:
+            headers = {"Authorization": f"Bearer {write_token}"}
+            status, data = http_json(f"{relay_url}/api/events", payload=payload, headers=headers)
+            if status == 200 and data and int(data.get("processed", 0)) == len(batch):
+                break
+            if status in AUTH_FAILURE_STATUSES and not auth_retry:
+                reset_write_token()
+                write_token = ensure_write_token(load_config())
+                auth_retry = True
+                if write_token:
+                    continue
+            return sent
 
         events = events[len(batch):]
         write_outbox(events)

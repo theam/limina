@@ -62,8 +62,24 @@ class StaleWarning:
     path: str
 
 
-def maybe_prompt_telemetry() -> None:
+def should_prompt_telemetry(args: argparse.Namespace) -> bool:
     if telemetry_ensure_consent is None:
+        return False
+    if args.format == "json":
+        return False
+    return True
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Check Limina kb/ provenance and staleness.")
+    parser.add_argument("--kb-root", default="./kb", help="Path to kb/ directory")
+    parser.add_argument("--max-age-days", type=int, default=180, help="Age threshold for literature notes")
+    parser.add_argument("--format", choices=("text", "json"), default="text")
+    return parser.parse_args()
+
+
+def maybe_prompt_telemetry(args: argparse.Namespace) -> None:
+    if not should_prompt_telemetry(args):
         return
     try:
         telemetry_ensure_consent("kb_provenance")
@@ -232,12 +248,8 @@ def run_checks(kb_root: Path, max_age_days: int) -> list[StaleWarning]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Check Limina kb/ provenance and staleness.")
-    parser.add_argument("--kb-root", default="./kb", help="Path to kb/ directory")
-    parser.add_argument("--max-age-days", type=int, default=180, help="Age threshold for literature notes")
-    parser.add_argument("--format", choices=("text", "json"), default="text")
-    args = parser.parse_args()
-    maybe_prompt_telemetry()
+    args = parse_args()
+    maybe_prompt_telemetry(args)
 
     kb_root = Path(args.kb_root).resolve()
     if not kb_root.exists():

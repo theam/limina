@@ -1,6 +1,6 @@
 # Limina Telemetry
 
-Limina telemetry is explicit opt-in and privacy-constrained by a machine-readable contract at [telemetry/contract.v1.json](/Users/adrian-theam/projects/autonomous-researcher-migrate/telemetry/contract.v1.json).
+Limina telemetry is explicit opt-in and privacy-constrained by a machine-readable contract at [telemetry/contract.v1.json](../telemetry/contract.v1.json).
 
 ## Consent
 

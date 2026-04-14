@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify References"
+  short_description: "Fact-check citations and audit claims in markdown docs"
+  default_prompt: "Use $verify-refs to run the reference verification pipeline on the project's markdown documents."

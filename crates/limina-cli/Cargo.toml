@@ -1,0 +1,44 @@
+[package]
+name = "limina-cli"
+description = "The `limina` command: run the runtime server and manage projects."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "limina_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "limina"
+path = "src/main.rs"
+
+[dependencies]
+limina-core.workspace = true
+limina-store.workspace = true
+limina-domain.workspace = true
+# `limina serve` is wired to the server crate during integration (see `src/serve.rs`).
+limina-server.workspace = true
+clap.workspace = true
+futures.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+# The HTTP client for the public and internal APIs (the Python CLI used httpx). rustls only, so
+# the binary needs no system OpenSSL.
+reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
+# `limina attach`: the live project WebSocket. 0.29 is the version axum already locks.
+tokio-tungstenite = { version = "0.29", default-features = false, features = ["connect", "rustls-tls-native-roots"] }
+# Hidden secret prompts (`limina resource secret` without --from-env/--from-stdin), like
+# click's `hide_input`.
+rpassword = "7.5"
+
+[dev-dependencies]
+axum.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

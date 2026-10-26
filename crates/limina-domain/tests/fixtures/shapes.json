@@ -1,0 +1,1851 @@
+{
+  "create_challenge": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "CREATED",
+      "current_objective": "Pin every JSON shape.",
+      "next_step": "Frame the first falsifiable hypothesis.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": null,
+      "inbox_cursor": 0,
+      "version": 1,
+      "heartbeat_at": null,
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "create_challenge_duplicate": {
+    "error": {
+      "code": "version_conflict",
+      "message": "Challenge 'shapes' already exists.",
+      "details": {
+        "challenge": "shapes"
+      }
+    }
+  },
+  "create_challenge_bad_slug": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Challenge slug must contain lowercase letters, numbers, and single hyphens.",
+      "details": {
+        "slug": "bad--slug"
+      }
+    }
+  },
+  "create_challenge_bad_engine": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Runtime engine must be one of: claude-code, codex.",
+      "details": {
+        "runtime_engine": "gpt"
+      }
+    }
+  },
+  "create_challenge_empty_name": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Name cannot be empty.",
+      "details": {
+        "field": "name"
+      }
+    }
+  },
+  "get_challenge": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "CREATED",
+      "current_objective": "Pin every JSON shape.",
+      "next_step": "Frame the first falsifiable hypothesis.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": null,
+      "inbox_cursor": 0,
+      "version": 1,
+      "heartbeat_at": null,
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "get_challenge_missing": {
+    "error": {
+      "code": "not_found",
+      "message": "Challenge 'Missing' does not exist.",
+      "details": {
+        "challenge": "Missing"
+      }
+    }
+  },
+  "list_projects": [
+    {
+      "id": "<uuid>",
+      "slug": "shapes",
+      "name": "Shapes",
+      "objective": "Pin every JSON shape.",
+      "context": "Golden fixture.",
+      "success_criteria": "Rust matches Python.",
+      "runtime_engine": "claude-code",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>",
+      "coordinator": {
+        "status": "CREATED",
+        "current_objective": "Pin every JSON shape.",
+        "next_step": "Frame the first falsifiable hypothesis.",
+        "blocker": "None",
+        "worker_id": null,
+        "continuation_id": null,
+        "inbox_cursor": 0,
+        "version": 1,
+        "heartbeat_at": null,
+        "wake_at": null,
+        "updated_at": "<timestamp>"
+      }
+    }
+  ],
+  "claim_coordinator": {
+    "scope": "coordinator",
+    "owner": "worker",
+    "token": "<uuid>",
+    "expires_at": "<timestamp>",
+    "version": 1
+  },
+  "claim_coordinator_taken": {
+    "error": {
+      "code": "lease_conflict",
+      "message": "coordinator is already claimed by worker.",
+      "details": {
+        "scope": "coordinator",
+        "owner": "worker",
+        "expires_at": "<timestamp>"
+      }
+    }
+  },
+  "claim_coordinator_bad_ttl": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Lease TTL must be between 30 seconds and 24 hours.",
+      "details": {}
+    }
+  },
+  "send_message": {
+    "id": "<uuid>",
+    "sequence": 1,
+    "kind": "STEER",
+    "body": "Prefer the frozen baseline.",
+    "actor": "owner",
+    "status": "PENDING",
+    "created_at": "<timestamp>",
+    "acknowledged_at": null
+  },
+  "send_message_bad_kind": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Message kind must be STEER, INTERRUPT, ANSWER, APPROVAL, COMMENT, or BLOCKER.",
+      "details": {}
+    }
+  },
+  "send_message_too_long": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Message must be at most 32768 characters.",
+      "details": {}
+    }
+  },
+  "inbox": [
+    {
+      "id": "<uuid>",
+      "sequence": 1,
+      "kind": "STEER",
+      "body": "Prefer the frozen baseline.",
+      "actor": "owner",
+      "status": "PENDING",
+      "created_at": "<timestamp>",
+      "acknowledged_at": null
+    }
+  ],
+  "inbox_pending_after": [],
+  "message_bodies": {
+    "<uuid>": "Prefer the frozen baseline."
+  },
+  "message_bodies_empty": {},
+  "checkpoint_missing_message": {
+    "error": {
+      "code": "not_found",
+      "message": "One or more inbox messages do not exist in this challenge.",
+      "details": {
+        "message_ids": [
+          "missing-a",
+          "missing-b"
+        ]
+      }
+    }
+  },
+  "checkpoint_bad_status": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Runtime status must be CREATED, RUNNING, WAITING, PAUSED, STOPPED, COMPLETE, or FAILED.",
+      "details": {}
+    }
+  },
+  "checkpoint_empty_next_step": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Next step cannot be empty.",
+      "details": {
+        "field": "next step"
+      }
+    }
+  },
+  "checkpoint": {
+    "status": "RUNNING",
+    "current_objective": "Compare rerankers.",
+    "next_step": "Run the benchmark.",
+    "blocker": "None",
+    "worker_id": "worker",
+    "continuation_id": "thread-1",
+    "inbox_cursor": 1,
+    "version": 2,
+    "heartbeat_at": "<timestamp>",
+    "wake_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "checkpoint_stale": {
+    "error": {
+      "code": "version_conflict",
+      "message": "Coordinator state changed from v1 to v2.",
+      "details": {
+        "expected_version": 1,
+        "current_version": 2
+      }
+    }
+  },
+  "acknowledge_message": {
+    "id": "<uuid>",
+    "sequence": 2,
+    "kind": "ANSWER",
+    "body": "Use the March snapshot.",
+    "actor": "owner",
+    "status": "ACKNOWLEDGED",
+    "created_at": "<timestamp>",
+    "acknowledged_at": "<timestamp>"
+  },
+  "acknowledge_missing": {
+    "error": {
+      "code": "not_found",
+      "message": "Inbox message 'missing' does not exist.",
+      "details": {}
+    }
+  },
+  "release_coordinator": {
+    "scope": "coordinator",
+    "owner": "worker",
+    "released": true
+  },
+  "release_coordinator_again": {
+    "error": {
+      "code": "lease_conflict",
+      "message": "The coordinator lease is not owned by this worker.",
+      "details": {
+        "scope": "coordinator",
+        "owner": null,
+        "actor": "worker"
+      }
+    }
+  },
+  "set_variable": {
+    "id": "<uuid>",
+    "name": "SOURCE_URL",
+    "type": "VARIABLE",
+    "value": " https://example.invalid/data ",
+    "configured": null,
+    "status": "ACTIVE",
+    "created_by": "owner",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "set_secret": {
+    "id": "<uuid>",
+    "name": "SOURCE_TOKEN",
+    "type": "SECRET",
+    "value": null,
+    "configured": true,
+    "status": "ACTIVE",
+    "created_by": "owner",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "set_variable_reserved": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Resource name 'OPENAI_BASE_URL' is reserved by the managed runtime.",
+      "details": {
+        "name": "OPENAI_BASE_URL"
+      }
+    }
+  },
+  "set_variable_invalid_name": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Resource names must be valid environment variable names.",
+      "details": {
+        "name": "1BAD",
+        "suggestion": "Use letters, numbers, and underscores, beginning with a letter."
+      }
+    }
+  },
+  "set_variable_empty": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Resource variable cannot be empty.",
+      "details": {
+        "field": "resource variable"
+      }
+    }
+  },
+  "set_secret_too_large": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Resource secret exceeds the 32768-byte limit.",
+      "details": {
+        "resource_type": "secret",
+        "limit": 32768
+      }
+    }
+  },
+  "list_resources": [
+    {
+      "id": "<uuid>",
+      "name": "SOURCE_TOKEN",
+      "type": "SECRET",
+      "value": null,
+      "configured": true,
+      "status": "ACTIVE",
+      "created_by": "owner",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    },
+    {
+      "id": "<uuid>",
+      "name": "SOURCE_URL",
+      "type": "VARIABLE",
+      "value": " https://example.invalid/data ",
+      "configured": null,
+      "status": "ACTIVE",
+      "created_by": "owner",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    }
+  ],
+  "resource_environment": {
+    "SOURCE_TOKEN": "never-shown",
+    "SOURCE_URL": " https://example.invalid/data "
+  },
+  "remove_resource": {
+    "id": "<uuid>",
+    "name": "SOURCE_TOKEN",
+    "type": "SECRET",
+    "value": null,
+    "configured": false,
+    "status": "REMOVED",
+    "created_by": "owner",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "remove_resource_missing": {
+    "error": {
+      "code": "not_found",
+      "message": "Active resource 'SOURCE_TOKEN' does not exist.",
+      "details": {}
+    }
+  },
+  "list_resources_all": [
+    {
+      "id": "<uuid>",
+      "name": "SOURCE_TOKEN",
+      "type": "SECRET",
+      "value": null,
+      "configured": false,
+      "status": "REMOVED",
+      "created_by": "owner",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    },
+    {
+      "id": "<uuid>",
+      "name": "SOURCE_URL",
+      "type": "VARIABLE",
+      "value": " https://example.invalid/data ",
+      "configured": null,
+      "status": "ACTIVE",
+      "created_by": "owner",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    }
+  ],
+  "create_hypothesis": {
+    "uid": "<uuid>",
+    "id": "H001",
+    "kind": "H",
+    "title": "Reranking",
+    "status": "PROPOSED",
+    "payload": {
+      "statement": "A reranker improves NDCG.",
+      "mechanism": "Pairwise relevance.",
+      "generalization": "",
+      "shortcut_risks": "Overfitting.",
+      "test_plan": "Frozen candidates.",
+      "conclusion": ""
+    },
+    "hypothesis_id": null,
+    "experiment_id": null,
+    "version": 1,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "create_hypothesis_empty_title": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Title cannot be empty.",
+      "details": {
+        "field": "title"
+      }
+    }
+  },
+  "create_experiment_missing_hypothesis": {
+    "error": {
+      "code": "not_found",
+      "message": "Artifact 'h999' does not exist.",
+      "details": {
+        "artifact_id": "h999"
+      }
+    }
+  },
+  "create_experiment": {
+    "uid": "<uuid>",
+    "id": "E001",
+    "kind": "E",
+    "title": "Benchmark",
+    "status": "DESIGNED",
+    "payload": {
+      "objective": "Measure NDCG.",
+      "procedure": "Run both.",
+      "success_criteria": "+10%.",
+      "guardrails": "",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": null,
+    "version": 1,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "get_hypothesis_testing": {
+    "uid": "<uuid>",
+    "id": "H001",
+    "kind": "H",
+    "title": "Reranking",
+    "status": "TESTING",
+    "payload": {
+      "statement": "A reranker improves NDCG.",
+      "mechanism": "Pairwise relevance.",
+      "generalization": "",
+      "shortcut_risks": "Overfitting.",
+      "test_plan": "Frozen candidates.",
+      "conclusion": ""
+    },
+    "hypothesis_id": null,
+    "experiment_id": null,
+    "version": 2,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "claim_experiment": {
+    "artifact": {
+      "uid": "<uuid>",
+      "id": "E001",
+      "kind": "E",
+      "title": "Benchmark",
+      "status": "RUNNING",
+      "payload": {
+        "objective": "Measure NDCG.",
+        "procedure": "Run both.",
+        "success_criteria": "+10%.",
+        "guardrails": "",
+        "results": "",
+        "analysis": "",
+        "decision": "",
+        "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "version": 2,
+      "created_by": "researcher",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    },
+    "lease": {
+      "owner": "worker",
+      "token": "<uuid>",
+      "expires_at": "<timestamp>",
+      "version": 1
+    }
+  },
+  "claim_experiment_taken": {
+    "error": {
+      "code": "lease_conflict",
+      "message": "E001 is already claimed by worker.",
+      "details": {
+        "scope": "E001",
+        "owner": "worker",
+        "expires_at": "<timestamp>"
+      }
+    }
+  },
+  "claim_hypothesis_as_experiment": {
+    "error": {
+      "code": "not_found",
+      "message": "Artifact 'H001' does not exist.",
+      "details": {
+        "artifact_id": "H001"
+      }
+    }
+  },
+  "append_observation": {
+    "id": "<uuid>",
+    "experiment_id": "E001",
+    "body": "NDCG +12%.",
+    "evidence_ref": "s3://evidence/run.json",
+    "actor": "worker",
+    "created_at": "<timestamp>"
+  },
+  "append_observation_blank_ref": {
+    "id": "<uuid>",
+    "experiment_id": "E001",
+    "body": "Latency +8 ms.",
+    "evidence_ref": null,
+    "actor": "worker",
+    "created_at": "<timestamp>"
+  },
+  "append_observation_other_actor": {
+    "error": {
+      "code": "lease_conflict",
+      "message": "E001 is claimed by worker; current actor is other.",
+      "details": {
+        "artifact_id": "E001",
+        "owner": "worker",
+        "actor": "other",
+        "expires_at": "<timestamp>"
+      }
+    }
+  },
+  "get_experiment_running": {
+    "uid": "<uuid>",
+    "id": "E001",
+    "kind": "E",
+    "title": "Benchmark",
+    "status": "RUNNING",
+    "payload": {
+      "objective": "Measure NDCG.",
+      "procedure": "Run both.",
+      "success_criteria": "+10%.",
+      "guardrails": "",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": null,
+    "version": 2,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "observations": [
+      {
+        "id": "<uuid>",
+        "experiment_id": "E001",
+        "body": "NDCG +12%.",
+        "evidence_ref": "s3://evidence/run.json",
+        "actor": "worker",
+        "created_at": "<timestamp>"
+      },
+      {
+        "id": "<uuid>",
+        "experiment_id": "E001",
+        "body": "Latency +8 ms.",
+        "evidence_ref": null,
+        "actor": "worker",
+        "created_at": "<timestamp>"
+      }
+    ],
+    "lease": {
+      "scope": "E001",
+      "owner": "worker",
+      "token": "<uuid>",
+      "expires_at": "<timestamp>",
+      "version": 1
+    }
+  },
+  "publish_finding_early": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Cannot publish a finding before E001 is COMPLETED.",
+      "details": {
+        "artifact_id": "E001",
+        "status": "RUNNING"
+      }
+    }
+  },
+  "complete_experiment_stale": {
+    "error": {
+      "code": "version_conflict",
+      "message": "E001 changed from v1 to v2.",
+      "details": {
+        "artifact_id": "E001",
+        "expected_version": 1,
+        "current_version": 2
+      }
+    }
+  },
+  "complete_experiment": {
+    "uid": "<uuid>",
+    "id": "E001",
+    "kind": "E",
+    "title": "Benchmark",
+    "status": "COMPLETED",
+    "payload": {
+      "objective": "Measure NDCG.",
+      "procedure": "Run both.",
+      "success_criteria": "+10%.",
+      "guardrails": "",
+      "results": "Treatment won.",
+      "analysis": "Threshold exceeded.",
+      "decision": "Publish.",
+      "completed_at": "<date>"
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": null,
+    "version": 3,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "get_experiment_completed": {
+    "uid": "<uuid>",
+    "id": "E001",
+    "kind": "E",
+    "title": "Benchmark",
+    "status": "COMPLETED",
+    "payload": {
+      "objective": "Measure NDCG.",
+      "procedure": "Run both.",
+      "success_criteria": "+10%.",
+      "guardrails": "",
+      "results": "Treatment won.",
+      "analysis": "Threshold exceeded.",
+      "decision": "Publish.",
+      "completed_at": "<date>"
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": null,
+    "version": 3,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "observations": [
+      {
+        "id": "<uuid>",
+        "experiment_id": "E001",
+        "body": "NDCG +12%.",
+        "evidence_ref": "s3://evidence/run.json",
+        "actor": "worker",
+        "created_at": "<timestamp>"
+      },
+      {
+        "id": "<uuid>",
+        "experiment_id": "E001",
+        "body": "Latency +8 ms.",
+        "evidence_ref": null,
+        "actor": "worker",
+        "created_at": "<timestamp>"
+      }
+    ]
+  },
+  "publish_finding_bad_impact": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Impact must be CRITICAL, HIGH, MEDIUM, or LOW.",
+      "details": {}
+    }
+  },
+  "publish_finding": {
+    "uid": "<uuid>",
+    "id": "F001",
+    "kind": "F",
+    "title": "Reranking helps",
+    "status": "PUBLISHED",
+    "payload": {
+      "finding": "It helps.",
+      "evidence": "+12% NDCG.",
+      "improvement": "",
+      "remaining_debt": "Latency.",
+      "next_move": "Measure online.",
+      "impact": "HIGH"
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": "E001",
+    "version": 1,
+    "created_by": "worker",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "decide_hypothesis_bad_status": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Hypothesis status must be CONFIRMED, REJECTED, or TESTING.",
+      "details": {}
+    }
+  },
+  "decide_hypothesis_stale": {
+    "error": {
+      "code": "version_conflict",
+      "message": "H001 changed from v1 to v2.",
+      "details": {
+        "artifact_id": "H001",
+        "expected_version": 1,
+        "current_version": 2
+      }
+    }
+  },
+  "decide_hypothesis": {
+    "uid": "<uuid>",
+    "id": "H001",
+    "kind": "H",
+    "title": "Reranking",
+    "status": "CONFIRMED",
+    "payload": {
+      "statement": "A reranker improves NDCG.",
+      "mechanism": "Pairwise relevance.",
+      "generalization": "",
+      "shortcut_risks": "Overfitting.",
+      "test_plan": "Frozen candidates.",
+      "conclusion": "Confirmed offline."
+    },
+    "hypothesis_id": null,
+    "experiment_id": null,
+    "version": 3,
+    "created_by": "researcher",
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>"
+  },
+  "create_experiment_on_confirmed": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Cannot add an experiment to H001 because it is CONFIRMED.",
+      "details": {
+        "artifact_id": "H001",
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "get_artifact_bad_pattern": {
+    "error": {
+      "code": "not_found",
+      "message": "Artifact 'nope' does not exist.",
+      "details": {
+        "artifact_id": "nope"
+      }
+    }
+  },
+  "get_artifact_missing": {
+    "error": {
+      "code": "not_found",
+      "message": "Artifact 'F999' does not exist.",
+      "details": {
+        "artifact_id": "F999"
+      }
+    }
+  },
+  "get_artifact_missing_project": {
+    "error": {
+      "code": "not_found",
+      "message": "Challenge 'missing' does not exist.",
+      "details": {
+        "challenge": "missing"
+      }
+    }
+  },
+  "list_artifacts": [
+    {
+      "uid": "<uuid>",
+      "id": "E001",
+      "kind": "E",
+      "title": "Benchmark",
+      "status": "COMPLETED",
+      "payload": {
+        "objective": "Measure NDCG.",
+        "procedure": "Run both.",
+        "success_criteria": "+10%.",
+        "guardrails": "",
+        "results": "Treatment won.",
+        "analysis": "Threshold exceeded.",
+        "decision": "Publish.",
+        "completed_at": "<date>"
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "version": 3,
+      "created_by": "researcher",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    },
+    {
+      "uid": "<uuid>",
+      "id": "F001",
+      "kind": "F",
+      "title": "Reranking helps",
+      "status": "PUBLISHED",
+      "payload": {
+        "finding": "It helps.",
+        "evidence": "+12% NDCG.",
+        "improvement": "",
+        "remaining_debt": "Latency.",
+        "next_move": "Measure online.",
+        "impact": "HIGH"
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": "E001",
+      "version": 1,
+      "created_by": "worker",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    },
+    {
+      "uid": "<uuid>",
+      "id": "H001",
+      "kind": "H",
+      "title": "Reranking",
+      "status": "CONFIRMED",
+      "payload": {
+        "statement": "A reranker improves NDCG.",
+        "mechanism": "Pairwise relevance.",
+        "generalization": "",
+        "shortcut_risks": "Overfitting.",
+        "test_plan": "Frozen candidates.",
+        "conclusion": "Confirmed offline."
+      },
+      "hypothesis_id": null,
+      "experiment_id": null,
+      "version": 3,
+      "created_by": "researcher",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    }
+  ],
+  "list_experiments": [
+    {
+      "uid": "<uuid>",
+      "id": "E001",
+      "kind": "E",
+      "title": "Benchmark",
+      "status": "COMPLETED",
+      "payload": {
+        "objective": "Measure NDCG.",
+        "procedure": "Run both.",
+        "success_criteria": "+10%.",
+        "guardrails": "",
+        "results": "Treatment won.",
+        "analysis": "Threshold exceeded.",
+        "decision": "Publish.",
+        "completed_at": "<date>"
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "version": 3,
+      "created_by": "researcher",
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    }
+  ],
+  "status": {
+    "challenge": {
+      "id": "<uuid>",
+      "slug": "shapes",
+      "name": "Shapes",
+      "objective": "Pin every JSON shape.",
+      "context": "Golden fixture.",
+      "success_criteria": "Rust matches Python.",
+      "runtime_engine": "claude-code",
+      "status": "ACTIVE",
+      "version": 1,
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>",
+      "coordinator": {
+        "status": "RUNNING",
+        "current_objective": "Compare rerankers.",
+        "next_step": "Run the benchmark.",
+        "blocker": "None",
+        "worker_id": "worker",
+        "continuation_id": "thread-1",
+        "inbox_cursor": 1,
+        "version": 2,
+        "heartbeat_at": "<timestamp>",
+        "wake_at": "<timestamp>",
+        "updated_at": "<timestamp>"
+      }
+    },
+    "counts": {
+      "E": {
+        "COMPLETED": 1
+      },
+      "F": {
+        "PUBLISHED": 1
+      },
+      "H": {
+        "CONFIRMED": 1
+      }
+    },
+    "running_experiments": [],
+    "pending_inbox": 0,
+    "last_event_sequence": 18
+  },
+  "record_runtime_event": {
+    "sequence": 19,
+    "id": "<uuid>",
+    "type": "runtime.codex",
+    "actor": "limina:worker",
+    "artifact_id": null,
+    "payload": {
+      "kind": "message",
+      "text": "Planning.",
+      "nested": {
+        "z": 1,
+        "a": [
+          1,
+          2.5,
+          null,
+          true,
+          "ü"
+        ]
+      }
+    },
+    "command_id": "<uuid>",
+    "created_at": "<timestamp>"
+  },
+  "record_runtime_event_bad_type": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Internal runtime event types must start with 'runtime.'.",
+      "details": {
+        "event_type": "coordinator.claimed"
+      }
+    }
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "id": "<uuid>",
+      "type": "challenge.created",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "slug": "shapes",
+        "name": "Shapes",
+        "runtime_engine": "claude-code"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 2,
+      "id": "<uuid>",
+      "type": "coordinator.claimed",
+      "actor": "worker",
+      "artifact_id": null,
+      "payload": {
+        "expires_at": "<timestamp>"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 3,
+      "id": "<uuid>",
+      "type": "inbox.message_sent",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "message_id": "<uuid>",
+        "kind": "STEER",
+        "sequence": 1,
+        "body": "Prefer the frozen baseline.",
+        "origin": "resource"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 4,
+      "id": "<uuid>",
+      "type": "coordinator.checkpointed",
+      "actor": "worker",
+      "artifact_id": null,
+      "payload": {
+        "status": "RUNNING",
+        "current_objective": "Compare rerankers.",
+        "next_step": "Run the benchmark.",
+        "blocker": "None",
+        "version": 2,
+        "worker_id": "worker",
+        "continuation_id": "thread-1",
+        "inbox_cursor": 1,
+        "messages_acknowledged": 1,
+        "wake_at": "<timestamp>"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 5,
+      "id": "<uuid>",
+      "type": "inbox.message_sent",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "message_id": "<uuid>",
+        "kind": "ANSWER",
+        "sequence": 2,
+        "body": "Use the March snapshot."
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 6,
+      "id": "<uuid>",
+      "type": "inbox.message_acknowledged",
+      "actor": "worker",
+      "artifact_id": null,
+      "payload": {
+        "message_id": "<uuid>",
+        "sequence": 2
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 7,
+      "id": "<uuid>",
+      "type": "coordinator.released",
+      "actor": "worker",
+      "artifact_id": null,
+      "payload": {},
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 8,
+      "id": "<uuid>",
+      "type": "resource.variable_set",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "resource_id": "<uuid>",
+        "name": "SOURCE_URL",
+        "type": "VARIABLE"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 9,
+      "id": "<uuid>",
+      "type": "resource.secret_set",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "resource_id": "<uuid>",
+        "name": "SOURCE_TOKEN",
+        "type": "SECRET"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 10,
+      "id": "<uuid>",
+      "type": "resource.removed",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "resource_id": "<uuid>",
+        "name": "SOURCE_TOKEN"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 11,
+      "id": "<uuid>",
+      "type": "hypothesis.created",
+      "actor": "researcher",
+      "artifact_id": "H001",
+      "payload": {
+        "title": "Reranking"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 12,
+      "id": "<uuid>",
+      "type": "experiment.created",
+      "actor": "researcher",
+      "artifact_id": "E001",
+      "payload": {
+        "hypothesis_id": "H001",
+        "title": "Benchmark"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 13,
+      "id": "<uuid>",
+      "type": "experiment.claimed",
+      "actor": "worker",
+      "artifact_id": "E001",
+      "payload": {
+        "expires_at": "<timestamp>"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 14,
+      "id": "<uuid>",
+      "type": "experiment.observed",
+      "actor": "worker",
+      "artifact_id": "E001",
+      "payload": {
+        "observation_id": "<uuid>",
+        "evidence_ref": "s3://evidence/run.json"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 15,
+      "id": "<uuid>",
+      "type": "experiment.observed",
+      "actor": "worker",
+      "artifact_id": "E001",
+      "payload": {
+        "observation_id": "<uuid>",
+        "evidence_ref": null
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 16,
+      "id": "<uuid>",
+      "type": "experiment.completed",
+      "actor": "worker",
+      "artifact_id": "E001",
+      "payload": {
+        "version": 3
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 17,
+      "id": "<uuid>",
+      "type": "finding.published",
+      "actor": "worker",
+      "artifact_id": "F001",
+      "payload": {
+        "hypothesis_id": "H001",
+        "experiment_id": "E001",
+        "impact": "HIGH"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 18,
+      "id": "<uuid>",
+      "type": "hypothesis.decided",
+      "actor": "reviewer",
+      "artifact_id": "H001",
+      "payload": {
+        "status": "CONFIRMED",
+        "version": 3
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 19,
+      "id": "<uuid>",
+      "type": "runtime.codex",
+      "actor": "limina:worker",
+      "artifact_id": null,
+      "payload": {
+        "kind": "message",
+        "text": "Planning.",
+        "nested": {
+          "z": 1,
+          "a": [
+            1,
+            2.5,
+            null,
+            true,
+            "ü"
+          ]
+        }
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    }
+  ],
+  "events_page": [
+    {
+      "sequence": 3,
+      "id": "<uuid>",
+      "type": "inbox.message_sent",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "message_id": "<uuid>",
+        "kind": "STEER",
+        "sequence": 1,
+        "body": "Prefer the frozen baseline.",
+        "origin": "resource"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 4,
+      "id": "<uuid>",
+      "type": "coordinator.checkpointed",
+      "actor": "worker",
+      "artifact_id": null,
+      "payload": {
+        "status": "RUNNING",
+        "current_objective": "Compare rerankers.",
+        "next_step": "Run the benchmark.",
+        "blocker": "None",
+        "version": 2,
+        "worker_id": "worker",
+        "continuation_id": "thread-1",
+        "inbox_cursor": 1,
+        "messages_acknowledged": 1,
+        "wake_at": "<timestamp>"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 5,
+      "id": "<uuid>",
+      "type": "inbox.message_sent",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "message_id": "<uuid>",
+        "kind": "ANSWER",
+        "sequence": 2,
+        "body": "Use the March snapshot."
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    }
+  ],
+  "events_clamped": [
+    {
+      "sequence": 1,
+      "id": "<uuid>",
+      "type": "challenge.created",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "slug": "shapes",
+        "name": "Shapes",
+        "runtime_engine": "claude-code"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    }
+  ],
+  "events_before": [
+    [
+      {
+        "sequence": 6,
+        "id": "<uuid>",
+        "type": "inbox.message_acknowledged",
+        "actor": "worker",
+        "artifact_id": null,
+        "payload": {
+          "message_id": "<uuid>",
+          "sequence": 2
+        },
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      },
+      {
+        "sequence": 8,
+        "id": "<uuid>",
+        "type": "resource.variable_set",
+        "actor": "owner",
+        "artifact_id": null,
+        "payload": {
+          "resource_id": "<uuid>",
+          "name": "SOURCE_URL",
+          "type": "VARIABLE"
+        },
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      },
+      {
+        "sequence": 9,
+        "id": "<uuid>",
+        "type": "resource.secret_set",
+        "actor": "owner",
+        "artifact_id": null,
+        "payload": {
+          "resource_id": "<uuid>",
+          "name": "SOURCE_TOKEN",
+          "type": "SECRET"
+        },
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      }
+    ],
+    true
+  ],
+  "events_before_bounded": [
+    [
+      {
+        "sequence": 7,
+        "id": "<uuid>",
+        "type": "coordinator.released",
+        "actor": "worker",
+        "artifact_id": null,
+        "payload": {},
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      },
+      {
+        "sequence": 8,
+        "id": "<uuid>",
+        "type": "resource.variable_set",
+        "actor": "owner",
+        "artifact_id": null,
+        "payload": {
+          "resource_id": "<uuid>",
+          "name": "SOURCE_URL",
+          "type": "VARIABLE"
+        },
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      },
+      {
+        "sequence": 9,
+        "id": "<uuid>",
+        "type": "resource.secret_set",
+        "actor": "owner",
+        "artifact_id": null,
+        "payload": {
+          "resource_id": "<uuid>",
+          "name": "SOURCE_TOKEN",
+          "type": "SECRET"
+        },
+        "command_id": "<uuid>",
+        "created_at": "<timestamp>"
+      }
+    ],
+    true
+  ],
+  "events_before_empty": [
+    [],
+    false
+  ],
+  "has_events_before": true,
+  "has_events_before_first": false,
+  "recent_events": [
+    {
+      "sequence": 16,
+      "id": "<uuid>",
+      "type": "experiment.completed",
+      "actor": "worker",
+      "artifact_id": "E001",
+      "payload": {
+        "version": 3
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 17,
+      "id": "<uuid>",
+      "type": "finding.published",
+      "actor": "worker",
+      "artifact_id": "F001",
+      "payload": {
+        "hypothesis_id": "H001",
+        "experiment_id": "E001",
+        "impact": "HIGH"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 18,
+      "id": "<uuid>",
+      "type": "hypothesis.decided",
+      "actor": "reviewer",
+      "artifact_id": "H001",
+      "payload": {
+        "status": "CONFIRMED",
+        "version": 3
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 19,
+      "id": "<uuid>",
+      "type": "runtime.codex",
+      "actor": "limina:worker",
+      "artifact_id": null,
+      "payload": {
+        "kind": "message",
+        "text": "Planning.",
+        "nested": {
+          "z": 1,
+          "a": [
+            1,
+            2.5,
+            null,
+            true,
+            "ü"
+          ]
+        }
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    }
+  ],
+  "change_bad_action": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Project action must be start, pause, resume, stop, or archive.",
+      "details": {
+        "action": "restart"
+      }
+    }
+  },
+  "change_start_running": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "RUNNING",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": "worker",
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 2,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": "<timestamp>",
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_archive_running": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Pause or stop the project before archiving it.",
+      "details": {
+        "status": "RUNNING"
+      }
+    }
+  },
+  "change_pause": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "PAUSED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 3,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_pause_again": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "PAUSED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 3,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_start_paused": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "Cannot start a project while it is PAUSED.",
+      "details": {
+        "action": "start",
+        "status": "PAUSED"
+      }
+    }
+  },
+  "change_resume": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "RUNNING",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 4,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_stop": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "STOPPED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 5,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_start": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "RUNNING",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 6,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_stop_again": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ACTIVE",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "STOPPED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 7,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_archive": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ARCHIVED",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "STOPPED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 8,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_archive_again": {
+    "id": "<uuid>",
+    "slug": "shapes",
+    "name": "Shapes",
+    "objective": "Pin every JSON shape.",
+    "context": "Golden fixture.",
+    "success_criteria": "Rust matches Python.",
+    "runtime_engine": "claude-code",
+    "status": "ARCHIVED",
+    "version": 1,
+    "created_at": "<timestamp>",
+    "updated_at": "<timestamp>",
+    "coordinator": {
+      "status": "STOPPED",
+      "current_objective": "Compare rerankers.",
+      "next_step": "Run the benchmark.",
+      "blocker": "None",
+      "worker_id": null,
+      "continuation_id": "thread-1",
+      "inbox_cursor": 1,
+      "version": 8,
+      "heartbeat_at": "<timestamp>",
+      "wake_at": null,
+      "updated_at": "<timestamp>"
+    }
+  },
+  "change_resume_archived": {
+    "error": {
+      "code": "invariant_violation",
+      "message": "An archived project cannot be restarted.",
+      "details": {
+        "action": "resume",
+        "status": "ARCHIVED"
+      }
+    }
+  },
+  "lifecycle_events": [
+    {
+      "sequence": 20,
+      "id": "<uuid>",
+      "type": "project.paused",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "pause",
+        "status": "PAUSED"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 21,
+      "id": "<uuid>",
+      "type": "project.resumed",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "resume",
+        "status": "RUNNING"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 22,
+      "id": "<uuid>",
+      "type": "project.stopped",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "stop",
+        "status": "STOPPED"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 23,
+      "id": "<uuid>",
+      "type": "project.started",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "start",
+        "status": "RUNNING"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 24,
+      "id": "<uuid>",
+      "type": "project.stopped",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "stop",
+        "status": "STOPPED"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    },
+    {
+      "sequence": 25,
+      "id": "<uuid>",
+      "type": "project.archived",
+      "actor": "owner",
+      "artifact_id": null,
+      "payload": {
+        "action": "archive",
+        "status": "ARCHIVED"
+      },
+      "command_id": "<uuid>",
+      "created_at": "<timestamp>"
+    }
+  ],
+  "list_projects_active": [],
+  "list_projects_all": [
+    {
+      "id": "<uuid>",
+      "slug": "shapes",
+      "name": "Shapes",
+      "objective": "Pin every JSON shape.",
+      "context": "Golden fixture.",
+      "success_criteria": "Rust matches Python.",
+      "runtime_engine": "claude-code",
+      "status": "ARCHIVED",
+      "version": 1,
+      "created_at": "<timestamp>",
+      "updated_at": "<timestamp>",
+      "coordinator": {
+        "status": "STOPPED",
+        "current_objective": "Compare rerankers.",
+        "next_step": "Run the benchmark.",
+        "blocker": "None",
+        "worker_id": null,
+        "continuation_id": "thread-1",
+        "inbox_cursor": 1,
+        "version": 8,
+        "heartbeat_at": "<timestamp>",
+        "wake_at": null,
+        "updated_at": "<timestamp>"
+      }
+    }
+  ]
+}

@@ -2,6 +2,16 @@
 .github
 .codex
 .env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+.terraform
+**/.terraform
+*.tfstate*
+*.tfplan
+*.pem
+*.key
 .venv
 .limina
 __pycache__
@@ -10,6 +20,8 @@ __pycache__
 *.db
 dist
 build
+web/node_modules
+web/dist
 kb
 kb-export
 tests

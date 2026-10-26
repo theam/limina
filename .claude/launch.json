@@ -1,0 +1,28 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "limina-dev-runtime",
+      "runtimeExecutable": "cargo",
+      "runtimeArgs": [
+        "run",
+        "-q",
+        "-p",
+        "limina-cli",
+        "--",
+        "dev"
+      ],
+      "port": 7433
+    },
+    {
+      "name": "limina-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "web",
+        "dev"
+      ],
+      "port": 5173
+    }
+  ]
+}

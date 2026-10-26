@@ -42,10 +42,9 @@ migrations before serving; there is no separate database or runtime command in t
 The direct development path is:
 
 ```bash
-uv sync --locked --all-extras --dev
 export LIMINA_API_TOKEN=local-secret
 export LIMINA_ADMIN_API_TOKEN=another-local-secret
-uv run limina serve
+cargo run -p limina-cli -- serve
 ```
 
 For PostgreSQL:

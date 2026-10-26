@@ -1,0 +1,70 @@
+[package]
+name = "limina-server"
+description = "The Limina runtime server: REST API, live updates, MCP, sign-in and the console."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+libc = "0.2"
+limina-core.workspace = true
+limina-store.workspace = true
+limina-domain.workspace = true
+limina-engines.workspace = true
+async-trait.workspace = true
+axum.workspace = true
+base64.workspace = true
+# Request bodies are read into a buffer that stops at the route's limit.
+bytes.workspace = true
+# Retry wake-up times (`now + delay`) for the supervisor.
+chrono.workspace = true
+futures.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+# Sign-in: AES-256-GCM sealed cookies keyed with HKDF-SHA256 (the construction the Python runtime
+# uses, so existing cookies stay readable across the port).
+aes-gcm = "0.11"
+hkdf = "0.13"
+sha2 = "0.11"
+# OS randomness for cookie nonces, OAuth state and PKCE verifiers.
+getrandom = "0.4"
+# JWT verification (OIDC and WorkOS access tokens) on AWS-LC, the provider rustls already uses.
+jsonwebtoken = { version = "11.1", default-features = false, features = ["aws_lc_rs"] }
+# Calls to the identity provider (discovery, JWKS, WorkOS code exchange) over rustls.
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json"] }
+# The official MCP SDK: the Streamable HTTP server transport and the protocol types. Tools are
+# declared by hand (no macros) so their schemas match the Python server's exactly. `auth` is the
+# SDK's MCP authorization client (protected-resource and authorization-server discovery, dynamic
+# client registration, PKCE, refresh) that connections use to sign in to people's MCP servers.
+rmcp = { version = "3.5", default-features = false, features = ["server", "transport-streamable-http-server", "auth"] }
+# Reading the token responses `rmcp`'s authorization client stores (`TokenResponse`); the same
+# version and features the SDK uses.
+oauth2 = { version = "5.0", default-features = false }
+# Constant-time comparison of static tokens and OAuth state.
+subtle = "2.6"
+# The session-cookie layer (`Layer`/`Service`).
+tower = "0.5"
+url = "2.5"
+# The OpenAPI document (`/openapi.json`), generated from the HTTP layer's request and response
+# types and its route annotations; `utoipa-axum` registers each documented route with axum so the
+# document and the router cannot drift apart.
+utoipa = { version = "6.0", features = ["preserve_order", "preserve_path_order"] }
+utoipa-axum = "0.3"
+# CORS for `LIMINA_CORS_ORIGINS` (0.6 is the version reqwest already locks).
+tower-http = { version = "0.6", features = ["cors"] }
+
+[dev-dependencies]
+tempfile.workspace = true
+# The MCP tests drive the server with the SDK's own Streamable HTTP client.
+rmcp = { version = "3.5", default-features = false, features = ["client", "transport-streamable-http-client-reqwest"] }
+# Generates the RSA keys that sign test JWTs (the library jsonwebtoken verifies them with).
+aws-lc-rs = "1.18"
+# The live WebSocket tests talk to a real listener (0.29 is the version axum already locks).
+tokio-tungstenite = { version = "0.29", default-features = false, features = ["connect"] }
+
+[lints]
+workspace = true

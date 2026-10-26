@@ -1,0 +1,35 @@
+[package]
+name = "limina-engines"
+description = "Codex and Claude provider sessions for the Limina runtime."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+limina-core.workspace = true
+limina-domain.workspace = true
+async-trait.workspace = true
+chrono.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+rust_decimal.workspace = true
+tempfile.workspace = true
+
+# A scripted stand-in for `codex app-server` and the `claude` CLI that speaks their real stdio
+# protocols. Only the end-to-end tests run it (through `CARGO_BIN_EXE_limina-fake-provider`).
+[[bin]]
+name = "limina-fake-provider"
+path = "tests/support/fake_provider.rs"
+test = false
+doc = false
+bench = false
+
+[lints]
+workspace = true

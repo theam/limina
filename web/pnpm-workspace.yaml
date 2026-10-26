@@ -1,0 +1,4 @@
+# IBM telemetry postinstall scripts are not needed to use the icons.
+allowBuilds:
+  '@carbon/icon-helpers': false
+  '@carbon/icons-react': false

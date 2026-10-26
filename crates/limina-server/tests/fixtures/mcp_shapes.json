@@ -1,0 +1,2290 @@
+{
+ "calls": {
+  "create": {
+   "tool": "limina_create_project",
+   "arguments": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S"
+   },
+   "is_error": false,
+   "structured": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "",
+    "runtime": "codex",
+    "status": "CREATED",
+    "current_objective": "M",
+    "next_step": "Frame the first falsifiable hypothesis.",
+    "blocker": "None",
+    "created_at": "2026-10-15T15:13:15.532836+00:00",
+    "updated_at": "2026-10-15T15:13:15.533289+00:00",
+    "role": "OWNER"
+   },
+   "texts": [
+    "{\n  \"slug\": \"p\",\n  \"name\": \"P\",\n  \"mission\": \"M\",\n  \"success_criteria\": \"S\",\n  \"context\": \"\",\n  \"runtime\": \"codex\",\n  \"status\": \"CREATED\",\n  \"current_objective\": \"M\",\n  \"next_step\": \"Frame the first falsifiable hypothesis.\",\n  \"blocker\": \"None\",\n  \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.533289+00:00\",\n  \"role\": \"OWNER\"\n}"
+   ]
+  },
+  "list": {
+   "tool": "limina_list_projects",
+   "arguments": {},
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "slug": "p",
+      "name": "P",
+      "mission": "M",
+      "success_criteria": "S",
+      "context": "",
+      "runtime": "codex",
+      "status": "CREATED",
+      "current_objective": "M",
+      "next_step": "Frame the first falsifiable hypothesis.",
+      "blocker": "None",
+      "created_at": "2026-10-15T15:13:15.532836+00:00",
+      "updated_at": "2026-10-15T15:13:15.533289+00:00",
+      "role": "OWNER"
+     }
+    ],
+    "next_cursor": null,
+    "total": 1
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"slug\": \"p\",\n      \"name\": \"P\",\n      \"mission\": \"M\",\n      \"success_criteria\": \"S\",\n      \"context\": \"\",\n      \"runtime\": \"codex\",\n      \"status\": \"CREATED\",\n      \"current_objective\": \"M\",\n      \"next_step\": \"Frame the first falsifiable hypothesis.\",\n      \"blocker\": \"None\",\n      \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.533289+00:00\",\n      \"role\": \"OWNER\"\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 1\n}"
+   ]
+  },
+  "status": {
+   "tool": "limina_get_project_status",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "project": {
+     "slug": "p",
+     "name": "P",
+     "mission": "M",
+     "success_criteria": "S",
+     "context": "",
+     "runtime": "codex",
+     "status": "CREATED",
+     "current_objective": "M",
+     "next_step": "Frame the first falsifiable hypothesis.",
+     "blocker": "None",
+     "created_at": "2026-10-15T15:13:15.532836+00:00",
+     "updated_at": "2026-10-15T15:13:15.533289+00:00",
+     "role": "OWNER"
+    },
+    "knowledge": {},
+    "active_work": [],
+    "pending_guidance": 0,
+    "event_cursor": 1
+   },
+   "texts": [
+    "{\n  \"project\": {\n    \"slug\": \"p\",\n    \"name\": \"P\",\n    \"mission\": \"M\",\n    \"success_criteria\": \"S\",\n    \"context\": \"\",\n    \"runtime\": \"codex\",\n    \"status\": \"CREATED\",\n    \"current_objective\": \"M\",\n    \"next_step\": \"Frame the first falsifiable hypothesis.\",\n    \"blocker\": \"None\",\n    \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n    \"updated_at\": \"2026-10-15T15:13:15.533289+00:00\",\n    \"role\": \"OWNER\"\n  },\n  \"knowledge\": {},\n  \"active_work\": [],\n  \"pending_guidance\": 0,\n  \"event_cursor\": 1\n}"
+   ]
+  },
+  "steer": {
+   "tool": "limina_steer_project",
+   "arguments": {
+    "project": "p",
+    "message": "go"
+   },
+   "is_error": false,
+   "structured": {
+    "id": "57c10f90-951f-4659-aeb0-bddb7e87281e",
+    "delivery": "QUEUED",
+    "kind": "STEER",
+    "accepted_at": "2026-10-15T15:13:15.541901+00:00",
+    "status": "PENDING"
+   },
+   "texts": [
+    "{\n  \"id\": \"57c10f90-951f-4659-aeb0-bddb7e87281e\",\n  \"delivery\": \"QUEUED\",\n  \"kind\": \"STEER\",\n  \"accepted_at\": \"2026-10-15T15:13:15.541901+00:00\",\n  \"status\": \"PENDING\"\n}"
+   ]
+  },
+  "variable": {
+   "tool": "limina_set_project_variable",
+   "arguments": {
+    "project": "p",
+    "name": "V",
+    "value": "x"
+   },
+   "is_error": false,
+   "structured": {
+    "name": "V",
+    "type": "VARIABLE",
+    "status": "ACTIVE",
+    "created_at": "2026-10-15T15:13:15.544719+00:00",
+    "updated_at": "2026-10-15T15:13:15.544720+00:00",
+    "value": "x"
+   },
+   "texts": [
+    "{\n  \"name\": \"V\",\n  \"type\": \"VARIABLE\",\n  \"status\": \"ACTIVE\",\n  \"created_at\": \"2026-10-15T15:13:15.544719+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.544720+00:00\",\n  \"value\": \"x\"\n}"
+   ]
+  },
+  "resources": {
+   "tool": "limina_list_project_resources",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "result": [
+     {
+      "name": "S",
+      "type": "SECRET",
+      "status": "ACTIVE",
+      "created_at": "2026-10-15T15:13:15.552326+00:00",
+      "updated_at": "2026-10-15T15:13:15.552328+00:00",
+      "configured": true
+     },
+     {
+      "name": "V",
+      "type": "VARIABLE",
+      "status": "ACTIVE",
+      "created_at": "2026-10-15T15:13:15.544719+00:00",
+      "updated_at": "2026-10-15T15:13:15.544720+00:00",
+      "value": "x"
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"name\": \"S\",\n  \"type\": \"SECRET\",\n  \"status\": \"ACTIVE\",\n  \"created_at\": \"2026-10-15T15:13:15.552326+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.552328+00:00\",\n  \"configured\": true\n}",
+    "{\n  \"name\": \"V\",\n  \"type\": \"VARIABLE\",\n  \"status\": \"ACTIVE\",\n  \"created_at\": \"2026-10-15T15:13:15.544719+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.544720+00:00\",\n  \"value\": \"x\"\n}"
+   ]
+  },
+  "status_with_work": {
+   "tool": "limina_get_project_status",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "project": {
+     "slug": "p",
+     "name": "P",
+     "mission": "M",
+     "success_criteria": "S",
+     "context": "",
+     "runtime": "codex",
+     "status": "CREATED",
+     "current_objective": "M",
+     "next_step": "Frame the first falsifiable hypothesis.",
+     "blocker": "None",
+     "created_at": "2026-10-15T15:13:15.532836+00:00",
+     "updated_at": "2026-10-15T15:13:15.533289+00:00",
+     "role": "OWNER"
+    },
+    "knowledge": {
+     "E": {
+      "RUNNING": 1
+     },
+     "H": {
+      "TESTING": 1
+     }
+    },
+    "active_work": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     }
+    ],
+    "pending_guidance": 3,
+    "event_cursor": 10
+   },
+   "texts": [
+    "{\n  \"project\": {\n    \"slug\": \"p\",\n    \"name\": \"P\",\n    \"mission\": \"M\",\n    \"success_criteria\": \"S\",\n    \"context\": \"\",\n    \"runtime\": \"codex\",\n    \"status\": \"CREATED\",\n    \"current_objective\": \"M\",\n    \"next_step\": \"Frame the first falsifiable hypothesis.\",\n    \"blocker\": \"None\",\n    \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n    \"updated_at\": \"2026-10-15T15:13:15.533289+00:00\",\n    \"role\": \"OWNER\"\n  },\n  \"knowledge\": {\n    \"E\": {\n      \"RUNNING\": 1\n    },\n    \"H\": {\n      \"TESTING\": 1\n    }\n  },\n  \"active_work\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"pending_guidance\": 3,\n  \"event_cursor\": 10\n}"
+   ]
+  },
+  "knowledge_h": {
+   "tool": "limina_get_knowledge",
+   "arguments": {
+    "project": "p",
+    "artifact_id": "H001"
+   },
+   "is_error": false,
+   "structured": {
+    "id": "H001",
+    "kind": "H",
+    "title": "H",
+    "status": "TESTING",
+    "content": {
+     "statement": "s",
+     "mechanism": "m",
+     "generalization": "g",
+     "shortcut_risks": "r",
+     "test_plan": "t",
+     "conclusion": ""
+    },
+    "hypothesis_id": null,
+    "experiment_id": null,
+    "created_at": "2026-10-15T15:13:15.556662+00:00",
+    "updated_at": "2026-10-15T15:13:15.558030+00:00",
+    "tags": []
+   },
+   "texts": [
+    "{\n  \"id\": \"H001\",\n  \"kind\": \"H\",\n  \"title\": \"H\",\n  \"status\": \"TESTING\",\n  \"content\": {\n    \"statement\": \"s\",\n    \"mechanism\": \"m\",\n    \"generalization\": \"g\",\n    \"shortcut_risks\": \"r\",\n    \"test_plan\": \"t\",\n    \"conclusion\": \"\"\n  },\n  \"hypothesis_id\": null,\n  \"experiment_id\": null,\n  \"created_at\": \"2026-10-15T15:13:15.556662+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.558030+00:00\",\n  \"tags\": []\n}"
+   ]
+  },
+  "knowledge_e": {
+   "tool": "limina_get_knowledge",
+   "arguments": {
+    "project": "p",
+    "artifact_id": "E001"
+   },
+   "is_error": false,
+   "structured": {
+    "id": "E001",
+    "kind": "E",
+    "title": "E",
+    "status": "RUNNING",
+    "content": {
+     "objective": "o",
+     "procedure": "p",
+     "success_criteria": "s",
+     "guardrails": "g",
+     "results": "",
+     "analysis": "",
+     "decision": "",
+     "completed_at": null
+    },
+    "hypothesis_id": "H001",
+    "experiment_id": null,
+    "created_at": "2026-10-15T15:13:15.559076+00:00",
+    "updated_at": "2026-10-15T15:13:15.559822+00:00",
+    "tags": [],
+    "observations": [
+     {
+      "id": "6d7c78b5-3294-4f33-8864-682eb5152c56",
+      "experiment_id": "E001",
+      "body": "obs",
+      "evidence_ref": null,
+      "actor": "limina:x",
+      "created_at": "2026-10-15T15:13:15.561962+00:00"
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"id\": \"E001\",\n  \"kind\": \"E\",\n  \"title\": \"E\",\n  \"status\": \"RUNNING\",\n  \"content\": {\n    \"objective\": \"o\",\n    \"procedure\": \"p\",\n    \"success_criteria\": \"s\",\n    \"guardrails\": \"g\",\n    \"results\": \"\",\n    \"analysis\": \"\",\n    \"decision\": \"\",\n    \"completed_at\": null\n  },\n  \"hypothesis_id\": \"H001\",\n  \"experiment_id\": null,\n  \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n  \"tags\": [],\n  \"observations\": [\n    {\n      \"id\": \"6d7c78b5-3294-4f33-8864-682eb5152c56\",\n      \"experiment_id\": \"E001\",\n      \"body\": \"obs\",\n      \"evidence_ref\": null,\n      \"actor\": \"limina:x\",\n      \"created_at\": \"2026-10-15T15:13:15.561962+00:00\"\n    }\n  ]\n}"
+   ]
+  },
+  "query": {
+   "tool": "limina_query_knowledge",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     },
+     {
+      "id": "H001",
+      "kind": "H",
+      "title": "H",
+      "status": "TESTING",
+      "content": {
+       "statement": "s",
+       "mechanism": "m",
+       "generalization": "g",
+       "shortcut_risks": "r",
+       "test_plan": "t",
+       "conclusion": ""
+      },
+      "hypothesis_id": null,
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.556662+00:00",
+      "updated_at": "2026-10-15T15:13:15.558030+00:00",
+      "tags": []
+     }
+    ],
+    "next_cursor": null,
+    "total": 2,
+    "search_backend": "portable-substring"
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    },\n    {\n      \"id\": \"H001\",\n      \"kind\": \"H\",\n      \"title\": \"H\",\n      \"status\": \"TESTING\",\n      \"content\": {\n        \"statement\": \"s\",\n        \"mechanism\": \"m\",\n        \"generalization\": \"g\",\n        \"shortcut_risks\": \"r\",\n        \"test_plan\": \"t\",\n        \"conclusion\": \"\"\n      },\n      \"hypothesis_id\": null,\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.556662+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.558030+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 2,\n  \"search_backend\": \"portable-substring\"\n}"
+   ]
+  },
+  "query_filtered": {
+   "tool": "limina_query_knowledge",
+   "arguments": {
+    "project": "p",
+    "kind": "E"
+   },
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     }
+    ],
+    "next_cursor": null,
+    "total": 1,
+    "search_backend": "portable-substring"
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 1,\n  \"search_backend\": \"portable-substring\"\n}"
+   ]
+  },
+  "graph": {
+   "tool": "limina_get_knowledge_graph",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "nodes": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     },
+     {
+      "id": "H001",
+      "kind": "H",
+      "title": "H",
+      "status": "TESTING",
+      "content": {
+       "statement": "s",
+       "mechanism": "m",
+       "generalization": "g",
+       "shortcut_risks": "r",
+       "test_plan": "t",
+       "conclusion": ""
+      },
+      "hypothesis_id": null,
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.556662+00:00",
+      "updated_at": "2026-10-15T15:13:15.558030+00:00",
+      "tags": []
+     }
+    ],
+    "edges": [
+     {
+      "id": "derived:H001:TESTED_BY:E001",
+      "source_id": "H001",
+      "target_id": "E001",
+      "type": "TESTED_BY",
+      "description": "",
+      "derived": true,
+      "created_by": "Limina",
+      "created_at": null
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"nodes\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    },\n    {\n      \"id\": \"H001\",\n      \"kind\": \"H\",\n      \"title\": \"H\",\n      \"status\": \"TESTING\",\n      \"content\": {\n        \"statement\": \"s\",\n        \"mechanism\": \"m\",\n        \"generalization\": \"g\",\n        \"shortcut_risks\": \"r\",\n        \"test_plan\": \"t\",\n        \"conclusion\": \"\"\n      },\n      \"hypothesis_id\": null,\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.556662+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.558030+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"edges\": [\n    {\n      \"id\": \"derived:H001:TESTED_BY:E001\",\n      \"source_id\": \"H001\",\n      \"target_id\": \"E001\",\n      \"type\": \"TESTED_BY\",\n      \"description\": \"\",\n      \"derived\": true,\n      \"created_by\": \"Limina\",\n      \"created_at\": null\n    }\n  ]\n}"
+   ]
+  },
+  "review": {
+   "tool": "limina_review_project",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "project": {
+     "slug": "p",
+     "name": "P",
+     "mission": "M",
+     "success_criteria": "S",
+     "context": "",
+     "runtime": "codex",
+     "status": "CREATED",
+     "current_objective": "M",
+     "next_step": "Frame the first falsifiable hypothesis.",
+     "blocker": "None",
+     "created_at": "2026-10-15T15:13:15.532836+00:00",
+     "updated_at": "2026-10-15T15:13:15.533289+00:00",
+     "role": "OWNER"
+    },
+    "knowledge": {
+     "E": {
+      "RUNNING": 1
+     },
+     "H": {
+      "TESTING": 1
+     }
+    },
+    "active_work": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     }
+    ],
+    "pending_guidance": 3,
+    "event_cursor": 10,
+    "resources": [
+     {
+      "name": "S",
+      "type": "SECRET",
+      "status": "ACTIVE",
+      "created_at": "2026-10-15T15:13:15.552326+00:00",
+      "updated_at": "2026-10-15T15:13:15.552328+00:00",
+      "configured": true
+     },
+     {
+      "name": "V",
+      "type": "VARIABLE",
+      "status": "ACTIVE",
+      "created_at": "2026-10-15T15:13:15.544719+00:00",
+      "updated_at": "2026-10-15T15:13:15.544720+00:00",
+      "value": "x"
+     }
+    ],
+    "hypotheses": [
+     {
+      "id": "H001",
+      "kind": "H",
+      "title": "H",
+      "status": "TESTING",
+      "content": {
+       "statement": "s",
+       "mechanism": "m",
+       "generalization": "g",
+       "shortcut_risks": "r",
+       "test_plan": "t",
+       "conclusion": ""
+      },
+      "hypothesis_id": null,
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.556662+00:00",
+      "updated_at": "2026-10-15T15:13:15.558030+00:00",
+      "tags": []
+     }
+    ],
+    "experiments": [
+     {
+      "id": "E001",
+      "kind": "E",
+      "title": "E",
+      "status": "RUNNING",
+      "content": {
+       "objective": "o",
+       "procedure": "p",
+       "success_criteria": "s",
+       "guardrails": "g",
+       "results": "",
+       "analysis": "",
+       "decision": "",
+       "completed_at": null
+      },
+      "hypothesis_id": "H001",
+      "experiment_id": null,
+      "created_at": "2026-10-15T15:13:15.559076+00:00",
+      "updated_at": "2026-10-15T15:13:15.559822+00:00",
+      "tags": []
+     }
+    ],
+    "findings": [],
+    "recent_activity": [
+     {
+      "sequence": 1,
+      "type": "project.created",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "slug": "p",
+       "name": "P",
+       "runtime": "codex"
+      },
+      "created_at": "2026-10-15T15:13:15.533554+00:00"
+     },
+     {
+      "sequence": 2,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "STEER",
+       "sequence": 1,
+       "body": "go",
+       "guidance_id": "57c10f90-951f-4659-aeb0-bddb7e87281e"
+      },
+      "created_at": "2026-10-15T15:13:15.542189+00:00"
+     },
+     {
+      "sequence": 3,
+      "type": "resource.variable_set",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "resource_id": "4fc85616-1454-49e9-9c5e-11649059a22f",
+       "name": "V",
+       "type": "VARIABLE"
+      },
+      "created_at": "2026-10-15T15:13:15.544953+00:00"
+     },
+     {
+      "sequence": 4,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "ANSWER",
+       "sequence": 2,
+       "body": "Project variable 'V' was set.",
+       "origin": "resource",
+       "guidance_id": "3b634f63-c9e4-4ca6-a2b2-621fb63c344f"
+      },
+      "created_at": "2026-10-15T15:13:15.545635+00:00"
+     },
+     {
+      "sequence": 5,
+      "type": "resource.secret_set",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "resource_id": "34945328-dd39-4fb9-9b14-d4540f518612",
+       "name": "S",
+       "type": "SECRET"
+      },
+      "created_at": "2026-10-15T15:13:15.552488+00:00"
+     },
+     {
+      "sequence": 6,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "ANSWER",
+       "sequence": 3,
+       "body": "Project secret 'S' was set.",
+       "origin": "resource",
+       "guidance_id": "08069056-36d8-4fc9-8e62-e3a6c46c0464"
+      },
+      "created_at": "2026-10-15T15:13:15.553055+00:00"
+     },
+     {
+      "sequence": 7,
+      "type": "hypothesis.created",
+      "actor": "Limina",
+      "artifact_id": "H001",
+      "detail": {
+       "title": "H"
+      },
+      "created_at": "2026-10-15T15:13:15.557153+00:00"
+     },
+     {
+      "sequence": 8,
+      "type": "experiment.created",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {
+       "hypothesis_id": "H001",
+       "title": "E"
+      },
+      "created_at": "2026-10-15T15:13:15.559356+00:00"
+     },
+     {
+      "sequence": 9,
+      "type": "experiment.claimed",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {},
+      "created_at": "2026-10-15T15:13:15.560533+00:00"
+     },
+     {
+      "sequence": 10,
+      "type": "experiment.observed",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {
+       "observation_id": "6d7c78b5-3294-4f33-8864-682eb5152c56",
+       "evidence_ref": null
+      },
+      "created_at": "2026-10-15T15:13:15.562177+00:00"
+     }
+    ],
+    "knowledge_cursor": null,
+    "knowledge_total": 2
+   },
+   "texts": [
+    "{\n  \"project\": {\n    \"slug\": \"p\",\n    \"name\": \"P\",\n    \"mission\": \"M\",\n    \"success_criteria\": \"S\",\n    \"context\": \"\",\n    \"runtime\": \"codex\",\n    \"status\": \"CREATED\",\n    \"current_objective\": \"M\",\n    \"next_step\": \"Frame the first falsifiable hypothesis.\",\n    \"blocker\": \"None\",\n    \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n    \"updated_at\": \"2026-10-15T15:13:15.533289+00:00\",\n    \"role\": \"OWNER\"\n  },\n  \"knowledge\": {\n    \"E\": {\n      \"RUNNING\": 1\n    },\n    \"H\": {\n      \"TESTING\": 1\n    }\n  },\n  \"active_work\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"pending_guidance\": 3,\n  \"event_cursor\": 10,\n  \"resources\": [\n    {\n      \"name\": \"S\",\n      \"type\": \"SECRET\",\n      \"status\": \"ACTIVE\",\n      \"created_at\": \"2026-10-15T15:13:15.552326+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.552328+00:00\",\n      \"configured\": true\n    },\n    {\n      \"name\": \"V\",\n      \"type\": \"VARIABLE\",\n      \"status\": \"ACTIVE\",\n      \"created_at\": \"2026-10-15T15:13:15.544719+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.544720+00:00\",\n      \"value\": \"x\"\n    }\n  ],\n  \"hypotheses\": [\n    {\n      \"id\": \"H001\",\n      \"kind\": \"H\",\n      \"title\": \"H\",\n      \"status\": \"TESTING\",\n      \"content\": {\n        \"statement\": \"s\",\n        \"mechanism\": \"m\",\n        \"generalization\": \"g\",\n        \"shortcut_risks\": \"r\",\n        \"test_plan\": \"t\",\n        \"conclusion\": \"\"\n      },\n      \"hypothesis_id\": null,\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.556662+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.558030+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"experiments\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"findings\": [],\n  \"recent_activity\": [\n    {\n      \"sequence\": 1,\n      \"type\": \"project.created\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"slug\": \"p\",\n        \"name\": \"P\",\n        \"runtime\": \"codex\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.533554+00:00\"\n    },\n    {\n      \"sequence\": 2,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"STEER\",\n        \"sequence\": 1,\n        \"body\": \"go\",\n        \"guidance_id\": \"57c10f90-951f-4659-aeb0-bddb7e87281e\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.542189+00:00\"\n    },\n    {\n      \"sequence\": 3,\n      \"type\": \"resource.variable_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"4fc85616-1454-49e9-9c5e-11649059a22f\",\n        \"name\": \"V\",\n        \"type\": \"VARIABLE\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.544953+00:00\"\n    },\n    {\n      \"sequence\": 4,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 2,\n        \"body\": \"Project variable 'V' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"3b634f63-c9e4-4ca6-a2b2-621fb63c344f\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.545635+00:00\"\n    },\n    {\n      \"sequence\": 5,\n      \"type\": \"resource.secret_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"34945328-dd39-4fb9-9b14-d4540f518612\",\n        \"name\": \"S\",\n        \"type\": \"SECRET\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.552488+00:00\"\n    },\n    {\n      \"sequence\": 6,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 3,\n        \"body\": \"Project secret 'S' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"08069056-36d8-4fc9-8e62-e3a6c46c0464\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.553055+00:00\"\n    },\n    {\n      \"sequence\": 7,\n      \"type\": \"hypothesis.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"H001\",\n      \"detail\": {\n        \"title\": \"H\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.557153+00:00\"\n    },\n    {\n      \"sequence\": 8,\n      \"type\": \"experiment.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"hypothesis_id\": \"H001\",\n        \"title\": \"E\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.559356+00:00\"\n    },\n    {\n      \"sequence\": 9,\n      \"type\": \"experiment.claimed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {},\n      \"created_at\": \"2026-10-15T15:13:15.560533+00:00\"\n    },\n    {\n      \"sequence\": 10,\n      \"type\": \"experiment.observed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"observation_id\": \"6d7c78b5-3294-4f33-8864-682eb5152c56\",\n        \"evidence_ref\": null\n      },\n      \"created_at\": \"2026-10-15T15:13:15.562177+00:00\"\n    }\n  ],\n  \"knowledge_cursor\": null,\n  \"knowledge_total\": 2\n}"
+   ]
+  },
+  "activity": {
+   "tool": "limina_list_activity",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "events": [
+     {
+      "sequence": 1,
+      "type": "project.created",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "slug": "p",
+       "name": "P",
+       "runtime": "codex"
+      },
+      "created_at": "2026-10-15T15:13:15.533554+00:00"
+     },
+     {
+      "sequence": 2,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "STEER",
+       "sequence": 1,
+       "body": "go",
+       "guidance_id": "57c10f90-951f-4659-aeb0-bddb7e87281e"
+      },
+      "created_at": "2026-10-15T15:13:15.542189+00:00"
+     },
+     {
+      "sequence": 3,
+      "type": "resource.variable_set",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "resource_id": "4fc85616-1454-49e9-9c5e-11649059a22f",
+       "name": "V",
+       "type": "VARIABLE"
+      },
+      "created_at": "2026-10-15T15:13:15.544953+00:00"
+     },
+     {
+      "sequence": 4,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "ANSWER",
+       "sequence": 2,
+       "body": "Project variable 'V' was set.",
+       "origin": "resource",
+       "guidance_id": "3b634f63-c9e4-4ca6-a2b2-621fb63c344f"
+      },
+      "created_at": "2026-10-15T15:13:15.545635+00:00"
+     },
+     {
+      "sequence": 5,
+      "type": "resource.secret_set",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "resource_id": "34945328-dd39-4fb9-9b14-d4540f518612",
+       "name": "S",
+       "type": "SECRET"
+      },
+      "created_at": "2026-10-15T15:13:15.552488+00:00"
+     },
+     {
+      "sequence": 6,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "ANSWER",
+       "sequence": 3,
+       "body": "Project secret 'S' was set.",
+       "origin": "resource",
+       "guidance_id": "08069056-36d8-4fc9-8e62-e3a6c46c0464"
+      },
+      "created_at": "2026-10-15T15:13:15.553055+00:00"
+     },
+     {
+      "sequence": 7,
+      "type": "hypothesis.created",
+      "actor": "Limina",
+      "artifact_id": "H001",
+      "detail": {
+       "title": "H"
+      },
+      "created_at": "2026-10-15T15:13:15.557153+00:00"
+     },
+     {
+      "sequence": 8,
+      "type": "experiment.created",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {
+       "hypothesis_id": "H001",
+       "title": "E"
+      },
+      "created_at": "2026-10-15T15:13:15.559356+00:00"
+     },
+     {
+      "sequence": 9,
+      "type": "experiment.claimed",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {},
+      "created_at": "2026-10-15T15:13:15.560533+00:00"
+     },
+     {
+      "sequence": 10,
+      "type": "experiment.observed",
+      "actor": "Limina",
+      "artifact_id": "E001",
+      "detail": {
+       "observation_id": "6d7c78b5-3294-4f33-8864-682eb5152c56",
+       "evidence_ref": null
+      },
+      "created_at": "2026-10-15T15:13:15.562177+00:00"
+     }
+    ],
+    "cursor": 10,
+    "has_earlier": false
+   },
+   "texts": [
+    "{\n  \"events\": [\n    {\n      \"sequence\": 1,\n      \"type\": \"project.created\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"slug\": \"p\",\n        \"name\": \"P\",\n        \"runtime\": \"codex\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.533554+00:00\"\n    },\n    {\n      \"sequence\": 2,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"STEER\",\n        \"sequence\": 1,\n        \"body\": \"go\",\n        \"guidance_id\": \"57c10f90-951f-4659-aeb0-bddb7e87281e\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.542189+00:00\"\n    },\n    {\n      \"sequence\": 3,\n      \"type\": \"resource.variable_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"4fc85616-1454-49e9-9c5e-11649059a22f\",\n        \"name\": \"V\",\n        \"type\": \"VARIABLE\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.544953+00:00\"\n    },\n    {\n      \"sequence\": 4,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 2,\n        \"body\": \"Project variable 'V' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"3b634f63-c9e4-4ca6-a2b2-621fb63c344f\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.545635+00:00\"\n    },\n    {\n      \"sequence\": 5,\n      \"type\": \"resource.secret_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"34945328-dd39-4fb9-9b14-d4540f518612\",\n        \"name\": \"S\",\n        \"type\": \"SECRET\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.552488+00:00\"\n    },\n    {\n      \"sequence\": 6,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 3,\n        \"body\": \"Project secret 'S' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"08069056-36d8-4fc9-8e62-e3a6c46c0464\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.553055+00:00\"\n    },\n    {\n      \"sequence\": 7,\n      \"type\": \"hypothesis.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"H001\",\n      \"detail\": {\n        \"title\": \"H\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.557153+00:00\"\n    },\n    {\n      \"sequence\": 8,\n      \"type\": \"experiment.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"hypothesis_id\": \"H001\",\n        \"title\": \"E\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.559356+00:00\"\n    },\n    {\n      \"sequence\": 9,\n      \"type\": \"experiment.claimed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {},\n      \"created_at\": \"2026-10-15T15:13:15.560533+00:00\"\n    },\n    {\n      \"sequence\": 10,\n      \"type\": \"experiment.observed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"observation_id\": \"6d7c78b5-3294-4f33-8864-682eb5152c56\",\n        \"evidence_ref\": null\n      },\n      \"created_at\": \"2026-10-15T15:13:15.562177+00:00\"\n    }\n  ],\n  \"cursor\": 10,\n  \"has_earlier\": false\n}"
+   ]
+  },
+  "activity_after": {
+   "tool": "limina_list_activity",
+   "arguments": {
+    "project": "p",
+    "after": 2,
+    "limit": 2
+   },
+   "is_error": false,
+   "structured": {
+    "events": [
+     {
+      "sequence": 3,
+      "type": "resource.variable_set",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "resource_id": "4fc85616-1454-49e9-9c5e-11649059a22f",
+       "name": "V",
+       "type": "VARIABLE"
+      },
+      "created_at": "2026-10-15T15:13:15.544953+00:00"
+     },
+     {
+      "sequence": 4,
+      "type": "guidance.received",
+      "actor": "maya",
+      "artifact_id": null,
+      "detail": {
+       "kind": "ANSWER",
+       "sequence": 2,
+       "body": "Project variable 'V' was set.",
+       "origin": "resource",
+       "guidance_id": "3b634f63-c9e4-4ca6-a2b2-621fb63c344f"
+      },
+      "created_at": "2026-10-15T15:13:15.545635+00:00"
+     }
+    ],
+    "cursor": 4,
+    "has_earlier": true
+   },
+   "texts": [
+    "{\n  \"events\": [\n    {\n      \"sequence\": 3,\n      \"type\": \"resource.variable_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"4fc85616-1454-49e9-9c5e-11649059a22f\",\n        \"name\": \"V\",\n        \"type\": \"VARIABLE\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.544953+00:00\"\n    },\n    {\n      \"sequence\": 4,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 2,\n        \"body\": \"Project variable 'V' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"3b634f63-c9e4-4ca6-a2b2-621fb63c344f\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.545635+00:00\"\n    }\n  ],\n  \"cursor\": 4,\n  \"has_earlier\": true\n}"
+   ]
+  },
+  "guidance": {
+   "tool": "limina_list_guidance",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "id": "08069056-36d8-4fc9-8e62-e3a6c46c0464",
+      "sequence": 3,
+      "kind": "ANSWER",
+      "body": "Project secret 'S' was set.",
+      "actor": "maya",
+      "status": "PENDING",
+      "created_at": "2026-10-15T15:13:15.552917+00:00",
+      "acknowledged_at": null
+     },
+     {
+      "id": "3b634f63-c9e4-4ca6-a2b2-621fb63c344f",
+      "sequence": 2,
+      "kind": "ANSWER",
+      "body": "Project variable 'V' was set.",
+      "actor": "maya",
+      "status": "PENDING",
+      "created_at": "2026-10-15T15:13:15.545466+00:00",
+      "acknowledged_at": null
+     },
+     {
+      "id": "57c10f90-951f-4659-aeb0-bddb7e87281e",
+      "sequence": 1,
+      "kind": "STEER",
+      "body": "go",
+      "actor": "maya",
+      "status": "PENDING",
+      "created_at": "2026-10-15T15:13:15.541901+00:00",
+      "acknowledged_at": null
+     }
+    ],
+    "next_cursor": null,
+    "total": 3
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"id\": \"08069056-36d8-4fc9-8e62-e3a6c46c0464\",\n      \"sequence\": 3,\n      \"kind\": \"ANSWER\",\n      \"body\": \"Project secret 'S' was set.\",\n      \"actor\": \"maya\",\n      \"status\": \"PENDING\",\n      \"created_at\": \"2026-10-15T15:13:15.552917+00:00\",\n      \"acknowledged_at\": null\n    },\n    {\n      \"id\": \"3b634f63-c9e4-4ca6-a2b2-621fb63c344f\",\n      \"sequence\": 2,\n      \"kind\": \"ANSWER\",\n      \"body\": \"Project variable 'V' was set.\",\n      \"actor\": \"maya\",\n      \"status\": \"PENDING\",\n      \"created_at\": \"2026-10-15T15:13:15.545466+00:00\",\n      \"acknowledged_at\": null\n    },\n    {\n      \"id\": \"57c10f90-951f-4659-aeb0-bddb7e87281e\",\n      \"sequence\": 1,\n      \"kind\": \"STEER\",\n      \"body\": \"go\",\n      \"actor\": \"maya\",\n      \"status\": \"PENDING\",\n      \"created_at\": \"2026-10-15T15:13:15.541901+00:00\",\n      \"acknowledged_at\": null\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 3\n}"
+   ]
+  },
+  "source": {
+   "tool": "limina_register_project_source",
+   "arguments": {
+    "project": "p",
+    "name": "Docs",
+    "source_type": "URL",
+    "uri": "https://example.test/x"
+   },
+   "is_error": false,
+   "structured": {
+    "id": "eb5473d8-6d59-4d12-9674-c0a33cb7a44e",
+    "name": "Docs",
+    "type": "URL",
+    "uri": "https://example.test/x",
+    "media_type": null,
+    "metadata": {},
+    "status": "ACTIVE",
+    "created_at": "2026-10-15T15:13:15.586214+00:00",
+    "updated_at": "2026-10-15T15:13:15.586216+00:00"
+   },
+   "texts": [
+    "{\n  \"id\": \"eb5473d8-6d59-4d12-9674-c0a33cb7a44e\",\n  \"name\": \"Docs\",\n  \"type\": \"URL\",\n  \"uri\": \"https://example.test/x\",\n  \"media_type\": null,\n  \"metadata\": {},\n  \"status\": \"ACTIVE\",\n  \"created_at\": \"2026-10-15T15:13:15.586214+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.586216+00:00\"\n}"
+   ]
+  },
+  "preflight": {
+   "tool": "limina_preflight_project",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "ready": true,
+    "checks": [
+     {
+      "name": "mission",
+      "status": "PASS",
+      "detail": "Mission is defined."
+     },
+     {
+      "name": "success_criteria",
+      "status": "PASS",
+      "detail": "Success criteria are defined."
+     },
+     {
+      "name": "runtime",
+      "status": "WARN",
+      "detail": "Sign in with ChatGPT, or set OPENAI_API_KEY or CODEX_ACCESS_TOKEN, to enable Codex."
+     },
+     {
+      "name": "sources",
+      "status": "PASS",
+      "detail": "1 source(s) registered."
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"ready\": true,\n  \"checks\": [\n    {\n      \"name\": \"mission\",\n      \"status\": \"PASS\",\n      \"detail\": \"Mission is defined.\"\n    },\n    {\n      \"name\": \"success_criteria\",\n      \"status\": \"PASS\",\n      \"detail\": \"Success criteria are defined.\"\n    },\n    {\n      \"name\": \"runtime\",\n      \"status\": \"WARN\",\n      \"detail\": \"Sign in with ChatGPT, or set OPENAI_API_KEY or CODEX_ACCESS_TOKEN, to enable Codex.\"\n    },\n    {\n      \"name\": \"sources\",\n      \"status\": \"PASS\",\n      \"detail\": \"1 source(s) registered.\"\n    }\n  ]\n}"
+   ]
+  },
+  "start": {
+   "tool": "limina_manage_project",
+   "arguments": {
+    "project": "p",
+    "action": "start"
+   },
+   "is_error": false,
+   "structured": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "",
+    "runtime": "codex",
+    "status": "RUNNING",
+    "current_objective": "M",
+    "next_step": "Frame the first falsifiable hypothesis.",
+    "blocker": "None",
+    "created_at": "2026-10-15T15:13:15.532836+00:00",
+    "updated_at": "2026-10-15T15:13:16.037497+00:00",
+    "role": "OWNER"
+   },
+   "texts": [
+    "{\n  \"slug\": \"p\",\n  \"name\": \"P\",\n  \"mission\": \"M\",\n  \"success_criteria\": \"S\",\n  \"context\": \"\",\n  \"runtime\": \"codex\",\n  \"status\": \"RUNNING\",\n  \"current_objective\": \"M\",\n  \"next_step\": \"Frame the first falsifiable hypothesis.\",\n  \"blocker\": \"None\",\n  \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:16.037497+00:00\",\n  \"role\": \"OWNER\"\n}"
+   ]
+  },
+  "runs": {
+   "tool": "limina_list_runtime_runs",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "id": "a9e0002d-23a4-4e1c-aa8a-206a32611edf",
+      "runtime": "codex",
+      "model": "test-model",
+      "status": "COMPLETED",
+      "summary": "Done.",
+      "error": null,
+      "usage": {
+       "input_tokens": 1,
+       "output_tokens": 2,
+       "cached_input_tokens": null,
+       "reasoning_output_tokens": null,
+       "total_tokens": null,
+       "cost_microusd": null,
+       "usage_source": null,
+       "cost_source": null
+      },
+      "tool_calls": 0,
+      "retry_count": 0,
+      "started_at": "2026-10-15T15:13:16.041965+00:00",
+      "completed_at": "2026-10-15T15:13:16.053981+00:00",
+      "duration_ms": 12
+     }
+    ],
+    "next_cursor": null,
+    "total": 1
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"id\": \"a9e0002d-23a4-4e1c-aa8a-206a32611edf\",\n      \"runtime\": \"codex\",\n      \"model\": \"test-model\",\n      \"status\": \"COMPLETED\",\n      \"summary\": \"Done.\",\n      \"error\": null,\n      \"usage\": {\n        \"input_tokens\": 1,\n        \"output_tokens\": 2,\n        \"cached_input_tokens\": null,\n        \"reasoning_output_tokens\": null,\n        \"total_tokens\": null,\n        \"cost_microusd\": null,\n        \"usage_source\": null,\n        \"cost_source\": null\n      },\n      \"tool_calls\": 0,\n      \"retry_count\": 0,\n      \"started_at\": \"2026-10-15T15:13:16.041965+00:00\",\n      \"completed_at\": \"2026-10-15T15:13:16.053981+00:00\",\n      \"duration_ms\": 12\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 1\n}"
+   ]
+  },
+  "analytics": {
+   "tool": "limina_get_project_analytics",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "window": {
+     "days": 30,
+     "since": "2026-09-15T15:13:16.061982+00:00"
+    },
+    "runs": {
+     "total": 1,
+     "by_status": {
+      "COMPLETED": 1
+     },
+     "success_rate": 1.0,
+     "average_duration_ms": 12,
+     "p95_duration_ms": 12,
+     "input_tokens": 1,
+     "output_tokens": 2,
+     "reasoning_output_tokens": null,
+     "total_tokens": null,
+     "cost_microusd": null,
+     "usage_sources": [],
+     "cost_sources": [],
+     "tool_calls": 0
+    },
+    "knowledge": {
+     "created": 2,
+     "by_kind": {
+      "E": 1,
+      "H": 1
+     },
+     "by_status": {
+      "RUNNING": 1,
+      "TESTING": 1
+     }
+    },
+    "guidance": {
+     "total": 3,
+     "pending": 0,
+     "average_acknowledgement_seconds": 0
+    },
+    "timeseries": [
+     {
+      "date": "2026-10-15",
+      "runs": 1,
+      "completed_runs": 1,
+      "failed_runs": 0,
+      "artifacts": 2,
+      "guidance": 3
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"window\": {\n    \"days\": 30,\n    \"since\": \"2026-09-15T15:13:16.061982+00:00\"\n  },\n  \"runs\": {\n    \"total\": 1,\n    \"by_status\": {\n      \"COMPLETED\": 1\n    },\n    \"success_rate\": 1.0,\n    \"average_duration_ms\": 12,\n    \"p95_duration_ms\": 12,\n    \"input_tokens\": 1,\n    \"output_tokens\": 2,\n    \"reasoning_output_tokens\": null,\n    \"total_tokens\": null,\n    \"cost_microusd\": null,\n    \"usage_sources\": [],\n    \"cost_sources\": [],\n    \"tool_calls\": 0\n  },\n  \"knowledge\": {\n    \"created\": 2,\n    \"by_kind\": {\n      \"E\": 1,\n      \"H\": 1\n    },\n    \"by_status\": {\n      \"RUNNING\": 1,\n      \"TESTING\": 1\n    }\n  },\n  \"guidance\": {\n    \"total\": 3,\n    \"pending\": 0,\n    \"average_acknowledgement_seconds\": 0\n  },\n  \"timeseries\": [\n    {\n      \"date\": \"2026-10-15\",\n      \"runs\": 1,\n      \"completed_runs\": 1,\n      \"failed_runs\": 0,\n      \"artifacts\": 2,\n      \"guidance\": 3\n    }\n  ]\n}"
+   ]
+  },
+  "members": {
+   "tool": "limina_list_project_members",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": false,
+   "structured": {
+    "result": [
+     {
+      "subject": "local:maya",
+      "display_name": "maya",
+      "email": null,
+      "role": "OWNER",
+      "created_at": "2026-10-15T15:13:15.533779+00:00",
+      "updated_at": "2026-10-15T15:13:15.533780+00:00"
+     }
+    ]
+   },
+   "texts": [
+    "{\n  \"subject\": \"local:maya\",\n  \"display_name\": \"maya\",\n  \"email\": null,\n  \"role\": \"OWNER\",\n  \"created_at\": \"2026-10-15T15:13:15.533779+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.533780+00:00\"\n}"
+   ]
+  },
+  "set_member": {
+   "tool": "limina_set_project_member",
+   "arguments": {
+    "project": "p",
+    "subject": "local:sam",
+    "display_name": "Sam",
+    "role": "VIEWER"
+   },
+   "is_error": false,
+   "structured": {
+    "subject": "local:sam",
+    "display_name": "Sam",
+    "email": null,
+    "role": "VIEWER",
+    "created_at": "2026-10-15T15:13:16.067716+00:00",
+    "updated_at": "2026-10-15T15:13:16.067719+00:00"
+   },
+   "texts": [
+    "{\n  \"subject\": \"local:sam\",\n  \"display_name\": \"Sam\",\n  \"email\": null,\n  \"role\": \"VIEWER\",\n  \"created_at\": \"2026-10-15T15:13:16.067716+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:16.067719+00:00\"\n}"
+   ]
+  },
+  "remove_variable": {
+   "tool": "limina_remove_project_resource",
+   "arguments": {
+    "project": "p",
+    "name": "V"
+   },
+   "is_error": false,
+   "structured": {
+    "name": "V",
+    "type": "VARIABLE",
+    "status": "REMOVED",
+    "created_at": "2026-10-15T15:13:15.544719+00:00",
+    "updated_at": "2026-10-15T15:13:16.070041+00:00",
+    "value": null
+   },
+   "texts": [
+    "{\n  \"name\": \"V\",\n  \"type\": \"VARIABLE\",\n  \"status\": \"REMOVED\",\n  \"created_at\": \"2026-10-15T15:13:15.544719+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:16.070041+00:00\",\n  \"value\": null\n}"
+   ]
+  },
+  "archive": {
+   "tool": "limina_manage_project",
+   "arguments": {
+    "project": "p",
+    "action": "archive"
+   },
+   "is_error": false,
+   "structured": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "",
+    "runtime": "codex",
+    "status": "ARCHIVED",
+    "current_objective": "O",
+    "next_step": "N",
+    "blocker": "None",
+    "created_at": "2026-10-15T15:13:15.532836+00:00",
+    "updated_at": "2026-10-15T15:13:16.073204+00:00",
+    "role": "OWNER"
+   },
+   "texts": [
+    "{\n  \"slug\": \"p\",\n  \"name\": \"P\",\n  \"mission\": \"M\",\n  \"success_criteria\": \"S\",\n  \"context\": \"\",\n  \"runtime\": \"codex\",\n  \"status\": \"ARCHIVED\",\n  \"current_objective\": \"O\",\n  \"next_step\": \"N\",\n  \"blocker\": \"None\",\n  \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:16.073204+00:00\",\n  \"role\": \"OWNER\"\n}"
+   ]
+  },
+  "list_archived": {
+   "tool": "limina_list_projects",
+   "arguments": {
+    "include_archived": true
+   },
+   "is_error": false,
+   "structured": {
+    "items": [
+     {
+      "slug": "p",
+      "name": "P",
+      "mission": "M",
+      "success_criteria": "S",
+      "context": "",
+      "runtime": "codex",
+      "status": "ARCHIVED",
+      "current_objective": "O",
+      "next_step": "N",
+      "blocker": "None",
+      "created_at": "2026-10-15T15:13:15.532836+00:00",
+      "updated_at": "2026-10-15T15:13:16.073204+00:00",
+      "role": "OWNER"
+     }
+    ],
+    "next_cursor": null,
+    "total": 1
+   },
+   "texts": [
+    "{\n  \"items\": [\n    {\n      \"slug\": \"p\",\n      \"name\": \"P\",\n      \"mission\": \"M\",\n      \"success_criteria\": \"S\",\n      \"context\": \"\",\n      \"runtime\": \"codex\",\n      \"status\": \"ARCHIVED\",\n      \"current_objective\": \"O\",\n      \"next_step\": \"N\",\n      \"blocker\": \"None\",\n      \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:16.073204+00:00\",\n      \"role\": \"OWNER\"\n    }\n  ],\n  \"next_cursor\": null,\n  \"total\": 1\n}"
+   ]
+  },
+  "no_members": {
+   "tool": "limina_list_project_members",
+   "arguments": {
+    "project": "missing"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_list_project_members: Project 'missing' does not exist."
+   ]
+  },
+  "missing_project": {
+   "tool": "limina_get_project_status",
+   "arguments": {
+    "project": "missing"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_get_project_status: Challenge 'missing' does not exist."
+   ]
+  },
+  "missing_artifact": {
+   "tool": "limina_get_knowledge",
+   "arguments": {
+    "project": "p",
+    "artifact_id": "H404"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_get_knowledge: Artifact 'H404' does not exist."
+   ]
+  },
+  "missing_argument": {
+   "tool": "limina_get_project_status",
+   "arguments": {},
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_get_project_status: 1 validation error for limina_get_project_statusArguments\nproject\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+   ]
+  },
+  "bad_choice": {
+   "tool": "limina_manage_project",
+   "arguments": {
+    "project": "p",
+    "action": "explode"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_manage_project: 1 validation error for limina_manage_projectArguments\naction\n  Input should be 'start', 'pause', 'resume', 'stop' or 'archive' [type=literal_error, input_value='explode', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error"
+   ]
+  },
+  "bad_limit": {
+   "tool": "limina_review_project",
+   "arguments": {
+    "project": "p",
+    "limit": 0
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_review_project: 1 validation error for limina_review_projectArguments\nlimit\n  Input should be greater than or equal to 1 [type=greater_than_equal, input_value=0, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.13/v/greater_than_equal"
+   ]
+  },
+  "long_key": {
+   "tool": "limina_steer_project",
+   "arguments": {
+    "project": "p",
+    "message": "m",
+    "idempotency_key": "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Error executing tool limina_steer_project: 1 validation error for limina_steer_projectArguments\nidempotency_key\n  String should have at most 55 characters [type=string_too_long, input_value='kkkkkkkkkkkkkkkkkkkkkkkk...kkkkkkkkkkkkkkkkkkkkkkk', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/string_too_long"
+   ]
+  },
+  "unknown_tool": {
+   "tool": "limina_set_project_secret",
+   "arguments": {
+    "project": "p"
+   },
+   "is_error": true,
+   "structured": null,
+   "texts": [
+    "Unknown tool: limina_set_project_secret"
+   ]
+  },
+  "read_projects": {
+   "uri": "limina://projects",
+   "result": {
+    "contents": [
+     {
+      "uri": "limina://projects",
+      "mimeType": "application/json",
+      "text": "{\n  \"items\": [],\n  \"next_cursor\": null,\n  \"total\": 0\n}"
+     }
+    ]
+   }
+  },
+  "read_status": {
+   "uri": "limina://projects/p/status",
+   "result": {
+    "contents": [
+     {
+      "uri": "limina://projects/p/status",
+      "mimeType": "application/json",
+      "text": "{\n  \"project\": {\n    \"slug\": \"p\",\n    \"name\": \"P\",\n    \"mission\": \"M\",\n    \"success_criteria\": \"S\",\n    \"context\": \"\",\n    \"runtime\": \"codex\",\n    \"status\": \"ARCHIVED\",\n    \"current_objective\": \"O\",\n    \"next_step\": \"N\",\n    \"blocker\": \"None\",\n    \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n    \"updated_at\": \"2026-10-15T15:13:16.073204+00:00\",\n    \"role\": \"OWNER\"\n  },\n  \"knowledge\": {\n    \"E\": {\n      \"RUNNING\": 1\n    },\n    \"H\": {\n      \"TESTING\": 1\n    }\n  },\n  \"active_work\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"pending_guidance\": 1,\n  \"event_cursor\": 23\n}"
+     }
+    ]
+   }
+  },
+  "read_review": {
+   "uri": "limina://projects/p/review",
+   "result": {
+    "contents": [
+     {
+      "uri": "limina://projects/p/review",
+      "mimeType": "application/json",
+      "text": "{\n  \"project\": {\n    \"slug\": \"p\",\n    \"name\": \"P\",\n    \"mission\": \"M\",\n    \"success_criteria\": \"S\",\n    \"context\": \"\",\n    \"runtime\": \"codex\",\n    \"status\": \"ARCHIVED\",\n    \"current_objective\": \"O\",\n    \"next_step\": \"N\",\n    \"blocker\": \"None\",\n    \"created_at\": \"2026-10-15T15:13:15.532836+00:00\",\n    \"updated_at\": \"2026-10-15T15:13:16.073204+00:00\",\n    \"role\": \"OWNER\"\n  },\n  \"knowledge\": {\n    \"E\": {\n      \"RUNNING\": 1\n    },\n    \"H\": {\n      \"TESTING\": 1\n    }\n  },\n  \"active_work\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"pending_guidance\": 1,\n  \"event_cursor\": 23,\n  \"resources\": [\n    {\n      \"name\": \"S\",\n      \"type\": \"SECRET\",\n      \"status\": \"ACTIVE\",\n      \"created_at\": \"2026-10-15T15:13:15.552326+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.552328+00:00\",\n      \"configured\": true\n    }\n  ],\n  \"hypotheses\": [\n    {\n      \"id\": \"H001\",\n      \"kind\": \"H\",\n      \"title\": \"H\",\n      \"status\": \"TESTING\",\n      \"content\": {\n        \"statement\": \"s\",\n        \"mechanism\": \"m\",\n        \"generalization\": \"g\",\n        \"shortcut_risks\": \"r\",\n        \"test_plan\": \"t\",\n        \"conclusion\": \"\"\n      },\n      \"hypothesis_id\": null,\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.556662+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.558030+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"experiments\": [\n    {\n      \"id\": \"E001\",\n      \"kind\": \"E\",\n      \"title\": \"E\",\n      \"status\": \"RUNNING\",\n      \"content\": {\n        \"objective\": \"o\",\n        \"procedure\": \"p\",\n        \"success_criteria\": \"s\",\n        \"guardrails\": \"g\",\n        \"results\": \"\",\n        \"analysis\": \"\",\n        \"decision\": \"\",\n        \"completed_at\": null\n      },\n      \"hypothesis_id\": \"H001\",\n      \"experiment_id\": null,\n      \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n      \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n      \"tags\": []\n    }\n  ],\n  \"findings\": [],\n  \"recent_activity\": [\n    {\n      \"sequence\": 1,\n      \"type\": \"project.created\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"slug\": \"p\",\n        \"name\": \"P\",\n        \"runtime\": \"codex\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.533554+00:00\"\n    },\n    {\n      \"sequence\": 2,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"STEER\",\n        \"sequence\": 1,\n        \"body\": \"go\",\n        \"guidance_id\": \"57c10f90-951f-4659-aeb0-bddb7e87281e\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.542189+00:00\"\n    },\n    {\n      \"sequence\": 3,\n      \"type\": \"resource.variable_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"4fc85616-1454-49e9-9c5e-11649059a22f\",\n        \"name\": \"V\",\n        \"type\": \"VARIABLE\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.544953+00:00\"\n    },\n    {\n      \"sequence\": 4,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 2,\n        \"body\": \"Project variable 'V' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"3b634f63-c9e4-4ca6-a2b2-621fb63c344f\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.545635+00:00\"\n    },\n    {\n      \"sequence\": 5,\n      \"type\": \"resource.secret_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"34945328-dd39-4fb9-9b14-d4540f518612\",\n        \"name\": \"S\",\n        \"type\": \"SECRET\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.552488+00:00\"\n    },\n    {\n      \"sequence\": 6,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"ANSWER\",\n        \"sequence\": 3,\n        \"body\": \"Project secret 'S' was set.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"08069056-36d8-4fc9-8e62-e3a6c46c0464\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.553055+00:00\"\n    },\n    {\n      \"sequence\": 7,\n      \"type\": \"hypothesis.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"H001\",\n      \"detail\": {\n        \"title\": \"H\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.557153+00:00\"\n    },\n    {\n      \"sequence\": 8,\n      \"type\": \"experiment.created\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"hypothesis_id\": \"H001\",\n        \"title\": \"E\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.559356+00:00\"\n    },\n    {\n      \"sequence\": 9,\n      \"type\": \"experiment.claimed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {},\n      \"created_at\": \"2026-10-15T15:13:15.560533+00:00\"\n    },\n    {\n      \"sequence\": 10,\n      \"type\": \"experiment.observed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": \"E001\",\n      \"detail\": {\n        \"observation_id\": \"6d7c78b5-3294-4f33-8864-682eb5152c56\",\n        \"evidence_ref\": null\n      },\n      \"created_at\": \"2026-10-15T15:13:15.562177+00:00\"\n    },\n    {\n      \"sequence\": 11,\n      \"type\": \"source.configured\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"source_id\": \"eb5473d8-6d59-4d12-9674-c0a33cb7a44e\",\n        \"name\": \"Docs\",\n        \"type\": \"URL\"\n      },\n      \"created_at\": \"2026-10-15T15:13:15.586418+00:00\"\n    },\n    {\n      \"sequence\": 12,\n      \"type\": \"project.started\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"action\": \"start\",\n        \"status\": \"RUNNING\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.038258+00:00\"\n    },\n    {\n      \"sequence\": 14,\n      \"type\": \"runtime.turn_started\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"summary\": \"Frame the first falsifiable hypothesis.\",\n        \"pending_messages\": 3,\n        \"run_id\": \"a9e0002d-23a4-4e1c-aa8a-206a32611edf\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.047660+00:00\"\n    },\n    {\n      \"sequence\": 15,\n      \"type\": \"project.checkpoint\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"status\": \"RUNNING\",\n        \"current_objective\": \"M\",\n        \"next_step\": \"Frame the first falsifiable hypothesis.\",\n        \"blocker\": \"None\",\n        \"inbox_cursor\": 0,\n        \"messages_acknowledged\": 0,\n        \"wake_at\": null\n      },\n      \"created_at\": \"2026-10-15T15:13:16.050084+00:00\"\n    },\n    {\n      \"sequence\": 16,\n      \"type\": \"runtime.codex\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"summary\": \"hello\",\n        \"kind\": \"message\",\n        \"text\": \"hi\",\n        \"run_id\": \"a9e0002d-23a4-4e1c-aa8a-206a32611edf\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.050854+00:00\"\n    },\n    {\n      \"sequence\": 17,\n      \"type\": \"project.checkpoint\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"status\": \"COMPLETE\",\n        \"current_objective\": \"O\",\n        \"next_step\": \"N\",\n        \"blocker\": \"None\",\n        \"inbox_cursor\": 3,\n        \"messages_acknowledged\": 3,\n        \"wake_at\": null\n      },\n      \"created_at\": \"2026-10-15T15:13:16.053231+00:00\"\n    },\n    {\n      \"sequence\": 18,\n      \"type\": \"runtime.turn_completed\",\n      \"actor\": \"Limina\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"summary\": \"Done.\",\n        \"status\": \"COMPLETE\",\n        \"run_id\": \"a9e0002d-23a4-4e1c-aa8a-206a32611edf\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.053716+00:00\"\n    },\n    {\n      \"sequence\": 20,\n      \"type\": \"project.member_set\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"subject\": \"local:sam\",\n        \"role\": \"VIEWER\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.067877+00:00\"\n    },\n    {\n      \"sequence\": 21,\n      \"type\": \"resource.removed\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"resource_id\": \"4fc85616-1454-49e9-9c5e-11649059a22f\",\n        \"name\": \"V\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.070215+00:00\"\n    },\n    {\n      \"sequence\": 22,\n      \"type\": \"guidance.received\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"kind\": \"STEER\",\n        \"sequence\": 4,\n        \"body\": \"Resource 'V' has been revoked.\",\n        \"origin\": \"resource\",\n        \"guidance_id\": \"8ef270f9-7bb9-45da-b245-4e6c4b91f38c\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.071098+00:00\"\n    },\n    {\n      \"sequence\": 23,\n      \"type\": \"project.archived\",\n      \"actor\": \"maya\",\n      \"artifact_id\": null,\n      \"detail\": {\n        \"action\": \"archive\",\n        \"status\": \"ARCHIVED\"\n      },\n      \"created_at\": \"2026-10-15T15:13:16.073601+00:00\"\n    }\n  ],\n  \"knowledge_cursor\": null,\n  \"knowledge_total\": 2\n}"
+     }
+    ]
+   }
+  },
+  "read_knowledge": {
+   "uri": "limina://projects/p/knowledge/E001",
+   "result": {
+    "contents": [
+     {
+      "uri": "limina://projects/p/knowledge/E001",
+      "mimeType": "application/json",
+      "text": "{\n  \"id\": \"E001\",\n  \"kind\": \"E\",\n  \"title\": \"E\",\n  \"status\": \"RUNNING\",\n  \"content\": {\n    \"objective\": \"o\",\n    \"procedure\": \"p\",\n    \"success_criteria\": \"s\",\n    \"guardrails\": \"g\",\n    \"results\": \"\",\n    \"analysis\": \"\",\n    \"decision\": \"\",\n    \"completed_at\": null\n  },\n  \"hypothesis_id\": \"H001\",\n  \"experiment_id\": null,\n  \"created_at\": \"2026-10-15T15:13:15.559076+00:00\",\n  \"updated_at\": \"2026-10-15T15:13:15.559822+00:00\",\n  \"tags\": [],\n  \"observations\": [\n    {\n      \"id\": \"6d7c78b5-3294-4f33-8864-682eb5152c56\",\n      \"experiment_id\": \"E001\",\n      \"body\": \"obs\",\n      \"evidence_ref\": null,\n      \"actor\": \"limina:x\",\n      \"created_at\": \"2026-10-15T15:13:15.561962+00:00\"\n    }\n  ]\n}"
+     }
+    ]
+   }
+  },
+  "read_snapshot": {
+   "uri": "limina://projects/p/snapshot",
+   "result": {
+    "contents": [
+     {
+      "uri": "limina://projects/p/snapshot",
+      "mimeType": "application/json",
+      "text": "{\n  \"files\": {\n    \"ACTIVE.md\": \"---\\naliases: [\\\"ACTIVE\\\"]\\ntype: active-state\\ncoordinator_version: 5\\n---\\n\\n# Active State\\n\\n## Current Objective\\n\\nO\\n\\n## Next Step\\n\\nN\\n\\n## Blocker\\n\\nNone\\n\\n## Links\\n\\n- Mission: [[CHALLENGE]]\\n- Working Note: [[E001]]\\n- Working Note: [[H001]]\\n\",\n    \"DASHBOARD.md\": \"---\\naliases: [\\\"DASHBOARD\\\"]\\ntype: dashboard\\nchallenge_slug: \\\"p\\\"\\n---\\n\\n# P — Dashboard\\n\\n## Entry Points\\n\\n- [[CHALLENGE]]\\n- [[ACTIVE]]\\n\\n## Hypotheses\\n\\n- [[H001]] — H (TESTING)\\n\\n## Experiments\\n\\n- [[E001]] — E (RUNNING)\\n\\n## Findings\\n\\n- None yet.\\n\\n## Links\\n\\n- Active State: [[ACTIVE]]\\n- Mission: [[CHALLENGE]]\\n\",\n    \"mission/CHALLENGE.md\": \"---\\naliases: [\\\"CHALLENGE\\\"]\\ntype: mission\\nchallenge_id: \\\"95c6a727-0fd5-4e0a-942f-6ed155c3cda9\\\"\\nchallenge_slug: \\\"p\\\"\\n---\\n\\n# Research Mission — P\\n\\n## Objective\\n\\nM\\n\\n## Context\\n\\n_Not recorded._\\n\\n## Success Criteria\\n\\nS\\n\\n## Resources & Boundaries\\n\\n_Managed by the cloud challenge policy._\\n\\n## Constraints\\n\\n- Persist durable evidence through typed Limina commands.\\n- Treat this export as a projection; the challenge service remains canonical.\\n\\n## Blocked Stop Condition\\n\\nStop when the coordinator records a blocker requiring human input.\\n\\n## Links\\n\\n- Active State: [[ACTIVE]]\\n- Dashboard: [[DASHBOARD]]\\n\",\n    \"research/experiments/E001-e.md\": \"---\\nid: \\\"E001\\\"\\naliases: [\\\"E001\\\"]\\ntype: experiment\\nstatus: \\\"RUNNING\\\"\\nhypothesis: \\\"H001\\\"\\ncreated: \\\"2026-10-15\\\"\\ncompleted: \\\"\\\"\\ntags: []\\n---\\n\\n# E001 — E\\n\\n> **Status**: RUNNING\\n> **Hypothesis**: [[H001]]\\n> **Created**: 2026-10-15\\n> **Completed**: \\n\\n## Objective\\n\\no\\n\\n## Setup\\n\\ng\\n\\n## Procedure\\n\\np\\n\\n## Expected Outcome\\n\\ns\\n\\n## Progress\\n\\n- [x] (2026-10-15) obs\\n\\n## Results\\n\\n_Not recorded._\\n\\n## Analysis\\n\\n_Not recorded._\\n\\n## Decision\\n\\n_Not recorded._\\n\\n## Links\\n\\n- Mission: [[CHALLENGE]]\\n- Active State: [[ACTIVE]]\\n- Parent Hypothesis: [[H001]]\\n\",\n    \"research/hypotheses/H001-h.md\": \"---\\nid: \\\"H001\\\"\\naliases: [\\\"H001\\\"]\\ntype: hypothesis\\nstatus: \\\"TESTING\\\"\\ncreated: \\\"2026-10-15\\\"\\nlast_updated: \\\"2026-10-15\\\"\\ntags: []\\n---\\n\\n# H001 — H\\n\\n> **Status**: TESTING\\n> **Created**: 2026-10-15\\n> **Last updated**: 2026-10-15\\n\\n## Statement\\n\\ns\\n\\n## Mechanism\\n\\nm\\n\\n## Why This Might Generalize\\n\\ng\\n\\n## Shortcut Risks\\n\\nr\\n\\n## Test Plan\\n\\nt\\n\\n## Evidence\\n\\n_See linked experiments and findings._\\n\\n## Conclusion\\n\\n_Not recorded._\\n\\n## Links\\n\\n- Mission: [[CHALLENGE]]\\n- Active State: [[ACTIVE]]\\n- Experiment: [[E001]]\\n\"\n  }\n}"
+     }
+    ]
+   }
+  },
+  "read_missing": {
+   "uri": "limina://projects/missing/status",
+   "error": {
+    "code": 0,
+    "message": "Error creating resource from template: Error creating resource from template: Challenge 'missing' does not exist."
+   }
+  },
+  "read_unknown": {
+   "uri": "limina://nothing",
+   "error": {
+    "code": 0,
+    "message": "Unknown resource: limina://nothing"
+   }
+  }
+ },
+ "initialize": {
+  "protocolVersion": "2025-06-18",
+  "capabilities": {
+   "experimental": {},
+   "prompts": {
+    "listChanged": false
+   },
+   "resources": {
+    "subscribe": false,
+    "listChanged": false
+   },
+   "tools": {
+    "listChanged": false
+   }
+  },
+  "serverInfo": {
+   "name": "Limina",
+   "version": "1.28.1"
+  },
+  "instructions": "Operate durable Limina projects at the mission boundary. Review work and knowledge, steer strategy, provide project variables, and manage project lifecycle. Limina owns provider sessions, threads, subagents, workspaces, and execution recovery. Never ask the user to manage those internals. Secret values must be configured through the trusted Limina CLI or REST API, not through model-visible MCP arguments."
+ },
+ "tools": [
+  {
+   "name": "limina_list_projects",
+   "description": "List Limina projects visible to this team instance.",
+   "inputSchema": {
+    "properties": {
+     "include_archived": {
+      "default": false,
+      "title": "Include Archived",
+      "type": "boolean"
+     }
+    },
+    "title": "limina_list_projectsArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_list_projectsDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_get_project_status",
+   "description": "Get a project's mission, state, next step, blocker, and knowledge counts.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_get_project_statusArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_get_project_statusDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_create_project",
+   "description": "Create a durable project; execution begins only after a start action.\n\nActor is the teammate steering the project. Supply a stable idempotency_key\nif the client may retry the request.\n",
+   "inputSchema": {
+    "properties": {
+     "slug": {
+      "title": "Slug",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "mission": {
+      "title": "Mission",
+      "type": "string"
+     },
+     "success_criteria": {
+      "title": "Success Criteria",
+      "type": "string"
+     },
+     "runtime": {
+      "default": "codex",
+      "enum": [
+       "codex",
+       "claude-code"
+      ],
+      "title": "Runtime",
+      "type": "string"
+     },
+     "context": {
+      "default": "",
+      "title": "Context",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "default": "",
+      "maxLength": 55,
+      "title": "Idempotency Key",
+      "type": "string"
+     }
+    },
+    "required": [
+     "slug",
+     "name",
+     "mission",
+     "success_criteria"
+    ],
+    "title": "limina_create_projectArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_create_projectDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_manage_project",
+   "description": "Start, pause, resume, stop, or archive a Limina-managed project.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "action": {
+      "enum": [
+       "start",
+       "pause",
+       "resume",
+       "stop",
+       "archive"
+      ],
+      "title": "Action",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "default": "",
+      "maxLength": 55,
+      "title": "Idempotency Key",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "action"
+    ],
+    "title": "limina_manage_projectArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_manage_projectDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_steer_project",
+   "description": "Give durable feedback or direction to a project, including active work.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "message": {
+      "title": "Message",
+      "type": "string"
+     },
+     "kind": {
+      "default": "STEER",
+      "enum": [
+       "STEER",
+       "ANSWER",
+       "APPROVAL",
+       "BLOCKER",
+       "INTERRUPT"
+      ],
+      "title": "Kind",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "default": "",
+      "maxLength": 55,
+      "title": "Idempotency Key",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "message"
+    ],
+    "title": "limina_steer_projectArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_steer_projectDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_review_project",
+   "description": "Review accepted knowledge, active evidence, resources, and recent activity.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "cursor": {
+      "default": "",
+      "title": "Cursor",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "maximum": 200,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_review_projectArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_review_projectDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_get_knowledge",
+   "description": "Read one hypothesis, experiment, or finding by its durable artifact ID.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "artifact_id": {
+      "title": "Artifact Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "artifact_id"
+    ],
+    "title": "limina_get_knowledgeArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_get_knowledgeDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_list_activity",
+   "description": "Read ordered durable activity after a cursor; use the returned cursor next time.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "after": {
+      "default": 0,
+      "minimum": 0,
+      "title": "After",
+      "type": "integer"
+     },
+     "limit": {
+      "default": 200,
+      "maximum": 1000,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_list_activityArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_list_activityDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_set_project_variable",
+   "description": "Set visible project configuration or a resource reference; never use for secrets.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "value": {
+      "title": "Value",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "default": "",
+      "maxLength": 55,
+      "title": "Idempotency Key",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "name",
+     "value"
+    ],
+    "title": "limina_set_project_variableArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_set_project_variableDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_list_project_resources",
+   "description": "List project variables and redacted secret metadata.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_list_project_resourcesArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "properties": {
+     "result": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "title": "Result",
+      "type": "array"
+     }
+    },
+    "required": [
+     "result"
+    ],
+    "title": "limina_list_project_resourcesOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_remove_project_resource",
+   "description": "Revoke a project variable or secret without exposing its value.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "default": "",
+      "maxLength": 55,
+      "title": "Idempotency Key",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "name"
+    ],
+    "title": "limina_remove_project_resourceArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_remove_project_resourceDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_preflight_project",
+   "description": "Check whether a project draft has the mission and runtime prerequisites to start.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_preflight_projectArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_preflight_projectDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_query_knowledge",
+   "description": "Search and filter the paginated project knowledge base.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "query": {
+      "default": "",
+      "title": "Query",
+      "type": "string"
+     },
+     "kind": {
+      "default": "",
+      "title": "Kind",
+      "type": "string"
+     },
+     "status": {
+      "default": "",
+      "title": "Status",
+      "type": "string"
+     },
+     "tag": {
+      "default": "",
+      "title": "Tag",
+      "type": "string"
+     },
+     "cursor": {
+      "default": "",
+      "title": "Cursor",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "maximum": 200,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_query_knowledgeArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_query_knowledgeDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_get_knowledge_graph",
+   "description": "Read knowledge nodes and both evidence-chain and explicit relations.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_get_knowledge_graphArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_get_knowledge_graphDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_list_guidance",
+   "description": "Review durable feedback with delivery and acknowledgement state.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "status": {
+      "default": "",
+      "title": "Status",
+      "type": "string"
+     },
+     "cursor": {
+      "default": "",
+      "title": "Cursor",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "maximum": 200,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_list_guidanceArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_list_guidanceDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_list_runtime_runs",
+   "description": "Inspect managed runtime turns, timing, tool counts, failures, and usage.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "status": {
+      "default": "",
+      "title": "Status",
+      "type": "string"
+     },
+     "cursor": {
+      "default": "",
+      "title": "Cursor",
+      "type": "string"
+     },
+     "limit": {
+      "default": 50,
+      "maximum": 200,
+      "minimum": 1,
+      "title": "Limit",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_list_runtime_runsArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_list_runtime_runsDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_get_project_analytics",
+   "description": "Aggregate run, knowledge, and human-guidance metrics for a project.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "days": {
+      "default": 30,
+      "title": "Days",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_get_project_analyticsArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_get_project_analyticsDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_register_project_source",
+   "description": "Register a URL or connector for the managed runtime to consume.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "source_type": {
+      "enum": [
+       "URL",
+       "CONNECTOR"
+      ],
+      "title": "Source Type",
+      "type": "string"
+     },
+     "uri": {
+      "title": "Uri",
+      "type": "string"
+     },
+     "media_type": {
+      "default": "",
+      "title": "Media Type",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "name",
+     "source_type",
+     "uri"
+    ],
+    "title": "limina_register_project_sourceArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_register_project_sourceDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_list_project_members",
+   "description": "List project owners, editors, and viewers.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project"
+    ],
+    "title": "limina_list_project_membersArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "properties": {
+     "result": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "title": "Result",
+      "type": "array"
+     }
+    },
+    "required": [
+     "result"
+    ],
+    "title": "limina_list_project_membersOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "openWorldHint": false
+   }
+  },
+  {
+   "name": "limina_set_project_member",
+   "description": "Add a teammate or change their project role; project ownership is required.",
+   "inputSchema": {
+    "properties": {
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "subject": {
+      "title": "Subject",
+      "type": "string"
+     },
+     "display_name": {
+      "title": "Display Name",
+      "type": "string"
+     },
+     "role": {
+      "enum": [
+       "OWNER",
+       "EDITOR",
+       "VIEWER"
+      ],
+      "title": "Role",
+      "type": "string"
+     },
+     "email": {
+      "default": "",
+      "title": "Email",
+      "type": "string"
+     },
+     "actor": {
+      "default": "",
+      "maxLength": 200,
+      "title": "Actor",
+      "type": "string"
+     }
+    },
+    "required": [
+     "project",
+     "subject",
+     "display_name",
+     "role"
+    ],
+    "title": "limina_set_project_memberArguments",
+    "type": "object"
+   },
+   "outputSchema": {
+    "additionalProperties": true,
+    "title": "limina_set_project_memberDictOutput",
+    "type": "object"
+   },
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false,
+    "openWorldHint": false
+   }
+  }
+ ],
+ "resources": [
+  {
+   "name": "Limina projects",
+   "uri": "limina://projects",
+   "description": "All active Limina projects as JSON.",
+   "mimeType": "application/json"
+  }
+ ],
+ "resource_templates": [
+  {
+   "name": "Limina project status",
+   "uriTemplate": "limina://projects/{project}/status",
+   "description": "Mission, active state, and knowledge counts for one project.",
+   "mimeType": "application/json"
+  },
+  {
+   "name": "Limina project review",
+   "uriTemplate": "limina://projects/{project}/review",
+   "description": "The complete review surface for one project.",
+   "mimeType": "application/json"
+  },
+  {
+   "name": "Limina knowledge artifact",
+   "uriTemplate": "limina://projects/{project}/knowledge/{artifact_id}",
+   "description": "One durable hypothesis, experiment, or finding.",
+   "mimeType": "application/json"
+  },
+  {
+   "name": "Limina knowledge snapshot",
+   "uriTemplate": "limina://projects/{project}/snapshot",
+   "description": "Deterministic Markdown knowledge-base files for one project.",
+   "mimeType": "application/json"
+  }
+ ]
+}

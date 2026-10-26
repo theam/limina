@@ -1,3 +1,0 @@
-experiment_id,trial_id,slice,system_name,metric_name,metric_value,unit,baseline_name,baseline_value,delta_absolute,delta_relative,duration_ms,cost_usd,tokens_input,tokens_output,recovery_count,passed_guardrails,decision_status
-E002,offline-1,all,feat/cloud-challenge-runtime,automated_tests_passed,77,tests,pre-remediation-suite,64,13,0.203125,,,,0,true,pass
-E002,live-1,fresh-volume-codex,feat/cloud-challenge-runtime,managed_turn_completed,1,boolean,E001 fresh-volume unattended completion,0,1,,51192,,19824,217,0,true,pass

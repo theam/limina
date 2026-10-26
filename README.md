@@ -42,7 +42,7 @@ a durable knowledge base.
 
 ## Managed runtime quick start — recommended
 
-You need Docker to run the server and [`uv`](https://docs.astral.sh/uv/) if you want the host CLI.
+You need Docker to run the server and [Rust](https://rustup.rs) if you want the host CLI.
 The local stack binds only to `127.0.0.1` and needs no extra configuration. Start the server with
 one command:
 
@@ -52,7 +52,8 @@ cd limina
 docker compose up --build
 ```
 
-Install the CLI in another terminal (`uv tool install .`) and authenticate the engines you use.
+Install the CLI in another terminal (`cargo install --locked --path crates/limina-cli`) and
+authenticate the engines you use.
 Codex supports either your ChatGPT account or a server API key:
 
 ```bash
@@ -62,7 +63,8 @@ limina runtime codex login
 # Or put OPENAI_API_KEY in .env, restart, then materialize it explicitly.
 limina runtime codex login --method api-key
 
-# Claude Code uses its server credential from .env.
+# Claude uses its server credential from .env, or each project connects its own account
+# in the console (Settings → Engine).
 # ANTHROPIC_API_KEY=...
 ```
 
@@ -73,16 +75,22 @@ it keeps raw provider credentials out of project environments. See the
 The no-token default is deliberately limited to the localhost-only Compose stack. If you set a
 local token, use two different values: `LIMINA_API_TOKEN` operates projects and
 `LIMINA_ADMIN_API_TOKEN` changes instance runtime configuration. Team and internet deployments
-should use OIDC; see [Security boundary](#security-boundary).
+should sign people in with WorkOS (see [web console sign-in](docs/web-console.md#sign-in)) or use
+OIDC; see [Security boundary](#security-boundary).
 
-The one container applies migrations and starts the API and supervisor. The `limina-data` Docker
-volume preserves the database, project workspaces, private engine continuation data, and the local
-secret-encryption key.
+The one container applies migrations and starts the API, the supervisor, and the web console. The
+`limina-data` Docker volume preserves the database, project workspaces, private engine continuation
+data, and the local secret-encryption key.
+
+Open **<http://127.0.0.1:7433>** for the console. From there you create projects, follow and steer
+each Codex or Claude conversation, and read the project's knowledge vault. Connect your Claude or
+ChatGPT account in the project's *Settings → Engine*. Run `make ui-demo` before `up` to start
+with a seeded demo project. See the [web console guide](docs/web-console.md).
 
 In another terminal:
 
 ```bash
-export LIMINA_ACTOR=adrian
+export LIMINA_ACTOR=researcher
 
 limina doctor
 ```
@@ -491,7 +499,13 @@ LIMINA_CORS_ORIGINS=https://limina-ui.example.com
 ```
 
 Then run the same command: `docker compose up --build`. Do not set `LIMINA_API_TOKEN` in OIDC
-mode. Limina refuses a non-local bind unless one of these authentication modes is configured.
+mode.
+
+To sign people in to the web console with their organization account, configure WorkOS AuthKit
+instead (`WORKOS_CLIENT_ID`, `WORKOS_API_KEY`, `WORKOS_COOKIE_PASSWORD`, and `LIMINA_PUBLIC_URL`).
+The runtime runs the sign-in flow itself and keeps the session in an encrypted HttpOnly cookie.
+Organization and permission policy come from the WorkOS access token. See
+[web console sign-in](docs/web-console.md#sign-in). Limina refuses a non-local bind unless one of these authentication modes is configured.
 
 Terminate the API behind TLS. For an untrusted multi-tenant service, also load
 `LIMINA_SECRET_KEY` from a secrets manager, isolate project workspaces with containers or
@@ -529,28 +543,34 @@ persisted `wake_at`; default backoff is 30, 120, and 600 seconds. Override it wi
 
 ## Development
 
-Install both managed runtimes and run the acceptance suite:
+The runtime is one Rust binary, `limina` (server and CLI), built from the Cargo workspace in
+[`crates/`](crates/README.md). Run the acceptance suite:
 
 ```bash
-uv sync --locked --all-extras --dev
-make runtime-check
+make runtime-check            # format, lint, tests, compose config, KB validation
+make runtime-test-postgres    # the same suites against PostgreSQL in Docker
 ```
 
-Run locally with either or both provider credentials:
+Run locally with either or both provider credentials (the `codex` and `claude` CLIs must be on
+`PATH`):
 
 ```bash
 export LIMINA_API_TOKEN=local-secret
 export OPENAI_API_KEY=...       # optional: Codex projects
-export ANTHROPIC_API_KEY=...    # optional: Claude Code projects
-uv run limina serve
+export ANTHROPIC_API_KEY=...    # optional: Claude projects
+cargo run -p limina-cli -- serve
 ```
+
+`make ui-dev` runs a credential-free instance with a scripted engine for console work.
 
 Further reading:
 
+- [Runtime crates and conventions](crates/README.md)
 - [CLI user story](docs/cloud-runtime-cli.md)
 - [Architecture and concurrency model](docs/cloud-runtime-architecture.md)
 - [UI-ready backend and API map](docs/ui-ready-backend.md)
-- [Verification evidence](docs/cloud-runtime-evidence.md)
+- [Deployment boundaries](docs/deployment-boundaries.md)
+- [Security policy](SECURITY.md)
 
 ## Contributing
 

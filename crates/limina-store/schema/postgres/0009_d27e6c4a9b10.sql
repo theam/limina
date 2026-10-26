@@ -1,0 +1,3 @@
+ALTER TABLE challenges ADD COLUMN model VARCHAR(200);
+ALTER TABLE challenges ADD COLUMN reasoning_effort VARCHAR(64);
+ALTER TABLE runtime_runs ALTER COLUMN model TYPE VARCHAR(200);

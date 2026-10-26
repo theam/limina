@@ -1,44 +1,11 @@
-[build-system]
-requires = ["hatchling>=1.27"]
-build-backend = "hatchling.build"
-
 [project]
-name = "limina-cloud-runtime"
-version = "0.1.0"
-description = "Durable, collaborative challenge runtime for Limina"
+name = "limina-template-tooling"
+version = "0.2.0"
+description = "Validation, scaffolding and telemetry scripts for file-based Limina projects."
 readme = "README.md"
 requires-python = ">=3.11"
 license = {file = "LICENSE"}
-dependencies = [
-  "alembic>=1.16,<2",
-  "cryptography>=45,<47",
-  "fastapi>=0.116,<1",
-  "httpx>=0.28,<1",
-  "mcp>=1.28,<2",
-  "psycopg[binary]>=3.2,<4",
-  "pyjwt[crypto]>=2.10,<3",
-  "python-multipart>=0.0.20,<1",
-  "rich>=13.9,<15",
-  "sqlalchemy>=2.0,<3",
-  "typer>=0.16,<1",
-  "uvicorn>=0.35,<1",
-  "websockets>=15,<17",
-]
-
-[project.optional-dependencies]
-codex = [
-  "openai-codex>=0.1.0b2,<0.2",
-]
-claude = [
-  "claude-agent-sdk>=0.1.51,<1",
-]
-runtimes = [
-  "claude-agent-sdk>=0.1.51,<1",
-  "openai-codex>=0.1.0b2,<0.2",
-]
-
-[project.scripts]
-limina = "limina_cloud.cli:main"
+dependencies = []
 
 [dependency-groups]
 dev = [
@@ -46,15 +13,12 @@ dev = [
   "ruff>=0.12,<1",
 ]
 
+[tool.uv]
+package = false
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/limina_cloud"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"migrations" = "limina_cloud/_migrations"

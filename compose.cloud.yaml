@@ -16,10 +16,10 @@ services:
   migrate:
     build:
       context: .
-      dockerfile: Dockerfile.cloud
+      dockerfile: Dockerfile
     command: ["limina", "db", "upgrade"]
     environment:
-      LIMINA_DATABASE_URL: postgresql+psycopg://limina:limina-local@postgres/limina
+      LIMINA_DATABASE_URL: postgres://limina:limina-local@postgres/limina
     depends_on:
       postgres:
         condition: service_healthy
@@ -27,9 +27,9 @@ services:
   runtime:
     build:
       context: .
-      dockerfile: Dockerfile.cloud
+      dockerfile: Dockerfile
     environment:
-      LIMINA_DATABASE_URL: postgresql+psycopg://limina:limina-local@postgres/limina
+      LIMINA_DATABASE_URL: postgres://limina:limina-local@postgres/limina
       LIMINA_API_TOKEN: ${LIMINA_API_TOKEN:-}
       LIMINA_ADMIN_API_TOKEN: ${LIMINA_ADMIN_API_TOKEN:-}
       LIMINA_OIDC_ISSUER: ${LIMINA_OIDC_ISSUER:-}
@@ -40,6 +40,15 @@ services:
       LIMINA_OIDC_ADMIN_VALUE: ${LIMINA_OIDC_ADMIN_VALUE:-admin}
       LIMINA_OIDC_LEEWAY_SECONDS: ${LIMINA_OIDC_LEEWAY_SECONDS:-30}
       LIMINA_CORS_ORIGINS: ${LIMINA_CORS_ORIGINS:-}
+      LIMINA_PUBLIC_URL: ${LIMINA_PUBLIC_URL:-}
+      WORKOS_CLIENT_ID: ${WORKOS_CLIENT_ID:-}
+      WORKOS_API_KEY: ${WORKOS_API_KEY:-}
+      WORKOS_COOKIE_PASSWORD: ${WORKOS_COOKIE_PASSWORD:-}
+      WORKOS_REDIRECT_URI: ${WORKOS_REDIRECT_URI:-}
+      WORKOS_API_HOSTNAME: ${WORKOS_API_HOSTNAME:-api.workos.com}
+      LIMINA_WORKOS_ORGANIZATION_ID: ${LIMINA_WORKOS_ORGANIZATION_ID:-}
+      LIMINA_WORKOS_REQUIRED_PERMISSION: ${LIMINA_WORKOS_REQUIRED_PERMISSION:-}
+      LIMINA_WORKOS_ADMIN_PERMISSION: ${LIMINA_WORKOS_ADMIN_PERMISSION:-limina:admin}
       LIMINA_CODEX_MODEL: ${LIMINA_CODEX_MODEL:-gpt-5.4}
       LIMINA_CODEX_SANDBOX: ${LIMINA_CODEX_SANDBOX:-workspace-write}
       LIMINA_CODEX_AUTH_MODE: ${LIMINA_CODEX_AUTH_MODE:-auto}
@@ -52,6 +61,7 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       CODEX_ACCESS_TOKEN: ${CODEX_ACCESS_TOKEN:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CLAUDE_CODE_OAUTH_TOKEN: ${CLAUDE_CODE_OAUTH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
     ports:
       - "7433:7433"
@@ -63,7 +73,7 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7433/readyz', timeout=2).read()"]
+      test: ["CMD", "limina", "_healthcheck"]
 
 volumes:
   limina-postgres:

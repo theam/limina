@@ -1,0 +1,325 @@
+/* Long-form reading surface for knowledge notes and agent messages. */
+
+.prose {
+  font-size: var(--text-read);
+  line-height: 28px;
+  color: rgb(var(--fg));
+  overflow-wrap: break-word;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose pre,
+.prose .table-scroll,
+.prose hr {
+  margin: 0 0 16px;
+}
+
+.prose .heading {
+  position: relative;
+  scroll-margin-top: calc(var(--header-height) + 24px);
+}
+
+.prose h2.heading {
+  margin: 40px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--text-xl);
+  line-height: 30px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.prose h3.heading {
+  margin: 28px 0 8px;
+  font-size: var(--text-lg);
+  line-height: 26px;
+  font-weight: 500;
+}
+
+.prose h4.heading {
+  margin: 24px 0 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(var(--fg-secondary));
+}
+
+.heading-anchor {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px;
+  color: rgb(var(--fg-tertiary));
+  opacity: 0;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.heading:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose a.external {
+  color: rgb(var(--link));
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--link) / 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--fast) var(--ease);
+}
+
+.prose a.external:hover {
+  text-decoration-color: rgb(var(--link));
+}
+
+.external-icon {
+  display: inline;
+  vertical-align: text-top;
+  margin-left: 1px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 24px;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin: 4px 0;
+  padding-left: 2px;
+}
+
+.prose li::marker {
+  color: rgb(var(--fg-secondary));
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin: 4px 0 0;
+}
+
+/* GFM task lists (experiment progress). */
+.prose ul.contains-task-list {
+  list-style: none;
+  padding-left: 4px;
+}
+
+.prose .task-list-item {
+  position: relative;
+  padding-left: 26px;
+}
+
+.prose .task-list-item > input {
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  accent-color: rgb(var(--success-fill));
+}
+
+.prose blockquote {
+  padding: 2px 0 2px 16px;
+  border-left: 3px solid var(--hairline-strong);
+  color: rgb(var(--fg-secondary));
+}
+
+.prose code {
+  padding: 1px 5px;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  background: rgb(var(--bg-secondary) / 0.7);
+  font-size: 0.86em;
+}
+
+.prose pre {
+  padding: 14px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: rgb(var(--bg-secondary) / 0.7);
+  overflow-x: auto;
+  font-size: var(--text-ui);
+  line-height: 20px;
+}
+
+.prose pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 32px 0;
+}
+
+.prose .table-scroll {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-base);
+  line-height: 20px;
+}
+
+.prose th,
+.prose td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgb(var(--fg-secondary));
+  background: rgb(var(--bg-secondary) / 0.5);
+}
+
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+/* Compact variant for cards and conversation. */
+.prose-compact {
+  font-size: var(--text-base);
+  line-height: 22px;
+}
+
+.prose-compact p,
+.prose-compact ul,
+.prose-compact ol {
+  margin-bottom: 8px;
+}
+
+.prose-compact h2.heading {
+  margin: 20px 0 8px;
+  padding: 0;
+  border: 0;
+  font-size: var(--text-base);
+}
+
+/* ─── Wikilinks ─────────────────────────────────────────────────────── */
+
+.wikilink {
+  display: inline;
+  color: rgb(var(--fg));
+  text-decoration: underline;
+  text-decoration-color: var(--hairline-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  border-radius: 2px;
+  transition:
+    text-decoration-color var(--fast) var(--ease),
+    background var(--fast) var(--ease);
+}
+
+.wikilink:hover {
+  text-decoration-color: rgb(var(--fg));
+  background: var(--hover);
+}
+
+.wikilink-id {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 0 4px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  line-height: 1.5;
+  font-weight: 500;
+  vertical-align: 0.12em;
+  text-decoration: none;
+}
+
+.wikilink-missing {
+  color: rgb(var(--fg-secondary));
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.hover-card {
+  width: 340px;
+  padding: 0;
+}
+
+.doc-preview {
+  display: grid;
+  gap: 6px;
+  padding: var(--space-4);
+}
+
+.doc-preview-title {
+  font-size: 15px;
+  line-height: 21px;
+  font-weight: 500;
+}
+
+.doc-preview-excerpt {
+  color: rgb(var(--fg-secondary));
+  font-size: var(--text-sm);
+  line-height: 18px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Compact inline artifact reference: H001 with its title in the hover preview. */
+.wikilink-ref {
+  display: inline-block;
+  padding: 0 5px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  line-height: 1.45;
+  font-weight: 500;
+  vertical-align: 0.06em;
+  color: rgb(var(--fg));
+  transition:
+    border-color var(--fast) var(--ease),
+    background var(--fast) var(--ease);
+}
+
+.wikilink-ref:hover {
+  border-color: rgb(var(--fg) / 0.5);
+  background: var(--hover);
+}

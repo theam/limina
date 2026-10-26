@@ -1,8 +1,0 @@
-Limina challenge runtime schema migrations.
-
-Set `LIMINA_DATABASE_URL` and run:
-
-    uv run alembic upgrade head
-
-Production deployments use PostgreSQL. SQLite is supported for embedded CLI
-work and deterministic tests.

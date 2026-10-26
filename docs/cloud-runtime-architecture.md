@@ -80,9 +80,9 @@ The project supervisor depends on a small internal runtime contract:
 Both adapters satisfy that contract, so lifecycle, durable guidance, knowledge writes, leases,
 redaction, and recovery are provider-independent.
 
-| Behavior | Codex | Claude Code |
+| Behavior | Codex | Claude |
 |---|---|---|
-| SDK | `openai-codex` Python SDK | `claude-agent-sdk` Python SDK |
+| Protocol | `codex app-server` JSON-RPC over stdio | `claude` CLI stream-json with the SDK control channel |
 | Continuity | Codex thread ID | Claude session ID |
 | Structured checkpoint | turn JSON output schema | SDK JSON-schema output format |
 | Active steering | steer the current turn | interrupt response, then query the same session with guidance |
@@ -97,9 +97,10 @@ An engine comparison should be two projects with independent histories and expli
 
 ### Codex adapter
 
-The official [Codex SDK](https://developers.openai.com/codex/sdk/) supports starting and resuming
-threads. Its [app-server protocol](https://developers.openai.com/codex/app-server/) exposes turn
-events, steering, and interruption. Limina creates or resumes the private thread, persists its ID
+Limina speaks the Codex [app-server protocol](https://developers.openai.com/codex/app-server/)
+directly, the same protocol the official [Codex SDKs](https://developers.openai.com/codex/sdk/) use.
+It exposes thread start and resume, turn events, steering, and interruption. Limina creates or
+resumes the private thread, persists its ID
 before tools run, supplies a JSON output schema, streams selected notifications, and uses the
 active turn handle for steering and lifecycle interruption. In the Docker image, `CODEX_HOME` is
 stored on the Limina volume so local thread data survives container replacement.
@@ -112,13 +113,15 @@ logout take an exclusive authentication lock; turns take shared locks, and ChatG
 are serialized on a single runtime node to avoid refresh-token races. API-key mode remains the
 parallel-workload option.
 
-### Claude Code adapter
+### Claude adapter
 
-The official [Claude Agent SDK for Python](https://platform.claude.com/docs/en/agent-sdk/python)
-supports persistent `ClaudeSDKClient` sessions, resume, interrupt, tool permission callbacks, and
-structured outputs. Limina uses the SDK's bundled Claude Code CLI, stores its private config below
-the Limina volume, disables user/project setting inheritance, enables sandboxing, and persists the
-session ID as the provider-neutral continuation.
+Limina drives the Claude CLI with the protocol the official
+[Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) uses: stream-json input
+and output plus a control channel for initialization, tool permission requests and interrupts. That
+gives persistent sessions, resume, interrupt, tool permission callbacks, and structured outputs.
+Limina launches the pinned CLI from the image, stores its private config below the Limina volume,
+disables user/project setting inheritance, enables sandboxing, and persists the session ID as the
+provider-neutral continuation.
 
 Claude's interrupt API stops the current response rather than injecting text into that response.
 Therefore a live Limina steer is implemented as an interrupt followed immediately by a new query
@@ -281,21 +284,22 @@ container or microVM isolation.
 
 | Concern | Choice |
 |---|---|
-| Runtime and domain | Python 3.11+, typed service layer |
-| Codex | Official `openai-codex` Python SDK |
-| Claude Code | Official `claude-agent-sdk` Python SDK with bundled CLI |
-| Public control/live transport | FastAPI REST + WebSocket; official MCP Python SDK for Streamable HTTP |
-| CLI | Typer, Rich, `websockets` |
-| Canonical persistence | PostgreSQL + SQLAlchemy 2 |
+| Runtime and domain | Rust (Tokio), one `limina` binary for the server and the CLI |
+| Codex | `codex app-server` JSON-RPC, the protocol of the official SDKs |
+| Claude | `claude` CLI stream-json + control channel, the protocol of the official Agent SDK |
+| Public control/live transport | axum REST + WebSocket; official Rust MCP SDK (`rmcp`) for Streamable HTTP |
+| CLI | clap, reqwest, tokio-tungstenite |
+| Canonical persistence | PostgreSQL via sqlx; one SQL dialect shared with SQLite |
 | Knowledge retrieval | PostgreSQL full-text search + explicit graph; SQLite substring fallback |
-| Schema evolution | Alembic |
-| Local/single-node storage | SQLite WAL |
-| Packaging | `uv`, locked `pyproject.toml` |
+| Schema evolution | Versioned SQL migrations tracked in `alembic_version` (compatible with existing databases) |
+| Local/single-node storage | SQLite WAL, write transactions taken up front (`BEGIN IMMEDIATE`) |
+| Packaging | Cargo workspace (`crates/`), locked `Cargo.lock` |
 | Default deployment | One runtime image + persistent SQLite volume |
 | Scale-out deployment | The same runtime image + PostgreSQL |
 
-Python keeps the supervisor and both official SDK adapters in one process model, while the adapter
-contract prevents provider details from leaking into the product interface.
+One process owns the supervisor and both engine adapters, while the adapter contract prevents
+provider details from leaking into the product interface. Provider processes start from an empty
+environment plus an allow-list, so control-plane secrets never reach them.
 
 ## Production layers still required
 
@@ -308,3 +312,27 @@ transactional outbox.
 For horizontal replicas, PostgreSQL leases already prevent duplicate top-level turns. An external
 workflow scheduler may later improve timers and operations, but it must remain an internal Limina
 component rather than becoming the owner of provider sessions.
+
+## Personal connections and project privacy
+
+WorkOS/OIDC users, including instance administrators, access only their project memberships.
+Runtime administration and project administration are separate capabilities. Local/open mode,
+embedded CLI calls and static machine tokens remain trusted operators. Pending email shares bind
+only to an explicitly verified email and, when pinned, the invitation's organization. No outbound
+email is sent. WorkOS directory lookup uses User Management users and active organization
+memberships. A project must always keep an owner.
+
+Personal MCP connections live in `mcp_connections`; explicit project grants in
+`project_mcp_connections`; encrypted browser-bound OAuth flows in `mcp_authorization_flows`.
+The migration after engine accounts adds invitations and the local-operator flag on live tickets;
+the next adds connections. Existing SQLite tables gain missing columns on startup; PostgreSQL
+continues the revision chain through `limina db upgrade`.
+
+Before each turn the supervisor resolves only active grants whose connection owner still belongs
+to the project (or a trusted local grant). The official `rmcp` OAuth client handles discovery,
+PKCE, registration and token refresh through a guarded HTTP client. Credentials are encrypted at
+rest and added to event redaction before the engine starts. Claude receives a private MCP config
+file; Codex receives config overrides with credentials referenced through environment variables
+excluded from shell environments. Neither engine receives a token in command-line arguments.
+Connections do not change the prompt for projects without grants. See
+[the console guide](web-console.md#connections) for operating constraints.

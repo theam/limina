@@ -136,7 +136,10 @@ objects.
 | Project kickoff | `POST/PATCH /v1/projects`, `/v1/project-templates`, `/preflight`, `/members`, `/sources`, `/resources` |
 | Steering | `/steering`, `/guidance`, `/live-ticket`, `/live` WebSocket, lifecycle actions |
 | Knowledge | `/knowledge`, `/knowledge/graph`, artifact detail, revisions, relations, comments, tags, saved views |
-| Observability | `/events`, `/runs`, `/runs/{run_id}`, live WebSocket |
+| Observability | `/events` (forward `after` or backward `before` paging), `/runs`, `/runs/{run_id}`, live WebSocket |
+| Identity | `GET /v1/me`; every project response includes the caller's `role` |
+| Engines | `GET /v1/runtime/engines` (installed + credentials, never secret values) |
+| Engine accounts | `/v1/projects/{slug}/engine-accounts` (write-only Claude token, per-project Codex device sign-in) |
 | Analytics | `/analytics` |
 | Portability | `/snapshot` |
 
@@ -147,6 +150,20 @@ the dedicated knowledge query endpoint.
 MCP exposes the same project boundary, including preflight, knowledge query/graph, guidance
 history, runs, analytics, sources, and members. Secret values remain intentionally absent from MCP
 arguments because those arguments normally enter a model-visible transcript.
+
+## Conversation events
+
+`runtime.codex` and `runtime.claude-code` events share one transcript schema, produced by
+`runtime_events.py`. `detail.kind` is `message`, `tool`, `plan`, `status`, or `knowledge`. `text`
+holds full agent Markdown. `tool` and `input` give a display name and a one-line input summary.
+`item_id` merges started and completed rows. `phase`, `state`, `exit_code`, `duration_ms`, and
+`files` (paths only) complete each tool row.
+
+Tool output, reasoning, file diffs, the structured checkpoint JSON, and internal `limina _agent`
+command lines are never exposed. `guidance.received` carries the message `body`, `kind`, and
+`guidance_id`, and `origin: "resource"` when a resource change generated it. `project.checkpoint`
+carries the checkpoint's objective, next step, and blocker. The [web console](web-console.md)
+renders this stream as the project conversation.
 
 ## Kickoff resources
 

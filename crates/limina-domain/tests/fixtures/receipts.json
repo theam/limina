@@ -1,0 +1,170 @@
+[
+  {
+    "command_id": "798d3ede-0a32-4b4d-97bf-a1a976fb1818",
+    "command_type": "challenge.create",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.598697+00:00\", \"coordinator\": {\"status\": \"CREATED\", \"current_objective\": \"Pin every JSON shape.\", \"next_step\": \"Frame the first falsifiable hypothesis.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": null, \"inbox_cursor\": 0, \"version\": 1, \"heartbeat_at\": null, \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.599007+00:00\"}}"
+  },
+  {
+    "command_id": "26ae267f-c0f4-46bc-8b3d-f59557b914a5",
+    "command_type": "coordinator.claim",
+    "actor": "worker",
+    "result": "{\"scope\": \"coordinator\", \"owner\": \"worker\", \"token\": \"5e92bae6-537d-4879-980d-762e27bfc76d\", \"expires_at\": \"2026-10-15 13:31:56.601363+00:00\", \"version\": 1}"
+  },
+  {
+    "command_id": "27f5e975-d210-4e6b-bc8f-9f7a0c9dc05f",
+    "command_type": "inbox.send",
+    "actor": "owner",
+    "result": "{\"id\": \"9427180e-26e4-46e1-b89e-7aab8b46c56d\", \"sequence\": 1, \"kind\": \"STEER\", \"body\": \"Prefer the frozen baseline.\", \"actor\": \"owner\", \"status\": \"PENDING\", \"created_at\": \"2026-10-15T13:26:56.603110+00:00\", \"acknowledged_at\": null}"
+  },
+  {
+    "command_id": "41a12895-c3cc-4650-b964-64d2574cb71c",
+    "command_type": "coordinator.checkpoint",
+    "actor": "worker",
+    "result": "{\"status\": \"RUNNING\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": \"worker\", \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 2, \"heartbeat_at\": \"2026-10-15T13:26:56.605341+00:00\", \"wake_at\": \"2026-01-02T03:04:05.123456+00:00\", \"updated_at\": \"2026-10-15T13:26:56.605342+00:00\"}"
+  },
+  {
+    "command_id": "910c3154-482e-448e-9184-de628bfe22d3",
+    "command_type": "inbox.send",
+    "actor": "owner",
+    "result": "{\"id\": \"9c8cf35d-c47e-4778-ba91-c2db0a8aa155\", \"sequence\": 2, \"kind\": \"ANSWER\", \"body\": \"Use the March snapshot.\", \"actor\": \"owner\", \"status\": \"PENDING\", \"created_at\": \"2026-10-15T13:26:56.607525+00:00\", \"acknowledged_at\": null}"
+  },
+  {
+    "command_id": "8ea5b706-db80-4ade-bd7f-87860aabfb20",
+    "command_type": "inbox.acknowledge",
+    "actor": "worker",
+    "result": "{\"id\": \"9c8cf35d-c47e-4778-ba91-c2db0a8aa155\", \"sequence\": 2, \"kind\": \"ANSWER\", \"body\": \"Use the March snapshot.\", \"actor\": \"owner\", \"status\": \"ACKNOWLEDGED\", \"created_at\": \"2026-10-15T13:26:56.607525+00:00\", \"acknowledged_at\": \"2026-10-15T13:26:56.608208+00:00\"}"
+  },
+  {
+    "command_id": "1ce71c67-b0d3-4de7-a03c-e2db6632c3d6",
+    "command_type": "coordinator.release",
+    "actor": "worker",
+    "result": "{\"scope\": \"coordinator\", \"owner\": \"worker\", \"released\": true}"
+  },
+  {
+    "command_id": "5738288a-53b2-4e6a-91a9-28d9b663a9bc",
+    "command_type": "resource.variable.set",
+    "actor": "owner",
+    "result": "{\"id\": \"60144480-9cd2-4409-b810-c61715751b10\", \"name\": \"SOURCE_URL\", \"type\": \"VARIABLE\", \"value\": \" https://example.invalid/data \", \"configured\": null, \"status\": \"ACTIVE\", \"created_by\": \"owner\", \"created_at\": \"2026-10-15T13:26:56.610632+00:00\", \"updated_at\": \"2026-10-15T13:26:56.610633+00:00\"}"
+  },
+  {
+    "command_id": "2a240a12-0597-490f-a30c-7d641a37cb3d",
+    "command_type": "resource.secret.set",
+    "actor": "owner",
+    "result": "{\"id\": \"a43314f3-b930-44e8-83ab-9e1573540211\", \"name\": \"SOURCE_TOKEN\", \"type\": \"SECRET\", \"value\": null, \"configured\": true, \"status\": \"ACTIVE\", \"created_by\": \"owner\", \"created_at\": \"2026-10-15T13:26:56.612449+00:00\", \"updated_at\": \"2026-10-15T13:26:56.612449+00:00\"}"
+  },
+  {
+    "command_id": "8113706b-f185-42f8-bdea-c435096662de",
+    "command_type": "resource.remove",
+    "actor": "owner",
+    "result": "{\"id\": \"a43314f3-b930-44e8-83ab-9e1573540211\", \"name\": \"SOURCE_TOKEN\", \"type\": \"SECRET\", \"value\": null, \"configured\": false, \"status\": \"REMOVED\", \"created_by\": \"owner\", \"created_at\": \"2026-10-15T13:26:56.612449+00:00\", \"updated_at\": \"2026-10-15T13:26:56.614072+00:00\"}"
+  },
+  {
+    "command_id": "b53a8d6a-bf5a-471d-80bb-ced309526f02",
+    "command_type": "hypothesis.create",
+    "actor": "researcher",
+    "result": "{\"uid\": \"639f6bc6-6b51-4c90-8ba4-5a2ec5f2d53c\", \"id\": \"H001\", \"kind\": \"H\", \"title\": \"Reranking\", \"status\": \"PROPOSED\", \"payload\": {\"statement\": \"A reranker improves NDCG.\", \"mechanism\": \"Pairwise relevance.\", \"generalization\": \"\", \"shortcut_risks\": \"Overfitting.\", \"test_plan\": \"Frozen candidates.\", \"conclusion\": \"\"}, \"hypothesis_id\": null, \"experiment_id\": null, \"version\": 1, \"created_by\": \"researcher\", \"created_at\": \"2026-10-15T13:26:56.615550+00:00\", \"updated_at\": \"2026-10-15T13:26:56.615551+00:00\"}"
+  },
+  {
+    "command_id": "f4cddd5b-f49b-4e7b-a52a-717fb3b8ff5e",
+    "command_type": "experiment.create",
+    "actor": "researcher",
+    "result": "{\"uid\": \"04780f65-67d4-4428-b8ce-4965408af58e\", \"id\": \"E001\", \"kind\": \"E\", \"title\": \"Benchmark\", \"status\": \"DESIGNED\", \"payload\": {\"objective\": \"Measure NDCG.\", \"procedure\": \"Run both.\", \"success_criteria\": \"+10%.\", \"guardrails\": \"\", \"results\": \"\", \"analysis\": \"\", \"decision\": \"\", \"completed_at\": null}, \"hypothesis_id\": \"H001\", \"experiment_id\": null, \"version\": 1, \"created_by\": \"researcher\", \"created_at\": \"2026-10-15T13:26:56.617875+00:00\", \"updated_at\": \"2026-10-15T13:26:56.617875+00:00\"}"
+  },
+  {
+    "command_id": "433aa6b4-e27e-4f3c-9ae3-fb3335cea22d",
+    "command_type": "experiment.claim",
+    "actor": "worker",
+    "result": "{\"artifact\": {\"uid\": \"04780f65-67d4-4428-b8ce-4965408af58e\", \"id\": \"E001\", \"kind\": \"E\", \"title\": \"Benchmark\", \"status\": \"RUNNING\", \"payload\": {\"objective\": \"Measure NDCG.\", \"procedure\": \"Run both.\", \"success_criteria\": \"+10%.\", \"guardrails\": \"\", \"results\": \"\", \"analysis\": \"\", \"decision\": \"\", \"completed_at\": null}, \"hypothesis_id\": \"H001\", \"experiment_id\": null, \"version\": 2, \"created_by\": \"researcher\", \"created_at\": \"2026-10-15T13:26:56.617875+00:00\", \"updated_at\": \"2026-10-15T13:26:56.618732+00:00\"}, \"lease\": {\"owner\": \"worker\", \"token\": \"3f3bf72e-6469-4bbd-bf85-c98f75e3e048\", \"expires_at\": \"2026-10-15 13:36:56.618733+00:00\", \"version\": 1}}"
+  },
+  {
+    "command_id": "2960244b-0c3a-49fa-825e-0637ea05a9b7",
+    "command_type": "experiment.observe",
+    "actor": "worker",
+    "result": "{\"id\": \"8bd5ccb3-be5f-4ff8-b24a-4c3fb152d4d2\", \"experiment_id\": \"E001\", \"body\": \"NDCG +12%.\", \"evidence_ref\": \"s3://evidence/run.json\", \"actor\": \"worker\", \"created_at\": \"2026-10-15T13:26:56.620449+00:00\"}"
+  },
+  {
+    "command_id": "19798f6d-b92c-4ac0-9719-e420c08531de",
+    "command_type": "experiment.observe",
+    "actor": "worker",
+    "result": "{\"id\": \"a637ee3c-3882-45d2-aa37-6cec44982d58\", \"experiment_id\": \"E001\", \"body\": \"Latency +8 ms.\", \"evidence_ref\": null, \"actor\": \"worker\", \"created_at\": \"2026-10-15T13:26:56.621125+00:00\"}"
+  },
+  {
+    "command_id": "f8c20f4c-0bda-4610-8442-83bcf7e0e744",
+    "command_type": "experiment.complete",
+    "actor": "worker",
+    "result": "{\"uid\": \"04780f65-67d4-4428-b8ce-4965408af58e\", \"id\": \"E001\", \"kind\": \"E\", \"title\": \"Benchmark\", \"status\": \"COMPLETED\", \"payload\": {\"objective\": \"Measure NDCG.\", \"procedure\": \"Run both.\", \"success_criteria\": \"+10%.\", \"guardrails\": \"\", \"results\": \"Treatment won.\", \"analysis\": \"Threshold exceeded.\", \"decision\": \"Publish.\", \"completed_at\": \"2026-10-15\"}, \"hypothesis_id\": \"H001\", \"experiment_id\": null, \"version\": 3, \"created_by\": \"researcher\", \"created_at\": \"2026-10-15T13:26:56.617875+00:00\", \"updated_at\": \"2026-10-15T13:26:56.624105+00:00\"}"
+  },
+  {
+    "command_id": "1dc6e0e8-7b5e-437e-a3a9-b895bdc079aa",
+    "command_type": "finding.publish",
+    "actor": "worker",
+    "result": "{\"uid\": \"8af8d039-ea57-4816-af7f-b7fd87d9aa56\", \"id\": \"F001\", \"kind\": \"F\", \"title\": \"Reranking helps\", \"status\": \"PUBLISHED\", \"payload\": {\"finding\": \"It helps.\", \"evidence\": \"+12% NDCG.\", \"improvement\": \"\", \"remaining_debt\": \"Latency.\", \"next_move\": \"Measure online.\", \"impact\": \"HIGH\"}, \"hypothesis_id\": \"H001\", \"experiment_id\": \"E001\", \"version\": 1, \"created_by\": \"worker\", \"created_at\": \"2026-10-15T13:26:56.625735+00:00\", \"updated_at\": \"2026-10-15T13:26:56.625735+00:00\"}"
+  },
+  {
+    "command_id": "6b19e84e-219c-4cfd-9f25-a7369cebaf96",
+    "command_type": "hypothesis.decide",
+    "actor": "reviewer",
+    "result": "{\"uid\": \"639f6bc6-6b51-4c90-8ba4-5a2ec5f2d53c\", \"id\": \"H001\", \"kind\": \"H\", \"title\": \"Reranking\", \"status\": \"CONFIRMED\", \"payload\": {\"statement\": \"A reranker improves NDCG.\", \"mechanism\": \"Pairwise relevance.\", \"generalization\": \"\", \"shortcut_risks\": \"Overfitting.\", \"test_plan\": \"Frozen candidates.\", \"conclusion\": \"Confirmed offline.\"}, \"hypothesis_id\": null, \"experiment_id\": null, \"version\": 3, \"created_by\": \"researcher\", \"created_at\": \"2026-10-15T13:26:56.615550+00:00\", \"updated_at\": \"2026-10-15T13:26:56.626991+00:00\"}"
+  },
+  {
+    "command_id": "bf737e52-b68b-40bd-adf1-9a10759270a5",
+    "command_type": "runtime.codex",
+    "actor": "limina:worker",
+    "result": "{\"sequence\": 19, \"id\": \"f92369b7-c6dd-4492-a07f-42bc6b36895f\", \"type\": \"runtime.codex\", \"actor\": \"limina:worker\", \"artifact_id\": null, \"payload\": {\"kind\": \"message\", \"text\": \"Planning.\", \"nested\": {\"z\": 1, \"a\": [1, 2.5, null, true, \"\\u00fc\"]}}, \"command_id\": \"bf737e52-b68b-40bd-adf1-9a10759270a5\", \"created_at\": \"2026-10-15T13:26:56.630888+00:00\"}"
+  },
+  {
+    "command_id": "ca572cd1-6f61-476a-b895-8b37af1ad2e9",
+    "command_type": "project.start",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.598697+00:00\", \"coordinator\": {\"status\": \"RUNNING\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": \"worker\", \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 2, \"heartbeat_at\": \"2026-10-15T13:26:56.605341+00:00\", \"wake_at\": \"2026-01-02T03:04:05.123456+00:00\", \"updated_at\": \"2026-10-15T13:26:56.605342+00:00\"}}"
+  },
+  {
+    "command_id": "424d8f45-1cd4-43f3-bc03-cf1ea6ce9cf9",
+    "command_type": "project.pause",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.635857+00:00\", \"coordinator\": {\"status\": \"PAUSED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 3, \"heartbeat_at\": \"2026-10-15T13:26:56.635855+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.635855+00:00\"}}"
+  },
+  {
+    "command_id": "b2441c1e-9566-4466-a334-14cc0a6beb8f",
+    "command_type": "project.pause",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.635857+00:00\", \"coordinator\": {\"status\": \"PAUSED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 3, \"heartbeat_at\": \"2026-10-15T13:26:56.635855+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.635855+00:00\"}}"
+  },
+  {
+    "command_id": "3774a7ac-feb5-4ae4-b1ac-f24f636e31ba",
+    "command_type": "project.resume",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.637332+00:00\", \"coordinator\": {\"status\": \"RUNNING\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 4, \"heartbeat_at\": \"2026-10-15T13:26:56.637330+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.637331+00:00\"}}"
+  },
+  {
+    "command_id": "6561f01b-d8f4-435d-9016-e0f0469a0c60",
+    "command_type": "project.stop",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.638037+00:00\", \"coordinator\": {\"status\": \"STOPPED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 5, \"heartbeat_at\": \"2026-10-15T13:26:56.638035+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.638036+00:00\"}}"
+  },
+  {
+    "command_id": "88c340c0-4d3a-417c-a9e2-61b53568ff4c",
+    "command_type": "project.start",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.638622+00:00\", \"coordinator\": {\"status\": \"RUNNING\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 6, \"heartbeat_at\": \"2026-10-15T13:26:56.638620+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.638620+00:00\"}}"
+  },
+  {
+    "command_id": "40f57de9-9670-453d-a351-5b8af180502e",
+    "command_type": "project.stop",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ACTIVE\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.639220+00:00\", \"coordinator\": {\"status\": \"STOPPED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 7, \"heartbeat_at\": \"2026-10-15T13:26:56.639218+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.639218+00:00\"}}"
+  },
+  {
+    "command_id": "f8d38eaa-8ea6-4760-8606-afab7a78cb24",
+    "command_type": "project.archive",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ARCHIVED\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.639833+00:00\", \"coordinator\": {\"status\": \"STOPPED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 8, \"heartbeat_at\": \"2026-10-15T13:26:56.639831+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.639832+00:00\"}}"
+  },
+  {
+    "command_id": "4cfa80c7-e441-4823-9435-49ccf6fb93ec",
+    "command_type": "project.archive",
+    "actor": "owner",
+    "result": "{\"id\": \"a22013ef-fc9d-4f86-927b-0158240e1f0c\", \"slug\": \"shapes\", \"name\": \"Shapes\", \"objective\": \"Pin every JSON shape.\", \"context\": \"Golden fixture.\", \"success_criteria\": \"Rust matches Python.\", \"runtime_engine\": \"claude-code\", \"status\": \"ARCHIVED\", \"version\": 1, \"created_at\": \"2026-10-15T13:26:56.598695+00:00\", \"updated_at\": \"2026-10-15T13:26:56.639833+00:00\", \"coordinator\": {\"status\": \"STOPPED\", \"current_objective\": \"Compare rerankers.\", \"next_step\": \"Run the benchmark.\", \"blocker\": \"None\", \"worker_id\": null, \"continuation_id\": \"thread-1\", \"inbox_cursor\": 1, \"version\": 8, \"heartbeat_at\": \"2026-10-15T13:26:56.639831+00:00\", \"wake_at\": null, \"updated_at\": \"2026-10-15T13:26:56.639832+00:00\"}}"
+  }
+]

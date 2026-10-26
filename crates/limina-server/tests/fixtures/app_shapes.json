@@ -1,0 +1,1409 @@
+{
+ "create": {
+  "status": 201,
+  "body": {
+   "slug": "p",
+   "name": "P",
+   "mission": "M",
+   "success_criteria": "S",
+   "context": "",
+   "runtime": "codex",
+   "status": "CREATED",
+   "current_objective": "M",
+   "next_step": "Frame the first falsifiable hypothesis.",
+   "blocker": "None",
+   "created_at": "2026-10-15T14:07:52.606197+00:00",
+   "updated_at": "2026-10-15T14:07:52.606844+00:00",
+   "role": "OWNER"
+  }
+ },
+ "list": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "slug": "p",
+     "name": "P",
+     "mission": "M",
+     "success_criteria": "S",
+     "context": "",
+     "runtime": "codex",
+     "status": "CREATED",
+     "current_objective": "M",
+     "next_step": "Frame the first falsifiable hypothesis.",
+     "blocker": "None",
+     "created_at": "2026-10-15T14:07:52.606197+00:00",
+     "updated_at": "2026-10-15T14:07:52.606844+00:00",
+     "role": "OWNER"
+    }
+   ],
+   "next_cursor": null,
+   "total": 1
+  }
+ },
+ "get": {
+  "status": 200,
+  "body": {
+   "slug": "p",
+   "name": "P",
+   "mission": "M",
+   "success_criteria": "S",
+   "context": "",
+   "runtime": "codex",
+   "status": "CREATED",
+   "current_objective": "M",
+   "next_step": "Frame the first falsifiable hypothesis.",
+   "blocker": "None",
+   "created_at": "2026-10-15T14:07:52.606197+00:00",
+   "updated_at": "2026-10-15T14:07:52.606844+00:00",
+   "role": "OWNER"
+  }
+ },
+ "status": {
+  "status": 200,
+  "body": {
+   "project": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "",
+    "runtime": "codex",
+    "status": "CREATED",
+    "current_objective": "M",
+    "next_step": "Frame the first falsifiable hypothesis.",
+    "blocker": "None",
+    "created_at": "2026-10-15T14:07:52.606197+00:00",
+    "updated_at": "2026-10-15T14:07:52.606844+00:00",
+    "role": "OWNER"
+   },
+   "knowledge": {},
+   "active_work": [],
+   "pending_guidance": 0,
+   "event_cursor": 1
+  }
+ },
+ "patch": {
+  "status": 200,
+  "body": {
+   "slug": "p",
+   "name": "P",
+   "mission": "M",
+   "success_criteria": "S",
+   "context": "ctx",
+   "runtime": "codex",
+   "status": "CREATED",
+   "current_objective": "M",
+   "next_step": "Frame the first falsifiable hypothesis.",
+   "blocker": "None",
+   "created_at": "2026-10-15T14:07:52.606197+00:00",
+   "updated_at": "2026-10-15T14:07:52.616519+00:00",
+   "role": "OWNER"
+  }
+ },
+ "templates": {
+  "status": 200,
+  "body": [
+   {
+    "id": "technical-investigation",
+    "name": "Technical investigation",
+    "description": "Resolve a technical uncertainty with a falsifiable evidence chain.",
+    "defaults": {
+     "context": "State the current system, strongest baseline, constraints, and available data.",
+     "success_criteria": "A decision is supported by reproducible evidence and remaining uncertainty is explicit."
+    }
+   },
+   {
+    "id": "capability-evaluation",
+    "name": "Capability evaluation",
+    "description": "Test whether a capability is credible beyond a narrow benchmark slice.",
+    "defaults": {
+     "context": "Describe the capability, evaluation set, baseline, and shortcut risks.",
+     "success_criteria": "The capability beats a fair baseline with guardrails and generalization checks."
+    }
+   },
+   {
+    "id": "incident-learning",
+    "name": "Incident learning",
+    "description": "Investigate a failure mechanism and establish a durable prevention strategy.",
+    "defaults": {
+     "context": "Include the incident timeline, symptoms, evidence, and known system changes.",
+     "success_criteria": "The mechanism is reproduced or bounded and a verified prevention is identified."
+    }
+   }
+  ]
+ },
+ "preflight": {
+  "status": 200,
+  "body": {
+   "ready": true,
+   "checks": [
+    {
+     "name": "mission",
+     "status": "PASS",
+     "detail": "Mission is defined."
+    },
+    {
+     "name": "success_criteria",
+     "status": "PASS",
+     "detail": "Success criteria are defined."
+    },
+    {
+     "name": "runtime",
+     "status": "WARN",
+     "detail": "Sign in with ChatGPT, or set OPENAI_API_KEY or CODEX_ACCESS_TOKEN, to enable Codex."
+    },
+    {
+     "name": "sources",
+     "status": "INFO",
+     "detail": "0 source(s) registered."
+    }
+   ]
+  }
+ },
+ "engines": {
+  "status": 200,
+  "body": [
+   {
+    "engine": "codex",
+    "label": "Codex",
+    "installed": true,
+    "credentials": false,
+    "detail": "Sign in with ChatGPT, or set OPENAI_API_KEY or CODEX_ACCESS_TOKEN, to enable Codex.",
+    "model": "gpt-5.4"
+   },
+   {
+    "engine": "claude-code",
+    "label": "Claude",
+    "installed": true,
+    "credentials": false,
+    "detail": "Connect an account to the project, or set ANTHROPIC_API_KEY on the runtime.",
+    "model": null
+   }
+  ]
+ },
+ "engine_accounts": {
+  "status": 200,
+  "body": [
+   {
+    "engine": "codex",
+    "label": "Codex",
+    "account": null,
+    "runtime_available": false,
+    "runtime_detail": "Sign in with ChatGPT, or set OPENAI_API_KEY or CODEX_ACCESS_TOKEN, to enable Codex."
+   },
+   {
+    "engine": "claude-code",
+    "label": "Claude",
+    "account": null,
+    "runtime_available": false,
+    "runtime_detail": "Connect an account to the project, or set ANTHROPIC_API_KEY on the runtime."
+   }
+  ]
+ },
+ "var": {
+  "status": 200,
+  "body": {
+   "name": "V",
+   "type": "VARIABLE",
+   "status": "ACTIVE",
+   "value": "x",
+   "created_at": "2026-10-15T14:07:53.960988+00:00",
+   "updated_at": "2026-10-15T14:07:53.960993+00:00"
+  }
+ },
+ "secret": {
+  "status": 200,
+  "body": {
+   "name": "S",
+   "type": "SECRET",
+   "status": "ACTIVE",
+   "configured": true,
+   "created_at": "2026-10-15T14:07:53.969052+00:00",
+   "updated_at": "2026-10-15T14:07:53.969053+00:00"
+  }
+ },
+ "resources": {
+  "status": 200,
+  "body": [
+   {
+    "name": "S",
+    "type": "SECRET",
+    "status": "ACTIVE",
+    "configured": true,
+    "created_at": "2026-10-15T14:07:53.969052+00:00",
+    "updated_at": "2026-10-15T14:07:53.969053+00:00"
+   },
+   {
+    "name": "V",
+    "type": "VARIABLE",
+    "status": "ACTIVE",
+    "value": "x",
+    "created_at": "2026-10-15T14:07:53.960988+00:00",
+    "updated_at": "2026-10-15T14:07:53.960993+00:00"
+   }
+  ]
+ },
+ "members": {
+  "status": 200,
+  "body": [
+   {
+    "subject": "owner",
+    "display_name": "Olivia Owner",
+    "email": "owner@example.test",
+    "role": "OWNER",
+    "created_at": "2026-10-15T14:07:52.607359+00:00",
+    "updated_at": "2026-10-15T14:07:52.607360+00:00"
+   }
+  ]
+ },
+ "set_member": {
+  "status": 200,
+  "body": {
+   "subject": "v",
+   "display_name": "V",
+   "email": null,
+   "role": "VIEWER",
+   "created_at": "2026-10-15T14:07:53.975450+00:00",
+   "updated_at": "2026-10-15T14:07:53.975452+00:00"
+  }
+ },
+ "ticket": {
+  "status": 200,
+  "body": {
+   "ticket": "5aosksSZhlxeGOxIuQf-7ycHWcU64LT3te7mZXCq4io",
+   "expires_at": "2026-10-15T14:08:53.977020+00:00"
+  }
+ },
+ "source": {
+  "status": 200,
+  "body": {
+   "id": "026c29c3-916d-47ae-a96d-bc3da75cf9bf",
+   "name": "b",
+   "type": "URL",
+   "uri": "https://example.test/x",
+   "media_type": null,
+   "metadata": {},
+   "status": "ACTIVE",
+   "created_at": "2026-10-15T14:07:53.980055+00:00",
+   "updated_at": "2026-10-15T14:07:53.980056+00:00"
+  }
+ },
+ "sources": {
+  "status": 200,
+  "body": [
+   {
+    "id": "026c29c3-916d-47ae-a96d-bc3da75cf9bf",
+    "name": "b",
+    "type": "URL",
+    "uri": "https://example.test/x",
+    "media_type": null,
+    "metadata": {},
+    "status": "ACTIVE",
+    "created_at": "2026-10-15T14:07:53.980055+00:00",
+    "updated_at": "2026-10-15T14:07:53.980056+00:00"
+   }
+  ]
+ },
+ "knowledge": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "E001",
+     "kind": "E",
+     "title": "E",
+     "status": "RUNNING",
+     "content": {
+      "objective": "o",
+      "procedure": "p",
+      "success_criteria": "s",
+      "guardrails": "g",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+     },
+     "hypothesis_id": "H001",
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.985580+00:00",
+     "updated_at": "2026-10-15T14:07:53.986416+00:00",
+     "observations": null,
+     "tags": []
+    },
+    {
+     "id": "H001",
+     "kind": "H",
+     "title": "H",
+     "status": "TESTING",
+     "content": {
+      "statement": "s",
+      "mechanism": "m",
+      "generalization": "g",
+      "shortcut_risks": "r",
+      "test_plan": "t",
+      "conclusion": ""
+     },
+     "hypothesis_id": null,
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.982946+00:00",
+     "updated_at": "2026-10-15T14:07:53.984350+00:00",
+     "observations": null,
+     "tags": []
+    }
+   ],
+   "next_cursor": null,
+   "total": 2,
+   "search_backend": "portable-substring"
+  }
+ },
+ "knowledge_h": {
+  "status": 200,
+  "body": {
+   "id": "H001",
+   "kind": "H",
+   "title": "H",
+   "status": "TESTING",
+   "content": {
+    "statement": "s",
+    "mechanism": "m",
+    "generalization": "g",
+    "shortcut_risks": "r",
+    "test_plan": "t",
+    "conclusion": ""
+   },
+   "hypothesis_id": null,
+   "experiment_id": null,
+   "created_at": "2026-10-15T14:07:53.982946+00:00",
+   "updated_at": "2026-10-15T14:07:53.984350+00:00",
+   "observations": null,
+   "tags": []
+  }
+ },
+ "knowledge_e": {
+  "status": 200,
+  "body": {
+   "id": "E001",
+   "kind": "E",
+   "title": "E",
+   "status": "RUNNING",
+   "content": {
+    "objective": "o",
+    "procedure": "p",
+    "success_criteria": "s",
+    "guardrails": "g",
+    "results": "",
+    "analysis": "",
+    "decision": "",
+    "completed_at": null
+   },
+   "hypothesis_id": "H001",
+   "experiment_id": null,
+   "created_at": "2026-10-15T14:07:53.985580+00:00",
+   "updated_at": "2026-10-15T14:07:53.986416+00:00",
+   "observations": [
+    {
+     "id": "b026b9b0-c6f2-488b-add8-a2e752d44f9b",
+     "experiment_id": "E001",
+     "body": "obs",
+     "evidence_ref": null,
+     "actor": "limina:x",
+     "created_at": "2026-10-15T14:07:53.988393+00:00"
+    }
+   ],
+   "tags": []
+  }
+ },
+ "graph": {
+  "status": 200,
+  "body": {
+   "nodes": [
+    {
+     "id": "E001",
+     "kind": "E",
+     "title": "E",
+     "status": "RUNNING",
+     "content": {
+      "objective": "o",
+      "procedure": "p",
+      "success_criteria": "s",
+      "guardrails": "g",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+     },
+     "hypothesis_id": "H001",
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.985580+00:00",
+     "updated_at": "2026-10-15T14:07:53.986416+00:00",
+     "observations": null,
+     "tags": []
+    },
+    {
+     "id": "H001",
+     "kind": "H",
+     "title": "H",
+     "status": "TESTING",
+     "content": {
+      "statement": "s",
+      "mechanism": "m",
+      "generalization": "g",
+      "shortcut_risks": "r",
+      "test_plan": "t",
+      "conclusion": ""
+     },
+     "hypothesis_id": null,
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.982946+00:00",
+     "updated_at": "2026-10-15T14:07:53.984350+00:00",
+     "observations": null,
+     "tags": []
+    }
+   ],
+   "edges": [
+    {
+     "id": "derived:H001:TESTED_BY:E001",
+     "source_id": "H001",
+     "target_id": "E001",
+     "type": "TESTED_BY",
+     "description": "",
+     "derived": true,
+     "created_by": "Limina",
+     "created_at": null
+    }
+   ]
+  }
+ },
+ "tag": {
+  "status": 200,
+  "body": {
+   "tags": [
+    "x"
+   ]
+  }
+ },
+ "comment": {
+  "status": 201,
+  "body": {
+   "id": "dee76b15-5526-4d9f-bb7b-89fed7c735ed",
+   "artifact_id": "H001",
+   "body": "b",
+   "actor": "Olivia Owner",
+   "created_at": "2026-10-15T14:07:54.002595+00:00"
+  }
+ },
+ "revisions": {
+  "status": 200,
+  "body": [
+   {
+    "version": 2,
+    "status": "TESTING",
+    "title": "H",
+    "content": {
+     "statement": "s",
+     "mechanism": "m",
+     "generalization": "g",
+     "shortcut_risks": "r",
+     "test_plan": "t",
+     "conclusion": ""
+    },
+    "actor": "Limina",
+    "created_at": "2026-10-15T14:07:53.985636+00:00"
+   },
+   {
+    "version": 1,
+    "status": "PROPOSED",
+    "title": "H",
+    "content": {
+     "statement": "s",
+     "mechanism": "m",
+     "generalization": "g",
+     "shortcut_risks": "r",
+     "test_plan": "t",
+     "conclusion": ""
+    },
+    "actor": "Limina",
+    "created_at": "2026-10-15T14:07:53.983354+00:00"
+   }
+  ]
+ },
+ "view": {
+  "status": 200,
+  "body": {
+   "id": "6fa14b27-dfb9-4141-9d1a-46d45d128e1e",
+   "name": "n",
+   "query": {
+    "kind": "H"
+   },
+   "created_by": "Olivia Owner",
+   "created_at": "2026-10-15T14:07:54.006147+00:00",
+   "updated_at": "2026-10-15T14:07:54.006148+00:00"
+  }
+ },
+ "status2": {
+  "status": 200,
+  "body": {
+   "project": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "ctx",
+    "runtime": "codex",
+    "status": "CREATED",
+    "current_objective": "M",
+    "next_step": "Frame the first falsifiable hypothesis.",
+    "blocker": "None",
+    "created_at": "2026-10-15T14:07:52.606197+00:00",
+    "updated_at": "2026-10-15T14:07:52.616519+00:00",
+    "role": "OWNER"
+   },
+   "knowledge": {
+    "E": {
+     "RUNNING": 1
+    },
+    "H": {
+     "TESTING": 1
+    }
+   },
+   "active_work": [
+    {
+     "id": "E001",
+     "kind": "E",
+     "title": "E",
+     "status": "RUNNING",
+     "content": {
+      "objective": "o",
+      "procedure": "p",
+      "success_criteria": "s",
+      "guardrails": "g",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+     },
+     "hypothesis_id": "H001",
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.985580+00:00",
+     "updated_at": "2026-10-15T14:07:53.986416+00:00",
+     "observations": null,
+     "tags": []
+    }
+   ],
+   "pending_guidance": 2,
+   "event_cursor": 15
+  }
+ },
+ "review": {
+  "status": 200,
+  "body": {
+   "project": {
+    "slug": "p",
+    "name": "P",
+    "mission": "M",
+    "success_criteria": "S",
+    "context": "ctx",
+    "runtime": "codex",
+    "status": "CREATED",
+    "current_objective": "M",
+    "next_step": "Frame the first falsifiable hypothesis.",
+    "blocker": "None",
+    "created_at": "2026-10-15T14:07:52.606197+00:00",
+    "updated_at": "2026-10-15T14:07:52.616519+00:00",
+    "role": "OWNER"
+   },
+   "knowledge": {
+    "E": {
+     "RUNNING": 1
+    },
+    "H": {
+     "TESTING": 1
+    }
+   },
+   "active_work": [
+    {
+     "id": "E001",
+     "kind": "E",
+     "title": "E",
+     "status": "RUNNING",
+     "content": {
+      "objective": "o",
+      "procedure": "p",
+      "success_criteria": "s",
+      "guardrails": "g",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+     },
+     "hypothesis_id": "H001",
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.985580+00:00",
+     "updated_at": "2026-10-15T14:07:53.986416+00:00",
+     "observations": null,
+     "tags": []
+    }
+   ],
+   "pending_guidance": 2,
+   "event_cursor": 15,
+   "resources": [
+    {
+     "name": "S",
+     "type": "SECRET",
+     "status": "ACTIVE",
+     "value": null,
+     "configured": true,
+     "created_at": "2026-10-15T14:07:53.969052+00:00",
+     "updated_at": "2026-10-15T14:07:53.969053+00:00"
+    },
+    {
+     "name": "V",
+     "type": "VARIABLE",
+     "status": "ACTIVE",
+     "value": "x",
+     "configured": null,
+     "created_at": "2026-10-15T14:07:53.960988+00:00",
+     "updated_at": "2026-10-15T14:07:53.960993+00:00"
+    }
+   ],
+   "hypotheses": [
+    {
+     "id": "H001",
+     "kind": "H",
+     "title": "H",
+     "status": "TESTING",
+     "content": {
+      "statement": "s",
+      "mechanism": "m",
+      "generalization": "g",
+      "shortcut_risks": "r",
+      "test_plan": "t",
+      "conclusion": ""
+     },
+     "hypothesis_id": null,
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.982946+00:00",
+     "updated_at": "2026-10-15T14:07:53.984350+00:00",
+     "observations": null,
+     "tags": [
+      "x"
+     ]
+    }
+   ],
+   "experiments": [
+    {
+     "id": "E001",
+     "kind": "E",
+     "title": "E",
+     "status": "RUNNING",
+     "content": {
+      "objective": "o",
+      "procedure": "p",
+      "success_criteria": "s",
+      "guardrails": "g",
+      "results": "",
+      "analysis": "",
+      "decision": "",
+      "completed_at": null
+     },
+     "hypothesis_id": "H001",
+     "experiment_id": null,
+     "created_at": "2026-10-15T14:07:53.985580+00:00",
+     "updated_at": "2026-10-15T14:07:53.986416+00:00",
+     "observations": null,
+     "tags": []
+    }
+   ],
+   "findings": [],
+   "recent_activity": [
+    {
+     "sequence": 1,
+     "type": "project.created",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "slug": "p",
+      "name": "P",
+      "runtime": "codex"
+     },
+     "created_at": "2026-10-15T14:07:52.607105+00:00"
+    },
+    {
+     "sequence": 2,
+     "type": "project.draft_updated",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {},
+     "created_at": "2026-10-15T14:07:52.617157+00:00"
+    },
+    {
+     "sequence": 3,
+     "type": "resource.variable_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "resource_id": "71811bbd-684d-4f8c-85e6-9dd37d8cc373",
+      "name": "V",
+      "type": "VARIABLE"
+     },
+     "created_at": "2026-10-15T14:07:53.961325+00:00"
+    },
+    {
+     "sequence": 4,
+     "type": "guidance.received",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "kind": "ANSWER",
+      "sequence": 1,
+      "body": "Project variable 'V' was set.",
+      "origin": "resource",
+      "guidance_id": "6aea43c2-4bc5-4157-ab5a-2a94557c584e"
+     },
+     "created_at": "2026-10-15T14:07:53.962522+00:00"
+    },
+    {
+     "sequence": 5,
+     "type": "resource.secret_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "resource_id": "f12adbf1-a382-4264-935b-44a7b00512c9",
+      "name": "S",
+      "type": "SECRET"
+     },
+     "created_at": "2026-10-15T14:07:53.969254+00:00"
+    },
+    {
+     "sequence": 6,
+     "type": "guidance.received",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "kind": "ANSWER",
+      "sequence": 2,
+      "body": "Project secret 'S' was set.",
+      "origin": "resource",
+      "guidance_id": "aae235bb-a67a-4568-bf80-9660f96119f7"
+     },
+     "created_at": "2026-10-15T14:07:53.970048+00:00"
+    },
+    {
+     "sequence": 7,
+     "type": "project.member_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "subject": "v",
+      "role": "VIEWER"
+     },
+     "created_at": "2026-10-15T14:07:53.975602+00:00"
+    },
+    {
+     "sequence": 8,
+     "type": "source.configured",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "source_id": "026c29c3-916d-47ae-a96d-bc3da75cf9bf",
+      "name": "b",
+      "type": "URL"
+     },
+     "created_at": "2026-10-15T14:07:53.980260+00:00"
+    },
+    {
+     "sequence": 9,
+     "type": "hypothesis.created",
+     "actor": "Limina",
+     "artifact_id": "H001",
+     "detail": {
+      "title": "H"
+     },
+     "created_at": "2026-10-15T14:07:53.983499+00:00"
+    },
+    {
+     "sequence": 10,
+     "type": "experiment.created",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {
+      "hypothesis_id": "H001",
+      "title": "E"
+     },
+     "created_at": "2026-10-15T14:07:53.985867+00:00"
+    },
+    {
+     "sequence": 11,
+     "type": "experiment.claimed",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {},
+     "created_at": "2026-10-15T14:07:53.986972+00:00"
+    },
+    {
+     "sequence": 12,
+     "type": "experiment.observed",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {
+      "observation_id": "b026b9b0-c6f2-488b-add8-a2e752d44f9b",
+      "evidence_ref": null
+     },
+     "created_at": "2026-10-15T14:07:53.988613+00:00"
+    },
+    {
+     "sequence": 13,
+     "type": "knowledge.tag_added",
+     "actor": "Olivia Owner",
+     "artifact_id": "H001",
+     "detail": {
+      "tag": "x"
+     },
+     "created_at": "2026-10-15T14:07:54.000178+00:00"
+    },
+    {
+     "sequence": 14,
+     "type": "knowledge.comment_added",
+     "actor": "Olivia Owner",
+     "artifact_id": "H001",
+     "detail": {
+      "comment_id": "dee76b15-5526-4d9f-bb7b-89fed7c735ed"
+     },
+     "created_at": "2026-10-15T14:07:54.002773+00:00"
+    },
+    {
+     "sequence": 15,
+     "type": "knowledge.view_saved",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "view_id": "6fa14b27-dfb9-4141-9d1a-46d45d128e1e",
+      "name": "n"
+     },
+     "created_at": "2026-10-15T14:07:54.006331+00:00"
+    }
+   ],
+   "knowledge_cursor": null,
+   "knowledge_total": 2
+  }
+ },
+ "steer": {
+  "status": 202,
+  "body": {
+   "id": "3e6caa95-f0a6-4ab3-b3af-ac77ea0e2514",
+   "delivery": "QUEUED",
+   "kind": "STEER",
+   "accepted_at": "2026-10-15T14:07:54.013184+00:00",
+   "status": "PENDING"
+  }
+ },
+ "guidance": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "3e6caa95-f0a6-4ab3-b3af-ac77ea0e2514",
+     "sequence": 3,
+     "kind": "STEER",
+     "body": "go",
+     "actor": "Olivia Owner",
+     "status": "PENDING",
+     "created_at": "2026-10-15T14:07:54.013184+00:00",
+     "acknowledged_at": null
+    },
+    {
+     "id": "aae235bb-a67a-4568-bf80-9660f96119f7",
+     "sequence": 2,
+     "kind": "ANSWER",
+     "body": "Project secret 'S' was set.",
+     "actor": "Olivia Owner",
+     "status": "PENDING",
+     "created_at": "2026-10-15T14:07:53.969841+00:00",
+     "acknowledged_at": null
+    },
+    {
+     "id": "6aea43c2-4bc5-4157-ab5a-2a94557c584e",
+     "sequence": 1,
+     "kind": "ANSWER",
+     "body": "Project variable 'V' was set.",
+     "actor": "Olivia Owner",
+     "status": "PENDING",
+     "created_at": "2026-10-15T14:07:53.962228+00:00",
+     "acknowledged_at": null
+    }
+   ],
+   "next_cursor": null,
+   "total": 3
+  }
+ },
+ "start": {
+  "status": 200,
+  "body": {
+   "slug": "p",
+   "name": "P",
+   "mission": "M",
+   "success_criteria": "S",
+   "context": "ctx",
+   "runtime": "codex",
+   "status": "RUNNING",
+   "current_objective": "M",
+   "next_step": "Frame the first falsifiable hypothesis.",
+   "blocker": "None",
+   "created_at": "2026-10-15T14:07:52.606197+00:00",
+   "updated_at": "2026-10-15T14:07:54.016789+00:00",
+   "role": "OWNER"
+  }
+ },
+ "runs": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "b073e973-bb8b-4abb-b297-f453fa473c42",
+     "runtime": "codex",
+     "model": "m",
+     "status": "COMPLETED",
+     "summary": "Done.",
+     "error": null,
+     "usage": {
+      "input_tokens": 1,
+      "output_tokens": 2,
+      "cached_input_tokens": null,
+      "reasoning_output_tokens": null,
+      "total_tokens": null,
+      "cost_microusd": null,
+      "usage_source": null,
+      "cost_source": null
+     },
+     "tool_calls": 0,
+     "retry_count": 0,
+     "started_at": "2026-10-15T14:07:54.019880+00:00",
+     "completed_at": "2026-10-15T14:07:54.028989+00:00",
+     "duration_ms": 9
+    }
+   ],
+   "next_cursor": null,
+   "total": 1
+  }
+ },
+ "run": {
+  "status": 200,
+  "body": {
+   "id": "b073e973-bb8b-4abb-b297-f453fa473c42",
+   "runtime": "codex",
+   "model": "m",
+   "status": "COMPLETED",
+   "summary": "Done.",
+   "error": null,
+   "usage": {
+    "input_tokens": 1,
+    "output_tokens": 2,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": null,
+    "total_tokens": null,
+    "cost_microusd": null,
+    "usage_source": null,
+    "cost_source": null
+   },
+   "tool_calls": 0,
+   "retry_count": 0,
+   "started_at": "2026-10-15T14:07:54.019880+00:00",
+   "completed_at": "2026-10-15T14:07:54.028989+00:00",
+   "duration_ms": 9,
+   "events": [
+    {
+     "sequence": 19,
+     "type": "runtime.turn_started",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "Frame the first falsifiable hypothesis.",
+      "pending_messages": 3,
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.024314+00:00"
+    },
+    {
+     "sequence": 21,
+     "type": "runtime.codex",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "hello",
+      "kind": "message",
+      "text": "hi",
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.026328+00:00"
+    },
+    {
+     "sequence": 23,
+     "type": "runtime.turn_completed",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "Done.",
+      "status": "COMPLETE",
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.028767+00:00"
+    }
+   ]
+  }
+ },
+ "analytics": {
+  "status": 200,
+  "body": {
+   "window": {
+    "days": 30,
+    "since": "2026-09-15T14:07:54.037994+00:00"
+   },
+   "runs": {
+    "total": 1,
+    "by_status": {
+     "COMPLETED": 1
+    },
+    "success_rate": 1.0,
+    "average_duration_ms": 9,
+    "p95_duration_ms": 9,
+    "input_tokens": 1,
+    "output_tokens": 2,
+    "reasoning_output_tokens": null,
+    "total_tokens": null,
+    "cost_microusd": null,
+    "usage_sources": [],
+    "cost_sources": [],
+    "tool_calls": 0
+   },
+   "knowledge": {
+    "created": 2,
+    "by_kind": {
+     "E": 1,
+     "H": 1
+    },
+    "by_status": {
+     "RUNNING": 1,
+     "TESTING": 1
+    }
+   },
+   "guidance": {
+    "total": 3,
+    "pending": 0,
+    "average_acknowledgement_seconds": 0
+   },
+   "timeseries": [
+    {
+     "date": "2026-10-15",
+     "runs": 1,
+     "completed_runs": 1,
+     "failed_runs": 0,
+     "artifacts": 2,
+     "guidance": 3
+    }
+   ]
+  }
+ },
+ "events": {
+  "status": 200,
+  "body": {
+   "events": [
+    {
+     "sequence": 1,
+     "type": "project.created",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "slug": "p",
+      "name": "P",
+      "runtime": "codex"
+     },
+     "created_at": "2026-10-15T14:07:52.607105+00:00"
+    },
+    {
+     "sequence": 2,
+     "type": "project.draft_updated",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {},
+     "created_at": "2026-10-15T14:07:52.617157+00:00"
+    },
+    {
+     "sequence": 3,
+     "type": "resource.variable_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "resource_id": "71811bbd-684d-4f8c-85e6-9dd37d8cc373",
+      "name": "V",
+      "type": "VARIABLE"
+     },
+     "created_at": "2026-10-15T14:07:53.961325+00:00"
+    },
+    {
+     "sequence": 4,
+     "type": "guidance.received",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "kind": "ANSWER",
+      "sequence": 1,
+      "body": "Project variable 'V' was set.",
+      "origin": "resource",
+      "guidance_id": "6aea43c2-4bc5-4157-ab5a-2a94557c584e"
+     },
+     "created_at": "2026-10-15T14:07:53.962522+00:00"
+    },
+    {
+     "sequence": 5,
+     "type": "resource.secret_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "resource_id": "f12adbf1-a382-4264-935b-44a7b00512c9",
+      "name": "S",
+      "type": "SECRET"
+     },
+     "created_at": "2026-10-15T14:07:53.969254+00:00"
+    },
+    {
+     "sequence": 6,
+     "type": "guidance.received",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "kind": "ANSWER",
+      "sequence": 2,
+      "body": "Project secret 'S' was set.",
+      "origin": "resource",
+      "guidance_id": "aae235bb-a67a-4568-bf80-9660f96119f7"
+     },
+     "created_at": "2026-10-15T14:07:53.970048+00:00"
+    },
+    {
+     "sequence": 7,
+     "type": "project.member_set",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "subject": "v",
+      "role": "VIEWER"
+     },
+     "created_at": "2026-10-15T14:07:53.975602+00:00"
+    },
+    {
+     "sequence": 8,
+     "type": "source.configured",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "source_id": "026c29c3-916d-47ae-a96d-bc3da75cf9bf",
+      "name": "b",
+      "type": "URL"
+     },
+     "created_at": "2026-10-15T14:07:53.980260+00:00"
+    },
+    {
+     "sequence": 9,
+     "type": "hypothesis.created",
+     "actor": "Limina",
+     "artifact_id": "H001",
+     "detail": {
+      "title": "H"
+     },
+     "created_at": "2026-10-15T14:07:53.983499+00:00"
+    },
+    {
+     "sequence": 10,
+     "type": "experiment.created",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {
+      "hypothesis_id": "H001",
+      "title": "E"
+     },
+     "created_at": "2026-10-15T14:07:53.985867+00:00"
+    },
+    {
+     "sequence": 11,
+     "type": "experiment.claimed",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {},
+     "created_at": "2026-10-15T14:07:53.986972+00:00"
+    },
+    {
+     "sequence": 12,
+     "type": "experiment.observed",
+     "actor": "Limina",
+     "artifact_id": "E001",
+     "detail": {
+      "observation_id": "b026b9b0-c6f2-488b-add8-a2e752d44f9b",
+      "evidence_ref": null
+     },
+     "created_at": "2026-10-15T14:07:53.988613+00:00"
+    },
+    {
+     "sequence": 13,
+     "type": "knowledge.tag_added",
+     "actor": "Olivia Owner",
+     "artifact_id": "H001",
+     "detail": {
+      "tag": "x"
+     },
+     "created_at": "2026-10-15T14:07:54.000178+00:00"
+    },
+    {
+     "sequence": 14,
+     "type": "knowledge.comment_added",
+     "actor": "Olivia Owner",
+     "artifact_id": "H001",
+     "detail": {
+      "comment_id": "dee76b15-5526-4d9f-bb7b-89fed7c735ed"
+     },
+     "created_at": "2026-10-15T14:07:54.002773+00:00"
+    },
+    {
+     "sequence": 15,
+     "type": "knowledge.view_saved",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "view_id": "6fa14b27-dfb9-4141-9d1a-46d45d128e1e",
+      "name": "n"
+     },
+     "created_at": "2026-10-15T14:07:54.006331+00:00"
+    },
+    {
+     "sequence": 16,
+     "type": "guidance.received",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "kind": "STEER",
+      "sequence": 3,
+      "body": "go",
+      "guidance_id": "3e6caa95-f0a6-4ab3-b3af-ac77ea0e2514"
+     },
+     "created_at": "2026-10-15T14:07:54.013382+00:00"
+    },
+    {
+     "sequence": 17,
+     "type": "project.started",
+     "actor": "Olivia Owner",
+     "artifact_id": null,
+     "detail": {
+      "action": "start",
+      "status": "RUNNING"
+     },
+     "created_at": "2026-10-15T14:07:54.017177+00:00"
+    },
+    {
+     "sequence": 19,
+     "type": "runtime.turn_started",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "Frame the first falsifiable hypothesis.",
+      "pending_messages": 3,
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.024314+00:00"
+    },
+    {
+     "sequence": 20,
+     "type": "project.checkpoint",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "status": "RUNNING",
+      "current_objective": "M",
+      "next_step": "Frame the first falsifiable hypothesis.",
+      "blocker": "None",
+      "inbox_cursor": 0,
+      "messages_acknowledged": 0,
+      "wake_at": null
+     },
+     "created_at": "2026-10-15T14:07:54.025806+00:00"
+    },
+    {
+     "sequence": 21,
+     "type": "runtime.codex",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "hello",
+      "kind": "message",
+      "text": "hi",
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.026328+00:00"
+    },
+    {
+     "sequence": 22,
+     "type": "project.checkpoint",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "status": "COMPLETE",
+      "current_objective": "O",
+      "next_step": "N",
+      "blocker": "None",
+      "inbox_cursor": 3,
+      "messages_acknowledged": 3,
+      "wake_at": null
+     },
+     "created_at": "2026-10-15T14:07:54.028338+00:00"
+    },
+    {
+     "sequence": 23,
+     "type": "runtime.turn_completed",
+     "actor": "Limina",
+     "artifact_id": null,
+     "detail": {
+      "summary": "Done.",
+      "status": "COMPLETE",
+      "run_id": "b073e973-bb8b-4abb-b297-f453fa473c42"
+     },
+     "created_at": "2026-10-15T14:07:54.028767+00:00"
+    }
+   ],
+   "cursor": 24,
+   "has_earlier": false
+  }
+ },
+ "snapshot": {
+  "status": 200,
+  "body": {
+   "files": {
+    "ACTIVE.md": "---\naliases: [\"ACTIVE\"]\ntype: active-state\ncoordinator_version: 5\n---\n\n# Active State\n\n## Current Objective\n\nO\n\n## Next Step\n\nN\n\n## Blocker\n\nNone\n\n## Links\n\n- Mission: [[CHALLENGE]]\n- Working Note: [[E001]]\n- Working Note: [[H001]]\n",
+    "DASHBOARD.md": "---\naliases: [\"DASHBOARD\"]\ntype: dashboard\nchallenge_slug: \"p\"\n---\n\n# P \u2014 Dashboard\n\n## Entry Points\n\n- [[CHALLENGE]]\n- [[ACTIVE]]\n\n## Hypotheses\n\n- [[H001]] \u2014 H (TESTING)\n\n## Experiments\n\n- [[E001]] \u2014 E (RUNNING)\n\n## Findings\n\n- None yet.\n\n## Links\n\n- Active State: [[ACTIVE]]\n- Mission: [[CHALLENGE]]\n",
+    "mission/CHALLENGE.md": "---\naliases: [\"CHALLENGE\"]\ntype: mission\nchallenge_id: \"afbadfa7-3f25-424c-9042-c9eaedfd49f9\"\nchallenge_slug: \"p\"\n---\n\n# Research Mission \u2014 P\n\n## Objective\n\nM\n\n## Context\n\nctx\n\n## Success Criteria\n\nS\n\n## Resources & Boundaries\n\n_Managed by the cloud challenge policy._\n\n## Constraints\n\n- Persist durable evidence through typed Limina commands.\n- Treat this export as a projection; the challenge service remains canonical.\n\n## Blocked Stop Condition\n\nStop when the coordinator records a blocker requiring human input.\n\n## Links\n\n- Active State: [[ACTIVE]]\n- Dashboard: [[DASHBOARD]]\n",
+    "research/experiments/E001-e.md": "---\nid: \"E001\"\naliases: [\"E001\"]\ntype: experiment\nstatus: \"RUNNING\"\nhypothesis: \"H001\"\ncreated: \"2026-10-15\"\ncompleted: \"\"\ntags: []\n---\n\n# E001 \u2014 E\n\n> **Status**: RUNNING\n> **Hypothesis**: [[H001]]\n> **Created**: 2026-10-15\n> **Completed**: \n\n## Objective\n\no\n\n## Setup\n\ng\n\n## Procedure\n\np\n\n## Expected Outcome\n\ns\n\n## Progress\n\n- [x] (2026-10-15) obs\n\n## Results\n\n_Not recorded._\n\n## Analysis\n\n_Not recorded._\n\n## Decision\n\n_Not recorded._\n\n## Links\n\n- Mission: [[CHALLENGE]]\n- Active State: [[ACTIVE]]\n- Parent Hypothesis: [[H001]]\n",
+    "research/hypotheses/H001-h.md": "---\nid: \"H001\"\naliases: [\"H001\"]\ntype: hypothesis\nstatus: \"TESTING\"\ncreated: \"2026-10-15\"\nlast_updated: \"2026-10-15\"\ntags: []\n---\n\n# H001 \u2014 H\n\n> **Status**: TESTING\n> **Created**: 2026-10-15\n> **Last updated**: 2026-10-15\n\n## Statement\n\ns\n\n## Mechanism\n\nm\n\n## Why This Might Generalize\n\ng\n\n## Shortcut Risks\n\nr\n\n## Test Plan\n\nt\n\n## Evidence\n\n_See linked experiments and findings._\n\n## Conclusion\n\n_Not recorded._\n\n## Links\n\n- Mission: [[CHALLENGE]]\n- Active State: [[ACTIVE]]\n- Experiment: [[E001]]\n"
+   }
+  }
+ },
+ "remove": {
+  "status": 200,
+  "body": {
+   "name": "V",
+   "type": "VARIABLE",
+   "status": "REMOVED",
+   "created_at": "2026-10-15T14:07:53.960988+00:00",
+   "updated_at": "2026-10-15T14:07:54.044789+00:00"
+  }
+ },
+ "err": {
+  "status": 404,
+  "body": {
+   "error": {
+    "code": "not_found",
+    "message": "Project 'zz' does not exist.",
+    "details": {
+     "project": "zz"
+    }
+   }
+  }
+ }
+}

@@ -1,15 +1,16 @@
 # Contributing
 
-Thanks for improving Limina. The project is intentionally small: Markdown contracts, a persistent `kb/` research graph, and Python scripts that keep the graph honest.
+Thanks for improving Limina. The project is intentionally small: Markdown contracts, a persistent `kb/` research graph, Python scripts that keep the graph honest, and a managed runtime written in Rust (`crates/`, see `crates/README.md`).
 
 ## Local Setup
 
 ```bash
 git clone https://github.com/theam/limina.git
 cd limina
-uv sync --locked --all-extras --dev
+uv sync --locked --dev
 make test
 make validate
+make runtime-check   # when you change the runtime (needs Rust)
 ```
 
 To install the bundled skills locally:
@@ -32,10 +33,11 @@ make install-skills
 - [ ] `make test` passes.
 - [ ] `make validate` passes.
 - [ ] No generated, private, or large local artifacts are committed.
-- [ ] New dependencies are justified in `pyproject.toml` and `uv.lock` is refreshed.
+- [ ] New dependencies are justified (`pyproject.toml` + `uv.lock` for scripts, the crate's `Cargo.toml` + `Cargo.lock` for the runtime).
+- [ ] Runtime changes pass `make runtime-check`.
 
 ## Style
 
-- Prefer plain Markdown and small Python scripts.
+- Prefer plain Markdown and small Python scripts for the template; the runtime follows the conventions in `crates/README.md`.
 - Keep command output and errors actionable.
 - Preserve the `H -> E -> F` research graph unless the change explicitly updates the validator and docs together.

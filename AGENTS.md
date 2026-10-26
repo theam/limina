@@ -4,6 +4,18 @@ Limina is a research-first contract for autonomous technical investigation.
 
 This file is the shared machine-facing instruction surface. Keep it short, specific, and stable. Runtime-specific details belong in adapters, skills, or scoped rules.
 
+For web console work, read and apply [design.md](design.md). It defines information hierarchy,
+accessible access to full content, evidence-based progress, and bounded knowledge navigation.
+
+## Public repository boundary
+
+This repository contains the reusable runtime, templates, synthetic fixtures and generic product
+and deployment contracts. Keep customer data, provider credentials, company account/domain
+configuration, operational runbooks and private session histories in separate private repositories.
+Do not commit personal machine paths or live research projects as examples. Public test data must
+be synthetic and clearly identified. Review both the release tree and any new Git history before
+publishing; deleting a file does not remove it from earlier commits.
+
 ## Core Rules
 
 1. Durable state lives in `kb/`. If it only exists in chat, it is not persistent.

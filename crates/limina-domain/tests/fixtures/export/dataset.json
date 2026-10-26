@@ -1,0 +1,240 @@
+{
+  "challenge": {
+    "id": "golden\"id\\é\t-0001",
+    "slug": "golden-export",
+    "name": "Golden export — ü \"quoted\"",
+    "objective": "Find what improves retrieval.\n\nKeep the mission in two paragraphs.  ",
+    "context": "  \n ",
+    "success_criteria": "NDCG improves by 10% with p95 latency under 120 ms.",
+    "runtime_engine": "codex",
+    "status": "ACTIVE",
+    "version": 3,
+    "created_at": "2026-01-02T03:04:05.123456+00:00",
+    "updated_at": "2026-01-09T10:00:00+00:00"
+  },
+  "coordinator": {
+    "status": "RUNNING",
+    "current_objective": "Compare rerankers on the frozen set.",
+    "next_step": "Finish E002 and decide H001.",
+    "blocker": "Awaiting GPU quota — `p4d` in us-east-1.",
+    "worker_id": "limina:worker",
+    "continuation_id": "thread-123",
+    "inbox_cursor": 4,
+    "version": 7,
+    "heartbeat_at": "2026-01-09T09:59:00+00:00",
+    "wake_at": null,
+    "updated_at": "2026-01-09T09:59:00+00:00"
+  },
+  "artifacts": [
+    {
+      "uid": "00000000-0000-4000-8000-0000000000a1",
+      "artifact_id": "H001",
+      "kind": "H",
+      "title": "Reranking improves NDCG",
+      "status": "TESTING",
+      "payload": {
+        "statement": "  A cross-encoder reranker improves NDCG@10.\n\nOn held-out queries.  ",
+        "mechanism": "Pairwise relevance modeling.",
+        "generalization": null,
+        "shortcut_risks": "   ",
+        "test_plan": "Use a frozen candidate set.",
+        "conclusion": ""
+      },
+      "parent_hypothesis_id": null,
+      "parent_experiment_id": null,
+      "version": 2,
+      "created_by": "researcher",
+      "created_at": "2026-01-03T00:00:00+00:00",
+      "updated_at": "2026-01-04T23:59:59.999999+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000a2",
+      "artifact_id": "H002",
+      "kind": "H",
+      "title": "!!!",
+      "status": "CONFIRMED",
+      "payload": {
+        "statement": "Short queries need query expansion.",
+        "mechanism": "Expansion recovers missing terms.",
+        "generalization": "Holds for any lexical retriever.",
+        "shortcut_risks": "Expansion could leak labels.",
+        "test_plan": "Ablate expansion on short queries.",
+        "conclusion": "\tConfirmed on the short-query slice.\n"
+      },
+      "parent_hypothesis_id": null,
+      "parent_experiment_id": null,
+      "version": 3,
+      "created_by": "researcher",
+      "created_at": "2026-01-03T12:00:00.5+00:00",
+      "updated_at": "2026-01-08T08:00:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000a3",
+      "artifact_id": "H003",
+      "kind": "H",
+      "title": "Été — Δ unicode 🚀 titles/slugs",
+      "status": "PROPOSED",
+      "payload": {},
+      "parent_hypothesis_id": null,
+      "parent_experiment_id": null,
+      "version": 1,
+      "created_by": "researcher",
+      "created_at": "2026-01-05T01:02:03+00:00",
+      "updated_at": "2026-01-05T01:02:03+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000b1",
+      "artifact_id": "E001",
+      "kind": "E",
+      "title": "Offline benchmark: BM25 vs. cross-encoder",
+      "status": "COMPLETED",
+      "payload": {
+        "objective": "Measure NDCG@10 and p95 latency.",
+        "procedure": "1. Freeze candidates.\n2. Rerank.\n3. Score.",
+        "success_criteria": "At least +10% NDCG.",
+        "guardrails": "Identical hardware and candidates.",
+        "results": "NDCG +12%; p95 +8 ms.",
+        "analysis": "Threshold exceeded.",
+        "decision": "Publish F001.",
+        "completed_at": "2026-01-06"
+      },
+      "parent_hypothesis_id": "H001",
+      "parent_experiment_id": null,
+      "version": 3,
+      "created_by": "researcher",
+      "created_at": "2026-01-04T10:00:00+00:00",
+      "updated_at": "2026-01-06T18:30:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000b2",
+      "artifact_id": "E002",
+      "kind": "E",
+      "title": "Online latency",
+      "status": "RUNNING",
+      "payload": {
+        "objective": "Measure latency in production-like traffic.",
+        "procedure": "",
+        "success_criteria": "p95 under 120 ms.",
+        "guardrails": "  ",
+        "results": "",
+        "analysis": "",
+        "decision": "",
+        "completed_at": null
+      },
+      "parent_hypothesis_id": "H001",
+      "parent_experiment_id": null,
+      "version": 2,
+      "created_by": "researcher",
+      "created_at": "2026-01-07T00:00:00+00:00",
+      "updated_at": "2026-01-07T00:05:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000b3",
+      "artifact_id": "E003",
+      "kind": "E",
+      "title": "Expansion ablation",
+      "status": "DESIGNED",
+      "payload": {
+        "objective": "Ablate expansion.",
+        "procedure": "Toggle expansion.",
+        "success_criteria": "",
+        "guardrails": "Same index.",
+        "results": "",
+        "analysis": "",
+        "decision": "",
+        "completed_at": ""
+      },
+      "parent_hypothesis_id": "H002",
+      "parent_experiment_id": null,
+      "version": 1,
+      "created_by": "researcher",
+      "created_at": "2026-01-07T09:00:00+00:00",
+      "updated_at": "2026-01-07T09:00:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000c1",
+      "artifact_id": "F001",
+      "kind": "F",
+      "title": "Reranking improves offline NDCG",
+      "status": "PUBLISHED",
+      "payload": {
+        "finding": "The treatment exceeded the offline NDCG threshold.",
+        "evidence": "A fixed-candidate comparison improved NDCG by 12%.",
+        "improvement": "Relevance ordering improved on held-out queries.",
+        "remaining_debt": "Online latency is not established.",
+        "next_move": "",
+        "impact": "HIGH"
+      },
+      "parent_hypothesis_id": "H001",
+      "parent_experiment_id": "E001",
+      "version": 1,
+      "created_by": "researcher",
+      "created_at": "2026-01-06T19:00:00+00:00",
+      "updated_at": "2026-01-06T19:00:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000c2",
+      "artifact_id": "F002",
+      "kind": "F",
+      "title": "Expansion helps short queries",
+      "status": "PUBLISHED",
+      "payload": {
+        "finding": "Expansion recovers recall on short queries.",
+        "evidence": "Ablation on the short-query slice.",
+        "improvement": "Recall@100 +6%.",
+        "remaining_debt": "  ",
+        "next_move": "Roll out behind a flag.",
+        "impact": "MEDIUM"
+      },
+      "parent_hypothesis_id": "H002",
+      "parent_experiment_id": "E003",
+      "version": 1,
+      "created_by": "researcher",
+      "created_at": "2026-01-08T07:00:00+00:00",
+      "updated_at": "2026-01-08T07:00:00+00:00"
+    },
+    {
+      "uid": "00000000-0000-4000-8000-0000000000d1",
+      "artifact_id": "L001",
+      "kind": "L",
+      "title": "Cross-encoder survey",
+      "status": "ACTIVE",
+      "payload": {"source": "survey"},
+      "parent_hypothesis_id": null,
+      "parent_experiment_id": null,
+      "version": 1,
+      "created_by": "researcher",
+      "created_at": "2026-01-02T05:00:00+00:00",
+      "updated_at": "2026-01-02T05:00:00+00:00"
+    }
+  ],
+  "observations": [
+    {
+      "id": "00000000-0000-4000-8000-0000000000e1",
+      "experiment_id": "E001",
+      "body": "Baseline NDCG@10 is 0.412.",
+      "evidence_ref": "s3://evidence/baseline.json",
+      "actor": "worker",
+      "command_id": "observation-1",
+      "created_at": "2026-01-05T10:00:00+00:00"
+    },
+    {
+      "id": "00000000-0000-4000-8000-0000000000e2",
+      "experiment_id": "E001",
+      "body": "Treatment NDCG@10 is 0.461 — +12%.",
+      "evidence_ref": null,
+      "actor": "worker",
+      "command_id": "observation-2",
+      "created_at": "2026-01-05T12:00:00+00:00"
+    },
+    {
+      "id": "00000000-0000-4000-8000-0000000000e3",
+      "experiment_id": "E001",
+      "body": "Latency p95 is +8 ms.",
+      "evidence_ref": "",
+      "actor": "worker",
+      "command_id": "observation-3",
+      "created_at": "2026-01-05T12:00:00+00:00"
+    }
+  ]
+}
